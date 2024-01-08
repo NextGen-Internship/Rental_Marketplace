@@ -8,8 +8,6 @@ import lombok.NoArgsConstructor;
 import java.util.List;
 
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
 @Entity
 @Table(name = "liked_item")
 public class LikedItem {
@@ -18,10 +16,8 @@ public class LikedItem {
     private int id ;
 
     @ManyToOne
-//    @JoinColumn(name="id")
     private Item item;
 
     @ManyToOne
-//    @JoinColumn(name="id")
     private User user;
 }

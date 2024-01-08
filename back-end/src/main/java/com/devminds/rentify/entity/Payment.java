@@ -11,8 +11,6 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
 @Entity
 @Table(name = "payment")
 public class Payment {
@@ -28,17 +26,14 @@ public class Payment {
     private Date date;
 
     @ManyToOne
-//    @JoinColumn(name = "id")
     private User owner;
 
     @ManyToOne
-//    @JoinColumn(name = "id")
     private User receiver;
 
 
     private PaymentMethod paymentMethod;
 
     @OneToOne
-//    @JoinColumn(name = "id")
     private Rent rent;
 }
