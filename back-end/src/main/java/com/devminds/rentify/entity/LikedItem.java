@@ -18,8 +18,10 @@ public class LikedItem {
     private int id ;
 
     @ManyToOne
+//    @JoinColumn(name="id")
     private Item item;
 
-    @ManyToMany(mappedBy = "likedItems")
-    private List<User> users;
+    @ManyToOne
+//    @JoinColumn(name="id")
+    private User user;
 }

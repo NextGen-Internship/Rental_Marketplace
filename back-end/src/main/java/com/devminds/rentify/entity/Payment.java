@@ -20,7 +20,7 @@ public class Payment {
     @Id
     private int id;
 
-    @Column(name= "amount")
+    @Column(name = "amount")
     private BigDecimal amount;
 
     private PaymentStatus status;
@@ -28,16 +28,17 @@ public class Payment {
     private Date date;
 
     @ManyToOne
+//    @JoinColumn(name = "id")
     private User owner;
 
     @ManyToOne
-    //dali trqq ima Join
-
+//    @JoinColumn(name = "id")
     private User receiver;
 
 
     private PaymentMethod paymentMethod;
 
-   @OneToOne(mappedBy = "payment")
+    @OneToOne
+//    @JoinColumn(name = "id")
     private Rent rent;
 }

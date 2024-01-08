@@ -18,9 +18,11 @@ public class History {
     private int id;
 
     @ManyToOne
+//    @JoinColumn(name="id")
     private User user;
 
     @ManyToOne
+//    @JoinColumn(name="id")
     private Item item;
 
     @Column(name = "datetime")

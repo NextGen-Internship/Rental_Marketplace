@@ -23,12 +23,12 @@ public class Rent {
     @ManyToOne
     private User user;
 
-    @Column(name ="start_date")
+    @Column(name = "start_date")
     private Date startDate;
 
-    @Column(name ="end_date")
+    @Column(name = "end_date")
     private Date endDate;
 
     @OneToOne(mappedBy = "rent")
-   private Payment payment;
+    private Payment payment;
 }

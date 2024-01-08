@@ -15,7 +15,7 @@ import java.util.List;
 public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
-    private int id ;
+    private int id;
 
     @Column(name = "first_name")
     private String firstName;
@@ -41,11 +41,11 @@ public class User {
 
 
     @OneToMany
-    private  List<Item> items;
+    private List<Item> items;
 
     @ManyToOne
     @JoinColumn(name = "role_id")
-    private  Role role;
+    private Role role;
 
     @OneToMany
     private List<Payment> payments;
@@ -57,6 +57,4 @@ public class User {
     @OneToMany
     private List<History> histories;
 
-    @ManyToMany(mappedBy = "users")
-    private List<LikedItem> likedItems;
 }
