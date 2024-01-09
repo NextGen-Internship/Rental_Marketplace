@@ -1,11 +1,12 @@
 package com.devminds.rentify.entity;
 
-import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 import lombok.Data;
-import lombok.NoArgsConstructor;
-
-import java.util.List;
 
 @Data
 @Entity
@@ -13,7 +14,7 @@ import java.util.List;
 public class LikedItem {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Id
-    private int id ;
+    private int id;
 
     @ManyToOne
     private Item item;
