@@ -9,7 +9,9 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.*;
 import lombok.Data;
+import org.hibernate.validator.constraints.UniqueElements;
 
 import java.util.List;
 
@@ -21,18 +23,29 @@ public class User {
     @Id
     private int id;
 
+    @NotEmpty
+    @Size(max = 30)
     @Column(name = "first_name")
     private String firstName;
 
+    @NotEmpty
+    @Size(max = 30)
     @Column(name = "last_name")
     private String lastName;
 
+    @NotEmpty
+    @Min(8)
     @Column(name = "password")
     private String password;
 
     @Column(name = "email")
+    @NotEmpty
+    @UniqueElements
+    @Email
     private String email;
 
+    @NotEmpty
+    @UniqueElements
     @Column(name = "phone")
     private String phoneNumber;
 

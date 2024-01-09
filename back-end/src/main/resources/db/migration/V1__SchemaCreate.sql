@@ -1,5 +1,6 @@
 CREATE table if not exists user_role(
 id int auto_increment primary key ,
+role_name varchar(10) not null,
 role_description varchar(255) not null
 );
 CREATE table if not exists address(

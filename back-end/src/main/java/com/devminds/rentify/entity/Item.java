@@ -8,6 +8,9 @@ import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 import java.math.BigDecimal;
@@ -22,18 +25,29 @@ public class Item {
     @Id
     private int id;
 
+    @NotEmpty
+    @Size(max = 100)
     @Column(name = "name")
     private String name;
 
+    @NotEmpty
+    @Size(max = 255)
     @Column(name = "description")
     private String description;
 
+
+    @NotEmpty
+    @Positive
     @Column(name = "price")
     private BigDecimal price;
 
+
+    @NotEmpty
     @Column(name = "posted_date")
     private Date postedDate;
 
+    @Positive
+    @NotEmpty
     @Column(name = "deposit")
     private float deposit;
 

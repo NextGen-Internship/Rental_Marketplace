@@ -7,6 +7,9 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 @Data
@@ -17,9 +20,13 @@ public class Review {
     @Id
     private int id;
 
+    @NotEmpty
+    @Positive
     @Column(name = "rating")
     private int rating;
 
+    @NotEmpty
+    @Size(max = 255)
     @Column(name = "comments")
     private String comments;
 

@@ -7,6 +7,9 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 @Data
@@ -17,6 +20,8 @@ public class Picture {
     @Id
     private int id;
 
+    @NotEmpty
+    @Size(max = 512)
     @Column(name = "url")
     private String url;
 

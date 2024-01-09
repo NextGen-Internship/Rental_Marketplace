@@ -8,6 +8,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 import java.util.Date;
@@ -26,9 +28,11 @@ public class Rent {
     @ManyToOne
     private User user;
 
+    @NotEmpty
     @Column(name = "start_date")
     private Date startDate;
 
+    @NotEmpty
     @Column(name = "end_date")
     private Date endDate;
 

@@ -2,14 +2,9 @@ package com.devminds.rentify.entity;
 
 import com.devminds.rentify.enums.PaymentMethod;
 import com.devminds.rentify.enums.PaymentStatus;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Positive;
 import lombok.Data;
 
 import java.math.BigDecimal;
@@ -23,11 +18,15 @@ public class Payment {
     @Id
     private int id;
 
+    @NotEmpty
+    @Positive
     @Column(name = "amount")
     private BigDecimal amount;
 
+    @Enumerated(EnumType.STRING)
     private PaymentStatus status;
 
+    @NotEmpty
     private Date date;
 
     @ManyToOne
@@ -36,7 +35,7 @@ public class Payment {
     @ManyToOne
     private User receiver;
 
-
+    @Enumerated(EnumType.STRING)
     private PaymentMethod paymentMethod;
 
     @OneToOne
