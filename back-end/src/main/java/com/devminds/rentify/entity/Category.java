@@ -15,9 +15,9 @@ import lombok.Data;
 @Table(name = "item_category")
 public class Category {
 
-    @GeneratedValue(strategy = GenerationType.AUTO)
     @Id
-    private int id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
 
     @Column(name = "name")
     @NotEmpty
