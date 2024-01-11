@@ -12,6 +12,8 @@ const Navbar = () => {
       <div className="links">
         <Link to="/">Home</Link>
         <Link to="/create">Add Item</Link>
+        <Link to="/login">Login</Link>
+
         <Link to="/Likes">
           {" "}
           <FavoriteBorderIcon />{" "}

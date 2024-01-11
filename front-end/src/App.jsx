@@ -1,15 +1,22 @@
 import "./App.css";
 import Navbar from "./components/Navbar";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-import Login2 from "./components/GoogleLogin";
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  Switch,
+  BrowserRouter,
+} from "react-router-dom";
+import Login from "./components/Login";
 
 function App() {
   return (
     <Router>
-      <div className="App">
-        <Navbar />
-        <Login2 />
-      </div>
+      {/* <Routes> */}
+        {/* <Route path="/login" element={} /> */}
+          <Navbar />
+          <Login />
+      {/* </Routes> */}
     </Router>
   );
 }

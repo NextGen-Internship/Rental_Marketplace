@@ -17,7 +17,6 @@ public class UserController {
 
     @PostMapping("/google-login")
     public void handleGoogleLogin(@RequestHeader("Authorization") String googleCredential) {
-
     }
 
 
