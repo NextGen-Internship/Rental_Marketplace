@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import logo from "../assets/rentify-logo.svg";
+import logo from "../../assets/rentify-logo.svg";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import LogoutIcon from "@mui/icons-material/Logout";
 import PersonIcon from "@mui/icons-material/Person";

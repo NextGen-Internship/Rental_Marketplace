@@ -1,12 +1,28 @@
+.app-container{
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  width: 100vw;
+}
+
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+
+
 .navbar {
-  padding: 20px;
+  padding: 3em;
   display: flex;
   align-items: center;
   max-height: 50px;
   margin: 0 auto;
   border-bottom: 1px solid #f2f2f2;
-  background-color: white;
+  width: 100%;
 }
+
 .navbar h1 {
   color: orange;
 }
@@ -22,78 +38,6 @@
   color: orange;
 }
 
-
-/* login */
-
-body, h1, h2, p, input, button {
-  margin: 0;
-  padding: 0;
-}
-
-body {
-  background-color: #1f41a9;
-  background-image: url(../src/assets/BG.svg);
-  background-size: cover;
-  background-position: center;
-  height: 100vh;
-
-}
-
-
-.app {
-  font-family: 'Arial', sans-serif;
-  display: flex;
-  align-items: center;
-  justify-content: center;  
-  margin-top: 10em;
-}
-
-.login {
-  background-color: #f4f4f4;
-  border-radius: 1em;
-  box-shadow: 0 0.2em 0.4em rgba(0, 0, 0, 0.1);
-  padding: 6em 6em;
-  width: 20em;
-}
-
-h1 {
-  text-align: center;
-  color: #333;
-}
-
-.form {
-  margin-top: 1em;
-}
-
-label {
-  display: block;
-  margin-bottom: 0.6em;
-  color: #333;
-}
-
-input {
-  width: 100%;
-  padding: 0.5em;
-  margin-bottom: 0.7em;
-  border: 0.1em solid #ccc;
-  border-radius: 0.2em;
-}
-
-button {
-  width: 100%;
-  padding: 0.8em;
-  background-color: #007bff;
-  color: #fff;
-  border: none;
-  border-radius: 0.2em;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-  margin: 2em 0em;
-}
-
-button:hover {
-  background-color: #0056b3;
-}
 
 
 
