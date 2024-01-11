@@ -1,5 +1,5 @@
 import "./App.css";
-import Navbar from "./components/Navbar";
+import Navbar from "./components/navbar/Navbar";
 import {
   BrowserRouter as Router,
   Route,
@@ -7,17 +7,21 @@ import {
   Switch,
   BrowserRouter,
 } from "react-router-dom";
-import Login from "./components/Login";
+
+import Login from "./components/login/Login";
 
 function App() {
   return (
-    <Router>
-      {/* <Routes> */}
+    <div className="app-container">
+      <Router>
         {/* <Route path="/login" element={} /> */}
-          <Navbar />
-          <Login />
-      {/* </Routes> */}
-    </Router>
+        <Navbar />
+        <Routes>
+          <Route exact path="/login" element={<Login />} />
+          {/* <Login /> */}
+        </Routes>
+      </Router>
+    </div>
   );
 }
 

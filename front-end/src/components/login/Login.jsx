@@ -1,5 +1,6 @@
 import axios from "axios";
 import { GoogleLogin } from "@react-oauth/google";
+import "./Login.css";
 
 function Login() {
   const handleGoogleLogin = async (response) => {
@@ -24,7 +25,7 @@ function Login() {
   };
 
   return (
-    <div className="app">
+    <div className="login-container">
       <div className="login">
         <h1>Sign in</h1>
 

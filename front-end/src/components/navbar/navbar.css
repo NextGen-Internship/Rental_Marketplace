@@ -1,0 +1,25 @@
+.navbar {
+    padding: 3em;
+    display: flex;
+    align-items: center;
+    max-height: 50px;
+    margin: 0 auto;
+    border-bottom: 1px solid #f2f2f2;
+    width: 100%;
+  }
+  
+  .navbar h1 {
+    color: orange;
+  }
+  .navbar .links {
+    margin-left: auto;
+  }
+  .navbar a {
+    margin-left: 16px;
+    text-decoration: none;
+    padding: 6px;
+  }
+  .navbar a:hover {
+    color: orange;
+  }
+  
