@@ -3,7 +3,7 @@ import logo from "../../assets/rentify-logo.svg";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import LogoutIcon from "@mui/icons-material/Logout";
 import PersonIcon from "@mui/icons-material/Person";
-
+import "./navbar.css"
 const Navbar = () => {
   return (
     <nav className="navbar">
