@@ -17,21 +17,21 @@ import { Link } from "react-router-dom";
 const endpoint = 'categories';
 
 const CategoriesList = () => {
-    const [categories, setCategories] = useState(null);
+  const [categories, setCategories] = useState(null);
 
-    // todo refactor this, maybe in a service
-    useEffect(() => {
-      const fetchCategories = async () => {
-        try {
-          const result = await fetchData(endpoint);
-          setCategories(result);
-        } catch (error) {
-          // Handle error
-        }
-      };
-  
-      fetchCategories();
-    }, []);
+  // todo refactor this, maybe in a service
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const result = await fetchData(endpoint);
+        setCategories(result);
+      } catch (error) {
+        // Handle error
+      }
+    };
+
+    fetchCategories();
+  }, []);
 
   const buttons = [
     HomeIcon,
@@ -48,12 +48,13 @@ const CategoriesList = () => {
 
   return (
     <div className="category-container">
-      <h2>Main Categories</h2>
+      <h2>All Categories</h2>
       <div className="category-list">
-        { categories && categories.map((category, index) => (
+        {categories && categories.map((category, index) => (
           <div key={index} className="category-item" >
             <div className="category-icon">
-            <Link to={`/items/category/${index}`}>{React.createElement(buttons[index])}</Link>
+              <Link to={`/items/category/${index + 1}`} >{React.createElement(buttons[index])}</Link>
+
               <p className="category-name">{category.name}</p>
             </div>
           </div>

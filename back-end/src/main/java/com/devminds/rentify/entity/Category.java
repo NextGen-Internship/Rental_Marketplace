@@ -6,8 +6,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 @Data
@@ -19,13 +17,9 @@ public class Category {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(name = "name")
-    @NotEmpty
-    @Size(max = 100)
+    @Column
     private String name;
 
-    @Column(name = "description")
-    @NotEmpty
-    @Size(max = 255)
+    @Column
     private String description;
 }
