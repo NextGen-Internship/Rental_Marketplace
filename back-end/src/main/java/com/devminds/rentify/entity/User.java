@@ -10,20 +10,26 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.*;
+import lombok.Builder;
 import lombok.Data;
 import org.hibernate.validator.constraints.UniqueElements;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.Collection;
 import java.util.List;
 
 @Data
+@Builder
 @Entity
 @Table(name = "user")
-public class User {
-    @GeneratedValue(strategy = GenerationType.AUTO)
+public class User  implements UserDetails {
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     private int id;
 
     @NotEmpty
+
     @Size(max = 30)
     @Column(name = "first_name")
     private String firstName;
@@ -34,18 +40,15 @@ public class User {
     private String lastName;
 
     @NotEmpty
-    @Min(8)
+ //   @Min(8)
     @Column(name = "password")
     private String password;
 
     @Column(name = "email")
-    @NotEmpty
-    @UniqueElements
     @Email
     private String email;
 
     @NotEmpty
-    @UniqueElements
     @Column(name = "phone")
     private String phoneNumber;
 
@@ -74,4 +77,33 @@ public class User {
     @OneToMany
     private List<History> histories;
 
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return role.getAuthorities();
+    }
+
+    @Override
+    public String getUsername() {
+        return email;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
 }
