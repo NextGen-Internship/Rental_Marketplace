@@ -8,14 +8,15 @@
 }
 
 .items-list-item {
-    position: relative; /* Set the position to relative */
-    width: 200px; /* Adjust the width based on your design */
-    margin: 10px;
+    position: relative;
+    width: 250px; /* Adjust the width based on your design */
+    padding: 20px; /* Adjust padding for better spacing */
+    margin: 15px; /* Adjust margin for better spacing */
     list-style: none;
     transition: transform 0.3s ease-in-out;
-    border: 2px solid orange; /* Add an orange border */
-    border-radius: 8px; /* Make it less rounded */
-    overflow: hidden; /* Hide overflow to ensure the rectangular shape */
+    border: 2px solid orange;
+    border-radius: 8px;
+    overflow: hidden;
 }
 
 .items-list-item:hover {
@@ -29,36 +30,36 @@
 }
 
 .items-list-item h2 {
-    font-size: 16px; /* Adjust the font size based on your design */
+    font-size: 18px; /* Adjust the font size based on your design */
     color: #333;
 }
 
 .items-list-item h5 {
-    font-size: 14px; /* Adjust the font size based on your design */
+    font-size: 16px; /* Adjust the font size based on your design */
     color: #888;
-    margin-top: 5px; /* Adjust the margin based on your design */
+    margin-top: 10px; /* Adjust the margin based on your design */
 }
 
 .items-list-item p {
-    font-size: 14px; /* Adjust the font size based on your design */
+    font-size: 16px; /* Adjust the font size based on your design */
     color: #888;
-    margin-top: 5px; /* Adjust the margin based on your design */
+    margin-top: 10px; /* Adjust the margin based on your design */
 }
 
 .items-list-item .like-button {
     position: absolute;
-    top: 10px; /* Adjust the top position */
-    right: 10px; /* Adjust the right position */
-    border: none; /* Remove border */
-    background: none; /* Remove background */
+    top: 15px;
+    right: 15px;
+    border: none;
+    background: none;
     cursor: pointer;
-    color: #888; /* Default color */
+    color: #888;
 }
 
 .items-list-item .like-button:focus {
-    outline: none; /* Remove outline on focus */
+    outline: none;
 }
 
 .items-list-item .like-button.clicked {
-    color: rgb(128, 22, 22); /* Change color to red when clicked */
+    color: rgb(128, 22, 22);
 }

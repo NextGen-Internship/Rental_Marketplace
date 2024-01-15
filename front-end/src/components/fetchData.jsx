@@ -1,6 +1,6 @@
-import axios from 'axios';
+import axios from "axios";
 
-const apiUrl = 'http://localhost:8080/rentify';
+const apiUrl = "http://localhost:8080/rentify";
 
 export const fetchData = async (endpoint) => {
   try {

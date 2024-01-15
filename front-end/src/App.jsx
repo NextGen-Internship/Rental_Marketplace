@@ -7,6 +7,7 @@ import Footer from './components/footer/Footer';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import CategoryDetails from './components/categories/CategoryDetails';
 import ItemDetails from './components/items/ItemDetails';
+import Login from "./components/login/Login";
 
 function App() {
   return (
@@ -21,7 +22,9 @@ function App() {
           {/* this is route parameter */}
           <Route path="/items/category/:id" element={<CategoryDetails />} /> 
 
-          <Route path="items/:id" element={<ItemDetails />} />             
+          <Route path="items/:id" element={<ItemDetails />} />   
+
+          <Route exact path="/login" element={<Login />} />          
           
           {/* catch any other path */}
           <Route path="*" element={<NotFound/>}/> 
@@ -32,6 +35,7 @@ function App() {
           <Footer />
       </div>
     </Router>
+
   );
 }
 
