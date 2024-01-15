@@ -16,14 +16,14 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class
-
 AuthenticationService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
-
+    private final UserMapper userMapper;
+    private final AddressMapper addressMapper;
     private final AddressRepository addressRepository;
 
 
@@ -32,16 +32,10 @@ AuthenticationService {
         var addresses = convertToAddressEntities(userRegisterDto.getAddresses());
 
         addressRepository.saveAll(addresses);
-        
-        var user = User.builder().firstName(userRegisterDto.getFirstName())
-                .lastName(userRegisterDto.getLastName())
-                .email(userRegisterDto.getEmail())
-                .password(passwordEncoder.encode(userRegisterDto.getPassword()))
-                .phoneNumber(userRegisterDto.getPhoneNumber())
-                .addresses(addresses)
-                .build();
 
-
+        User user = userMapper.mapToUser(userRegisterDto);
+        user.setPassword(passwordEncoder.encode(userRegisterDto.getPassword()));
+        user.setAddresses(addresses);
 
         userRepository.save(user);
 
@@ -52,12 +46,7 @@ AuthenticationService {
 
     private List<Address> convertToAddressEntities(List<AddressDto> addressDtos) {
    return     addressDtos.stream()
-                .map(addressDto -> Address.builder()
-                        .city(addressDto.getCity())
-                        .street(addressDto.getStreet())
-                        .postCode(addressDto.getPostCode())
-                        .streetNumber(addressDto.getStreetNumber())
-                        .build())
+                .map(addressMapper::mapToAddress)
               .collect(Collectors.toList());
     }
 

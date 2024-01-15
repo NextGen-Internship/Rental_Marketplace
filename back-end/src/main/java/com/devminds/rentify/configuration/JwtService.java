@@ -1,21 +1,28 @@
 package com.devminds.rentify.configuration;
 
+import com.devminds.rentify.entity.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.ObjectError;
 
 import java.security.Key;
 import java.util.*;
 import java.util.function.Function;
 
 @Service
+@RequiredArgsConstructor
 public class JwtService {
 
-    private static final String SECRET_KEY = "eyJhbGciOiJIUzI1NiJ9.eyJSb2xlIjoiQWRtaW4iLCJJc3N1ZXIiOiJJc3N1ZXIiLCJVc2VybmFtZSI6IkphdmFJblVzZSIsImV4cCI6MTcwNDk5MTY4MiwiaWF0IjoxNzA0OTkxNjgyfQ.mKEFJ2EpzPknChngQI3hohTna52_BfEYg4-qA-t_928";
+   private final  PasswordEncoder passwordEncoder;
+
+    private static final String SECRET_KEY = "secret";
     public String extractUsername(String token) {
         return extractClaim(token , Claims::getSubject);
     }
@@ -33,22 +40,46 @@ public class JwtService {
     }
 
     private Key getSignInKey() {
-        byte[] keyBytes = Decoders.BASE64.decode(SECRET_KEY);
-        return Keys.hmacShaKeyFor(keyBytes);
+
+        return Keys.secretKeyFor(SignatureAlgorithm.HS256);
+
     }
 
-    public String generateToken(UserDetails userDetails){
-        return  generateToken(new HashMap<>() , userDetails);
+    public String generateToken(User user) {
+
+     var passwordEncoded  = passwordEncoder.encode(user.getPassword());
+
+        Map<String, Object> extraClaims = new HashMap<>();
+        extraClaims.put("email", user.getEmail());
+        extraClaims.put("firstName", user.getFirstName());
+        extraClaims.put("lastName", user.getLastName());
+        extraClaims.put("photoUrl" , user.getProfilePicture());
+
+
+        return generateToken(extraClaims, user);
     }
-    public String generateToken(Map<String , Objects> extraClaims , UserDetails userDetails){
+
+    public String generateToken(Map<String, Object> extraClaims, User user) {
+        return Jwts.builder()
+                .setClaims(extraClaims)
+                .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 24)) // token will be valid for 24 hours and 1000 ms
+                .signWith(getSignInKey(), SignatureAlgorithm.HS256)
+                .compact();
+    }
+
+    /*
+    public String generateToken(Map<String , Objects> extraClaims , User user){
         return  Jwts.builder()
                 .setClaims(extraClaims)
-                .setSubject(userDetails.getUsername())
+                .setSubject(user.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + 1000  * 60 * 24)) // token will be valid for 24 hours and 1000 ms
                 .signWith(getSignInKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
+
+     */
 
    public boolean isTokenValid(String token , UserDetails userDetails){
         String userEmail = extractUsername(token);

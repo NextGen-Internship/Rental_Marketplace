@@ -1,18 +1,8 @@
 package com.devminds.rentify.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
-import lombok.Builder;
 import lombok.Data;
-import org.hibernate.validator.constraints.UniqueElements;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -20,16 +10,16 @@ import java.util.Collection;
 import java.util.List;
 
 @Data
-@Builder
 @Entity
 @Table(name = "user")
 public class User  implements UserDetails {
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private int id;
 
     @NotEmpty
-
     @Size(max = 30)
     @Column(name = "first_name")
     private String firstName;
@@ -55,9 +45,10 @@ public class User  implements UserDetails {
     @Column(name = "profile_picture")
     private String profilePicture;
 
-
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "id")  // Foreign key in the Address table
     private List<Address> addresses;
+
 
 
     @OneToMany
