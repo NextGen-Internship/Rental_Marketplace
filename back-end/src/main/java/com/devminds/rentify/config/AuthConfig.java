@@ -14,6 +14,8 @@ public class AuthConfig {
         http.authorizeHttpRequests(auth -> auth
                 .requestMatchers("/rentify/categories").permitAll()
                 .requestMatchers("/rentify/categories/*").permitAll()
+                .requestMatchers("/rentify/items").permitAll()
+                .requestMatchers("/rentify/items/*").permitAll()
 //                .requestMatchers("/h2/**").permitAll()
                 .anyRequest().authenticated());
         return http.build();

@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { fetchData } from '../fetchData';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
+import ItemsList from '../items/ItemsList';
 
 const endpoint = 'categories/';
 
 const CategoryDetails = () => {
   const { id } = useParams();
   const [category, setCategory] = useState();
+  const navigate = useNavigate();
 
   // todo refactor this, maybe in a service
   useEffect(() => {
@@ -17,6 +19,7 @@ const CategoryDetails = () => {
         // console.log(result);
       } catch (error) {
         // Handle error
+        navigate("/notfound");
       }
     };
 
@@ -28,6 +31,8 @@ const CategoryDetails = () => {
     <div>
       { category && <h2>Items in category {category.name} </h2> }
       { category && <p>Category description: {category.description}</p> }
+      <ItemsList /> 
+      {/* todo -> fetch fitered items */}
     </div>
   )
 }

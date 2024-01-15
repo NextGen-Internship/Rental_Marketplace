@@ -13,7 +13,6 @@ import './CategoriesList.css';
 import { fetchData } from '../fetchData';
 import { Link } from "react-router-dom";
 
-
 const endpoint = 'categories';
 
 const CategoriesList = () => {
@@ -27,6 +26,7 @@ const CategoriesList = () => {
         setCategories(result);
       } catch (error) {
         // Handle error
+        console.log(error);
       }
     };
 

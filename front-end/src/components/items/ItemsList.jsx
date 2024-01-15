@@ -1,11 +1,9 @@
-// ItemsList.jsx
-
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import './ItemsList.css';
 
-const ItemsList = () => {
+const ItemsList = ({ searchTerm }) => {
     const items = [
         { "id": 1, "name": "Item 1", "price": 20.99, "location": "City A" },
         { "id": 2, "name": "Item 2", "price": 15.49, "location": "City B" },
@@ -34,9 +32,13 @@ const ItemsList = () => {
         // post request to add a like, or remove a like
     };
 
+    const filteredItems = items.filter(item =>
+        item.name.toLowerCase().includes((searchTerm ?? '').toLowerCase())
+    );
+
     return (
         <div className="items-list">
-            {items.map((item) => (
+            {filteredItems.map((item) => (
                 <div className="items-list-item" key={item.id}>
                     <Link to={`/items/${item.id}`}>
                         <h2>{item.name}</h2>
@@ -51,7 +53,6 @@ const ItemsList = () => {
                         <h5>{item.price}</h5>
                         <p>{item.location}</p>
                     </Link>
-
                 </div>
             ))}
         </div>

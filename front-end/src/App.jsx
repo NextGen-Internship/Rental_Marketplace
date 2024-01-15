@@ -1,10 +1,12 @@
 import './App.css';
 import Hello from './components/Hello';
 import Navbar from './components/navbar/Navbar';
-import Home from './components/Home';
+import Home from './components/home/Home';
 import NotFound from './components/not-found/NotFound';
+import Footer from './components/footer/Footer';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import CategoryDetails from './components/categories/CategoryDetails';
+import ItemDetails from './components/items/ItemDetails';
 
 function App() {
   return (
@@ -18,11 +20,16 @@ function App() {
             
           {/* this is route parameter */}
           <Route path="/items/category/:id" element={<CategoryDetails />} /> 
-                       
+
+          <Route path="items/:id" element={<ItemDetails />} />             
+          
           {/* catch any other path */}
           <Route path="*" element={<NotFound/>}/> 
+          <Route path="/notfound" element={<NotFound/>}/> 
             
           </Routes>
+
+          <Footer />
       </div>
     </Router>
   );
