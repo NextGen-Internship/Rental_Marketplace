@@ -23,10 +23,8 @@ import java.util.List;
 public class Item {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Id
-    private int id;
+    private Long id;
 
-    @NotEmpty
-    @Size(max = 100)
     @Column(name = "name")
     private String name;
 

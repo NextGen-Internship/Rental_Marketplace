@@ -1,27 +1,41 @@
-import "./App.css";
-import Navbar from "./components/navbar/Navbar";
-import {
-  BrowserRouter as Router,
-  Route,
-  Routes,
-  Switch,
-  BrowserRouter,
-} from "react-router-dom";
-
+import './App.css';
+import Hello from './components/Hello';
+import Navbar from './components/navbar/Navbar';
+import Home from './components/home/Home';
+import NotFound from './components/not-found/NotFound';
+import Footer from './components/footer/Footer';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import CategoryDetails from './components/categories/CategoryDetails';
+import ItemDetails from './components/items/ItemDetails';
 import Login from "./components/login/Login";
 
 function App() {
   return (
-    <div className="app-container">
-      <Router>
-        {/* <Route path="/login" element={} /> */}
-        <Navbar />
+    <Router>
+      <div className="App">
+        <Navbar/>
+
         <Routes>
-          <Route exact path="/login" element={<Login />} />
-          {/* <Login /> */}
-        </Routes>
-      </Router>
-    </div>
+            
+          <Route exact path="/" element={<Home />} />
+            
+          {/* this is route parameter */}
+          <Route path="/items/category/:id" element={<CategoryDetails />} /> 
+
+          <Route path="items/:id" element={<ItemDetails />} />   
+
+          <Route exact path="/login" element={<Login />} />          
+          
+          {/* catch any other path */}
+          <Route path="*" element={<NotFound/>}/> 
+          <Route path="/notfound" element={<NotFound/>}/> 
+            
+          </Routes>
+
+          <Footer />
+      </div>
+    </Router>
+
   );
 }
 

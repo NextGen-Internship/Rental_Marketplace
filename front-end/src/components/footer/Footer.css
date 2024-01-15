@@ -1,0 +1,11 @@
+/* Footer.css */
+
+footer {
+    padding: 1rem;
+    text-align: center;
+    border-top: 1px solid #f2f2f2;
+}
+
+footer p {
+    margin: 0;
+}
