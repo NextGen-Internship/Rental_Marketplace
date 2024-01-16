@@ -1,10 +1,7 @@
-/* Home.css */
-
 .search-container {
   display: flex;
   align-items: center;
   padding: 15px;
-  /* Increase padding for more height */
   background-color: #ffffff;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
@@ -13,7 +10,6 @@
 
 .search-icon {
   margin-right: 15px;
-  /* Adjust margin for spacing */
   color: #757575;
 }
 
@@ -22,15 +18,12 @@
   border: none;
   outline: none;
   padding: 15px;
-  /* Increase padding for more height */
   font-size: 18px;
-  /* Increase font size */
   border-radius: 8px;
   background-color: transparent;
   color: #333333;
 }
 
-/* Optional: Add focus styles */
 .search-input:focus {
   border: 2px solid #4caf50;
 }

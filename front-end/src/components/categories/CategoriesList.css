@@ -1,4 +1,3 @@
-/* Categories lists */
 .category-container {
     text-align: center;
 }
@@ -11,7 +10,7 @@
 
 .category-item {
     text-align: center;
-    width: 200px; /* Adjust the width based on your design */
+    width: 200px; 
     margin: 10px;
     list-style: none;
     transition: transform 0.3s ease-in-out;
@@ -29,11 +28,11 @@
 
 .category-icon svg {
     background-color: orange;
-    width: 80px; /* Adjust the width and height for larger icons */
+    width: 80px; 
     height: 80px;
     border-radius: 50%;
     margin-bottom: 10px;
-    padding: 20px; /* Adjust the padding for a better visual appearance */
+    padding: 20px; 
 }
 
 .category-name {
