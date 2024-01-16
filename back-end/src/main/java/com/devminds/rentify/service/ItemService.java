@@ -35,8 +35,11 @@ public class ItemService {
                 .orElseThrow(() -> new ItemNotFoundException(String.format(ITEM_NOT_FOUND_MESSAGE, id)));
     }
 
-    public List<ItemDto> getItemsByCategoryId() {
-        return null;
+    public List<ItemDto> getItemsByCategoryId(Long id) {
+        return itemRepository.findByCategoryId(id)
+                .stream()
+                .map(this::mapItemToItemDto)
+                .toList();
     }
 
     private ItemDto mapItemToItemDto(Item item) {

@@ -9,7 +9,6 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
-import lombok.NonNull;
 
 @Data
 @Entity

@@ -1,96 +1,106 @@
-CREATE table if not exists user_role(
-id int auto_increment primary key ,
-role_name varchar(10) not null,
-role_description varchar(255) not null
+CREATE TABLE IF NOT EXISTS user_role (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    role_name VARCHAR(10) NOT NULL,
+    role_description VARCHAR(255) NOT NULL
 );
-CREATE table if not exists address(
-id int auto_increment primary key ,
-city varchar(100) not null,
-street varchar(100)not null,
-post_code varchar(10)not null,
-street_number varchar(10)not null
+
+CREATE TABLE IF NOT EXISTS address (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    city VARCHAR(100) NOT NULL,
+    street VARCHAR(100) NOT NULL,
+    post_code VARCHAR(10) NOT NULL,
+    street_number VARCHAR(10) NOT NULL
 );
-CREATE table if not exists user(
-id int auto_increment primary key ,
-first_name varchar(50)not null,
-last_name varchar(50) not null,
-password varchar(255) not null ,
-email varchar(100) unique not null ,
-address_id int ,
- FOREIGN KEY (address_id) REFERENCES address(id),
-profile_picture varchar(512),
-role_id int ,
-FOREIGN KEY (role_id) references user_role(id),
-phone varchar(10)not null unique
+
+CREATE TABLE IF NOT EXISTS user (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    first_name VARCHAR(50) NOT NULL,
+    last_name VARCHAR(50) NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    email VARCHAR(100) UNIQUE NOT NULL,
+    address_id INT,
+    FOREIGN KEY (address_id) REFERENCES address(id),
+    profile_picture VARCHAR(512),
+    role_id INT,
+    FOREIGN KEY (role_id) REFERENCES user_role(id),
+    phone VARCHAR(10) NOT NULL UNIQUE
 );
-CREATE table if not exists item_category(
-id int auto_increment primary key ,
-name varchar(100) not null,
-description varchar(255) not null
+
+CREATE TABLE IF NOT EXISTS item_category (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    description VARCHAR(255) NOT NULL
 );
-CREATE table if not exists item(
-id int auto_increment primary key ,
-name varchar(100)not null,
-description varchar(255)not null,
-price decimal(5,2)not null,
-category_id int ,
-foreign key (category_id) references item_category(id),
-user_id int ,
-foreign key (user_id) references user(id),
-posted_date datetime not null,
-deposit float(5,2) not null,
-address_id int,
-foreign key (address_id) references address(id)
+
+CREATE TABLE IF NOT EXISTS item (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    description VARCHAR(255) NOT NULL,
+    price DECIMAL(5,2) NOT NULL,
+    category_id INT,
+    FOREIGN KEY (category_id) REFERENCES item_category(id),
+    user_id INT,
+    FOREIGN KEY (user_id) REFERENCES user(id),
+    posted_date DATETIME NOT NULL,
+    deposit FLOAT(5,2) NOT NULL,
+    address_id INT,
+    FOREIGN KEY (address_id) REFERENCES address(id)
 );
-CREATE table if not exists picture(
-id int auto_increment primary key ,
-url varchar(512)not null,
-item_id int ,
-foreign key (item_id) references item(id)
+
+CREATE TABLE IF NOT EXISTS picture (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    url VARCHAR(512) NOT NULL,
+    item_id INT,
+    FOREIGN KEY (item_id) REFERENCES item(id)
 );
-CREATE table if not exists liked_item(
-id int auto_increment primary key ,
-item_id int ,
-foreign key (item_id) references item(id),
-user_id int ,
-foreign key (user_id) references user(id)
+
+CREATE TABLE IF NOT EXISTS liked_item (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    item_id INT,
+    FOREIGN KEY (item_id) REFERENCES item(id),
+    user_id INT,
+    FOREIGN KEY (user_id) REFERENCES user(id)
 );
-CREATE table if not exists rent(
-id int auto_increment primary key ,
-item_id int ,
-foreign key (item_id) references item(id),
-user_id int ,
-foreign key (user_id) references user(id),
-start_date datetime not null,
-end_date datetime not null
+
+CREATE TABLE IF NOT EXISTS rent (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    item_id INT,
+    FOREIGN KEY (item_id) REFERENCES item(id),
+    user_id INT,
+    FOREIGN KEY (user_id) REFERENCES user(id),
+    start_date DATETIME NOT NULL,
+    end_date DATETIME NOT NULL
 );
-CREATE table if not exists payment(
-id int auto_increment primary key ,
-amount decimal(5,2) not null ,
-status varchar(50) not null,
-date datetime not null,
-owner_id int ,
-foreign key (owner_id) references user(id),
-receiver_id int ,
-foreign key (receiver_id) references user(id),
-method varchar(50) not null,
-rent_id int ,
-foreign key (rent_id) references rent(id)
+
+CREATE TABLE IF NOT EXISTS payment (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    amount DECIMAL(5,2) NOT NULL,
+    status VARCHAR(50) NOT NULL,
+    date DATETIME NOT NULL,
+    owner_id INT,
+    FOREIGN KEY (owner_id) REFERENCES user(id),
+    receiver_id INT,
+    FOREIGN KEY (receiver_id) REFERENCES user(id),
+    method VARCHAR(50) NOT NULL,
+    rent_id INT,
+    FOREIGN KEY (rent_id) REFERENCES rent(id)
 );
-CREATE table if not exists review(
-id int auto_increment primary key ,
-rating smallint,
-comment varchar(255),
-item_id int ,
-foreign key (item_id) references item(id),
-user_id int ,
-foreign key (user_id) references user(id)
+
+CREATE TABLE IF NOT EXISTS review (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    rating SMALLINT,
+    comment VARCHAR(255),
+    item_id INT,
+    FOREIGN KEY (item_id) REFERENCES item(id),
+    user_id INT,
+    FOREIGN KEY (user_id) REFERENCES user(id)
 );
-CREATE table if not exists history(
-id int auto_increment primary key ,
-user_id int ,
-foreign key (user_id) references user(id),
-item_id int ,
-foreign key (item_id) references item(id),
-date datetime
+
+CREATE TABLE IF NOT EXISTS history (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT,
+    FOREIGN KEY (user_id) REFERENCES user(id),
+    item_id INT,
+    FOREIGN KEY (item_id) REFERENCES item(id),
+    date DATETIME
 );

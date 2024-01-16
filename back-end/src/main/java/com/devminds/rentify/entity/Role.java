@@ -24,6 +24,6 @@ public class Role {
 
     @NotEmpty
     @Size(max = 255)
-    @Column(name = "description")
+    @Column(name = "role_description")
     private String description;
 }

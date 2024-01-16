@@ -1,5 +1,6 @@
 package com.devminds.rentify.entity;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -53,25 +54,27 @@ public class User {
     private String profilePicture;
 
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "id")  // Foreign key in the Address table
     private List<Address> addresses;
 
 
-    @OneToMany
-    private List<Item> items;
+//    @OneToMany
+//    @JoinColumn(name = "id")
+//    private List<Item> items;
 
     @ManyToOne
     @JoinColumn(name = "role_id")
     private Role role;
 
-    @OneToMany
-    private List<Payment> payments;
+//    @OneToMany
+//    private List<Payment> payments;
 
-
-    @OneToMany
-    private List<Rent> rents;
-
-    @OneToMany
-    private List<History> histories;
+//
+//    @OneToMany
+//    private List<Rent> rents;
+//
+//    @OneToMany
+//    private List<History> histories;
 
 }
