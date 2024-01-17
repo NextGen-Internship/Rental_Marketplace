@@ -64,10 +64,12 @@ function Register() {
       password: "",
       confirmPassword: "",
       phoneNumber: "",
+       address: {
       city: "",
       postCode: "",
       street: "",
       streetNumber: "",
+    },
     });
 
     let isValid = true;
@@ -159,19 +161,19 @@ function Register() {
 
           <label>
             City
-            <input type="text" name="city" onChange={handleInputChange} />
+            <input type="text" name="address.city" onChange={handleInputChange} />
             <p className="error-message">{errorMessages.address.city}</p>
           </label>
 
           <label>
             Post Code
-            <input type="text" name="postCode" onChange={handleInputChange} />
+            <input type="text" name="address.postCode" onChange={handleInputChange} />
             <p className="error-message">{errorMessages.address.postCode}</p>
           </label>
 
           <label>
             Street
-            <input type="text" name="street" onChange={handleInputChange} />
+            <input type="text" name="address.street" onChange={handleInputChange} />
             <p className="error-message">{errorMessages.address.street}</p>
           </label>
 
@@ -179,7 +181,7 @@ function Register() {
             Street Number
             <input
               type="text"
-              name="streetNumber"
+              name="address.streetNumber"
               onChange={handleInputChange}
             />
             <p className="error-message">
