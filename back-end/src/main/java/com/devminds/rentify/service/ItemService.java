@@ -12,7 +12,7 @@ import java.util.List;
 
 @Service
 public class ItemService {
-    private static final String ITEM_NOT_FOUND_MESSAGE = "Item with %f id not found.";
+    private static final String ITEM_NOT_FOUND_MESSAGE = "Item with %d id not found.";
     private final ItemRepository itemRepository;
     private final ModelMapper modelMapper;
 

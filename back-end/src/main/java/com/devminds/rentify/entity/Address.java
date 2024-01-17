@@ -16,7 +16,7 @@ import lombok.Data;
 public class Address {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Id
-    private int id;
+    private Long id;
     @Column
     @NotEmpty
     @Size(max = 100)

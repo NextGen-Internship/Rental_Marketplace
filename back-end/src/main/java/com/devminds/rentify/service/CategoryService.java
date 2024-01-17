@@ -10,7 +10,7 @@ import java.util.List;
 
 @Service
 public class CategoryService {
-    private static final String CATEGORY_NOT_FOUND_MESSAGE = "Category with %f id not found.";
+    private static final String CATEGORY_NOT_FOUND_MESSAGE = "Category with %d id not found.";
     private final CategoryRepository categoryRepository;
 
     @Autowired

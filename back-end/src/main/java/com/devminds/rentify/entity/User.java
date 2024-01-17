@@ -14,6 +14,7 @@ import jakarta.validation.constraints.*;
 import lombok.Data;
 import org.hibernate.validator.constraints.UniqueElements;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -61,7 +62,7 @@ public class User {
 
 //    @OneToMany
 //    @JoinColumn(name = "id")
-//    private List<Item> items;
+//    private List<Item> items = new ArrayList<>();
 
     @ManyToOne
     @JoinColumn(name = "role_id")
