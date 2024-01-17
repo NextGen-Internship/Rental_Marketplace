@@ -1,9 +1,6 @@
 package com.devminds.rentify.dto;
 
 import com.devminds.rentify.entity.Category;
-import com.devminds.rentify.entity.User;
-import jakarta.persistence.Column;
-import jakarta.persistence.ManyToOne;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Positive;
