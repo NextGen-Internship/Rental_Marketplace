@@ -1,8 +1,11 @@
 package com.devminds.rentify.auth;
 import com.devminds.rentify.configuration.JwtService;
 import com.devminds.rentify.entity.Address;
+import com.devminds.rentify.entity.Role;
 import com.devminds.rentify.entity.User;
+import com.devminds.rentify.enums.UserRole;
 import com.devminds.rentify.repository.AddressRepository;
+import com.devminds.rentify.repository.RoleRepository;
 import com.devminds.rentify.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -25,17 +28,22 @@ AuthenticationService {
     private final UserMapper userMapper;
     private final AddressMapper addressMapper;
     private final AddressRepository addressRepository;
+    private final RoleRepository roleRepository;
 
 
     public AuthenticationRespone  register (UserRegisterDto userRegisterDto){
 
         var addresses = convertToAddressEntities(userRegisterDto.getAddresses());
-
         addressRepository.saveAll(addresses);
+
+        var role = new Role(UserRole.USER);
+        roleRepository.save(role);
+
 
         User user = userMapper.mapToUser(userRegisterDto);
         user.setPassword(passwordEncoder.encode(userRegisterDto.getPassword()));
         user.setAddresses(addresses);
+        user.setRole(role);
 
         userRepository.save(user);
 

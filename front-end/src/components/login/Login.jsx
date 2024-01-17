@@ -1,12 +1,48 @@
 import axios from "axios";
 import { GoogleLogin } from "@react-oauth/google";
 import "./Login.css";
+import { useState } from "react";
+import { FreeBreakfast } from "@mui/icons-material";
+import { json } from "react-router-dom";
+
 
 function Login() {
+
+    
+    const handeLogin = () => {
+      const [email, setEmail] = useState('');
+      const [password, setPassword] = useState('');
+    
+      const handleSubmit = async (e) => {
+        e.preventDefault();
+    
+        try {
+          const response = await axios.post('http://localhost:8080/api/auth/login', {
+            email,
+            password,
+          });
+
+
+          const { token } = response.data;
+          localStorage.setItem('token', token);
+    
+          console.log(response.data); // Handle successful login
+        } catch (error) {
+          console.error('Login failed', error);
+          // Handle login failure
+        }
+      };
+    }
+
+     
+  
+
   const handleGoogleLogin = async (response) => {
     const jwt = response.credential;
     console.log(response);
     localStorage.setItem("jwt token", jwt);
+
+  
 
     try {
       const backendResponse = await axios.post(
@@ -24,24 +60,29 @@ function Login() {
     }
   };
 
+
+
+
   return (
     <div className="login-container">
       <div className="login">
         <h1>Sign in</h1>
 
-        <form className="form">
+        <form className="form" onSubmit={handeLogin}>
           <label>
             Email
-            <input type="text" />
+            <input type="text" onChange={(e) => setEmail(e.target.value)} />
           </label>
 
           <label>
             Password
-            <input type="text" />
+            <input type="text" onChange={(e) => setPassword(e.target.value)} />
           </label>
+        
+          <button type = "submit" onClick={login}> Submit</button>
         </form>
 
-        <button>Submit</button>
+      
 
         <GoogleLogin
           onSuccess={handleGoogleLogin}

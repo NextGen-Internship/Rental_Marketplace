@@ -5,11 +5,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
-import java.util.Collections;
-import java.util.Set;
 
 @Data
 @Entity
@@ -18,21 +14,28 @@ import java.util.Set;
 public class Role {
 
 
-    @GeneratedValue(strategy = GenerationType.AUTO)
+
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
+    @Column(name = "id")
     private int id;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "role_name")
-    private UserRole role;
+    private UserRole role ;
+
 
 
     @NotEmpty
-    @Size(max = 255)
-    @Column(name = "description")
+    @Column(name = "role_description")
     private String description;
 
-    public Set<GrantedAuthority> getAuthorities() {
-        return Collections.singleton(new SimpleGrantedAuthority(role.name()));
+
+    public Role() {
+        this.description = "Some measafgasfd";
+    }
+    public Role(UserRole role) {
+        this.role = role;
+        this.description = "Some measafgasfd";
     }
 }

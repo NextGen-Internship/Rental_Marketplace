@@ -1,9 +1,11 @@
 package com.devminds.rentify.entity;
 
+import com.devminds.rentify.enums.UserRole;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
@@ -12,7 +14,7 @@ import java.util.List;
 @Data
 @Entity
 @Table(name = "user")
-public class User  implements UserDetails {
+public class User implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,7 +32,6 @@ public class User  implements UserDetails {
     private String lastName;
 
     @NotEmpty
- //   @Min(8)
     @Column(name = "password")
     private String password;
 
@@ -50,13 +51,13 @@ public class User  implements UserDetails {
     private List<Address> addresses;
 
 
-
     @OneToMany
     private List<Item> items;
 
     @ManyToOne
     @JoinColumn(name = "role_id")
     private Role role;
+
 
     @OneToMany
     private List<Payment> payments;
@@ -68,9 +69,10 @@ public class User  implements UserDetails {
     @OneToMany
     private List<History> histories;
 
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return role.getAuthorities();
+        return List.of(new SimpleGrantedAuthority(getUserRoleFromRole().toString()));
     }
 
     @Override
@@ -96,5 +98,10 @@ public class User  implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+
+    private UserRole getUserRoleFromRole() {
+        return role.getRole();
     }
 }

@@ -44,8 +44,4 @@ public class ApplicationConfig {
         return config.getAuthenticationManager();
     }
 
-    @Bean
-    public ModelMapper modelMapper() {
-        return new ModelMapper();
-    }
 }
