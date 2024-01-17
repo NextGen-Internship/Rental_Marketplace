@@ -31,24 +31,20 @@ AuthenticationService {
     private final AuthenticationManager authenticationManager;
     private final UserMapper userMapper;
     private final AddressMapper addressMapper;
-    private final AddressRepository addressRepository;
     private final RoleRepository roleRepository;
 
 
     public AuthenticationRespone  register (UserRegisterDto userRegisterDto){
 
-        var addresses = convertToAddressEntities(userRegisterDto.getAddresses());
-        addressRepository.saveAll(addresses);
 
         var role = new Role(UserRole.USER);
         roleRepository.save(role);
-
 
         User user = userMapper.mapToUser(userRegisterDto);
 
         if(user.getPassword().equals(userRegisterDto.getConfirmPassword())){
             user.setPassword(passwordEncoder.encode(userRegisterDto.getPassword()));
-            user.setAddresses(addresses);
+
             user.setRole(role);
 
             userRepository.save(user);

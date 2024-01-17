@@ -2,8 +2,6 @@ import axios from "axios";
 import { GoogleLogin } from "@react-oauth/google";
 import "./Login.css";
 import { useState } from "react";
-import { FreeBreakfast } from "@mui/icons-material";
-import { json } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 
 

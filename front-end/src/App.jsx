@@ -1,5 +1,4 @@
 import './App.css';
-import Hello from './components/Hello';
 import Navbar from './components/navbar/Navbar';
 import Home from './components/home/Home';
 import NotFound from './components/not-found/NotFound';

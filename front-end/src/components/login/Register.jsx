@@ -1,9 +1,7 @@
 import axios from "axios";
-import { GoogleLogin } from "@react-oauth/google";
 import "./Login.css";
 import { useState } from "react";
-import { FreeBreakfast } from "@mui/icons-material";
-import { json } from "react-router-dom";
+
 
 function Register() {
   const [formValues, setFormValues] = useState({
@@ -154,42 +152,7 @@ function Register() {
             <p className="error-message">{errorMessages.phoneNumber}</p>
           </label>
 
-          <p>
-            <b>Address</b>
-          </p>
-          <br />
-
-          <label>
-            City
-            <input type="text" name="address.city" onChange={handleInputChange} />
-            <p className="error-message">{errorMessages.address.city}</p>
-          </label>
-
-          <label>
-            Post Code
-            <input type="text" name="address.postCode" onChange={handleInputChange} />
-            <p className="error-message">{errorMessages.address.postCode}</p>
-          </label>
-
-          <label>
-            Street
-            <input type="text" name="address.street" onChange={handleInputChange} />
-            <p className="error-message">{errorMessages.address.street}</p>
-          </label>
-
-          <label>
-            Street Number
-            <input
-              type="text"
-              name="address.streetNumber"
-              onChange={handleInputChange}
-            />
-            <p className="error-message">
-              {errorMessages.address.streetNumber}
-            </p>
-          </label>
-
-          <button type="submit">Submit</button>
+          <button type="submit" onClick={handleSubmit}>Submit</button>
         </form>
       </div>
     </div>
