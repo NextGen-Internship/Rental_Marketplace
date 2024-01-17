@@ -9,6 +9,7 @@ import {
 } from "react-router-dom";
 
 import Login from "./components/login/Login";
+import CreateItem from "./components/add-item/Create-item";
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
         <Navbar />
         <Routes>
           <Route exact path="/login" element={<Login />} />
+          <Route exact path="/create" element={<CreateItem />} />
           {/* <Login /> */}
         </Routes>
       </Router>

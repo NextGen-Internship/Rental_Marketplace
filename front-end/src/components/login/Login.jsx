@@ -6,7 +6,7 @@ function Login() {
   const handleGoogleLogin = async (response) => {
     const jwt = response.credential;
     console.log(response);
-    localStorage.setItem("jwt token", jwt);
+    localStorage.setItem("jwt_token", jwt);
 
     try {
       const backendResponse = await axios.post(

@@ -1,4 +1,4 @@
-package com.devminds.rentify.web;
+package com.devminds.rentify.controller;
 
 import com.devminds.rentify.service.UserService;
 import org.springframework.web.bind.annotation.*;
