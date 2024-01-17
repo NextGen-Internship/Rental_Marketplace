@@ -1,4 +1,5 @@
 package com.devminds.rentify.auth;
+
 import com.devminds.rentify.configuration.JwtService;
 import com.devminds.rentify.entity.Address;
 import com.devminds.rentify.entity.Role;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.security.core.AuthenticationException;
 
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -35,7 +37,7 @@ AuthenticationService {
     private final RoleRepository roleRepository;
 
 
-    public AuthenticationRespone  register (UserRegisterDto userRegisterDto){
+    public AuthenticationRespone register(UserRegisterDto userRegisterDto) {
 
         var addresses = convertToAddressEntities(userRegisterDto.getAddresses());
         addressRepository.saveAll(addresses);
@@ -46,7 +48,7 @@ AuthenticationService {
 
         User user = userMapper.mapToUser(userRegisterDto);
 
-        if(user.getPassword().equals(userRegisterDto.getConfirmPassword())){
+        if (user.getPassword().equals(userRegisterDto.getConfirmPassword())) {
             user.setPassword(passwordEncoder.encode(userRegisterDto.getPassword()));
             user.setAddresses(addresses);
             user.setRole(role);
@@ -55,17 +57,20 @@ AuthenticationService {
         }
 
 
-
         var token = jwtService.generateToken(user);
         return AuthenticationRespone.builder()
                 .token(token)
                 .email(user.getEmail()).build();
     }
 
-    private List<Address> convertToAddressEntities(List<AddressDto> addressDtos) {
-   return     addressDtos.stream()
+    private List<Address> convertToAddressEntities(List<AddressDto> addressDto) {
+        if (addressDto == null) {
+            return Collections.emptyList();  // or return null, or handle it according to your requirements
+        }
+       
+        return addressDto.stream()
                 .map(addressMapper::mapToAddress)
-              .collect(Collectors.toList());
+                .collect(Collectors.toList());
     }
 
 
