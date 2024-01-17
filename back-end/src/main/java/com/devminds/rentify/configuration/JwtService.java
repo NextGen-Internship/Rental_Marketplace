@@ -68,18 +68,7 @@ public class JwtService {
                 .compact();
     }
 
-    /*
-    public String generateToken(Map<String , Objects> extraClaims , User user){
-        return  Jwts.builder()
-                .setClaims(extraClaims)
-                .setSubject(user.getUsername())
-                .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000  * 60 * 24)) // token will be valid for 24 hours and 1000 ms
-                .signWith(getSignInKey(), SignatureAlgorithm.HS256)
-                .compact();
-    }
 
-     */
 
    public boolean isTokenValid(String token , UserDetails userDetails){
         String userEmail = extractUsername(token);

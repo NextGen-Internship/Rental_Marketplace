@@ -36,7 +36,7 @@ public class AuthConfig {
                 .csrf(crsf -> crsf.disable())
                 .authorizeHttpRequests(
                         auth -> auth
-                                .requestMatchers("/api/auth/login").permitAll()
+                                .requestMatchers("/api/auth/**").permitAll()
                                 .requestMatchers("/rentify/categories").permitAll()
                                 .requestMatchers("/rentify/categories/*").permitAll()
                                 .requestMatchers("/rentify/items").permitAll()
