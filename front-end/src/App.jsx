@@ -8,6 +8,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import CategoryDetails from './components/categories/CategoryDetails';
 import ItemDetails from './components/items/ItemDetails';
 import Login from "./components/login/Login";
+import Register from "./components/login/Register";
 
 function App() {
   return (
@@ -24,7 +25,8 @@ function App() {
 
           <Route path="items/:id" element={<ItemDetails />} />   
 
-          <Route exact path="/login" element={<Login />} />          
+          <Route exact path="/login" element={<Login />} />   
+          <Route exact path="/register" element={<Register />} />        
           
           {/* catch any other path */}
           <Route path="*" element={<NotFound/>}/> 

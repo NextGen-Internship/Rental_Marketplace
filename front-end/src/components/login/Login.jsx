@@ -9,30 +9,30 @@ import { json } from "react-router-dom";
 function Login() {
 
     
-    const handeLogin = () => {
-      const [email, setEmail] = useState('');
-      const [password, setPassword] = useState('');
+    // const handeLogin = () => {
+    //   const [email, setEmail] = useState('');
+    //   const [password, setPassword] = useState('');
     
-      const handleSubmit = async (e) => {
-        e.preventDefault();
+    //   const handleSubmit = async (e) => {
+    //     e.preventDefault();
     
-        try {
-          const response = await axios.post('http://localhost:8080/api/auth/login', {
-            email,
-            password,
-          });
+    //     try {
+    //       const response = await axios.post('http://localhost:8080/api/auth/login', {
+    //         email,
+    //         password,
+    //       });
 
 
-          const { token } = response.data;
-          localStorage.setItem('token', token);
+    //       const { token } = response.data;
+    //       localStorage.setItem('token', token);
     
-          console.log(response.data); // Handle successful login
-        } catch (error) {
-          console.error('Login failed', error);
-          // Handle login failure
-        }
-      };
-    }
+    //       console.log(response.data); // Handle successful login
+    //     } catch (error) {
+    //       console.error('Login failed', error);
+    //       // Handle login failure
+    //     }
+    //   };
+    // }
 
      
   
@@ -68,18 +68,18 @@ function Login() {
       <div className="login">
         <h1>Sign in</h1>
 
-        <form className="form" onSubmit={handeLogin}>
+        <form className="form" >
           <label>
             Email
-            <input type="text" onChange={(e) => setEmail(e.target.value)} />
+            <input type="text"  />
           </label>
 
           <label>
             Password
-            <input type="text" onChange={(e) => setPassword(e.target.value)} />
+            <input type="text" />
           </label>
         
-          <button type = "submit" onClick={login}> Submit</button>
+          <button type = "submit" > Submit</button>
         </form>
 
       

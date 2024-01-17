@@ -1,5 +1,6 @@
 package com.devminds.rentify.auth;
 
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -22,10 +23,14 @@ public class UserRegisterDto implements UserDetails {
     private String lastName;
 
     @NotEmpty(message = "email is required")
+    @Email
     private String email;
 
     @NotEmpty(message = "password is required")
     private String password;
+
+    @NotEmpty(message = "confirm password is required")
+    private String confirmPassword;
 
     @NotEmpty(message = "phoneNumber is required")
     private String phoneNumber;

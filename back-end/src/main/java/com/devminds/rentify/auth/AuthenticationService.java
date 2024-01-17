@@ -41,11 +41,16 @@ AuthenticationService {
 
 
         User user = userMapper.mapToUser(userRegisterDto);
-        user.setPassword(passwordEncoder.encode(userRegisterDto.getPassword()));
-        user.setAddresses(addresses);
-        user.setRole(role);
 
-        userRepository.save(user);
+        if(user.getPassword().equals(userRegisterDto.getConfirmPassword())){
+            user.setPassword(passwordEncoder.encode(userRegisterDto.getPassword()));
+            user.setAddresses(addresses);
+            user.setRole(role);
+
+            userRepository.save(user);
+        }
+
+
 
         var token = jwtService.generateToken(user);
         return AuthenticationRespone.builder()
