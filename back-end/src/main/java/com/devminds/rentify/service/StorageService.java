@@ -1,28 +1,26 @@
 package com.devminds.rentify.service;
 
+import com.amazonaws.HttpMethod;
 import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.model.GeneratePresignedUrlRequest;
 import com.amazonaws.services.s3.model.ListObjectsRequest;
-import com.amazonaws.services.s3.model.ListObjectsV2Request;
 import com.amazonaws.services.s3.model.ObjectListing;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.services.s3.model.S3Object;
 import com.amazonaws.services.s3.model.S3ObjectInputStream;
 import com.amazonaws.services.s3.model.S3ObjectSummary;
 import com.amazonaws.util.IOUtils;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.Negative;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import software.amazon.awssdk.regions.Region;
-import software.amazon.awssdk.services.s3.S3Client;
-import software.amazon.awssdk.services.s3.model.ListObjectsV2Response;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import static software.amazon.awssdk.awscore.AwsExecutionAttribute.AWS_REGION;
@@ -40,13 +38,31 @@ public class StorageService {
         this.s3Client = s3Client;
     }
 
-    public String uploadFile(MultipartFile file) throws IOException {
+    public URL uploadFile(MultipartFile file) throws IOException {
         File fileObj = convertMultiPartFileToFile(file);
 //        String fileName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
         String fileName = file.getOriginalFilename();
         s3Client.putObject(new PutObjectRequest(bucketName, fileName, fileObj));
         fileObj.delete();
-        return "File uploaded : " + fileName;
+        //return "File uploaded : " + fileName;
+
+
+        String filePath = fileName;
+        // Set the key (object name) under which the file will be stored in the bucket
+//        String key = "images/" + new Date().getTime() + "_" + new File(filePath).getName();
+        String key = new File(filePath).getName();
+
+        // Generate a pre-signed URL for the uploaded object
+        GeneratePresignedUrlRequest generatePresignedUrlRequest =
+                new GeneratePresignedUrlRequest(bucketName, key)
+                        .withMethod(HttpMethod.GET)
+                        .withExpiration(new Date(System.currentTimeMillis() + 3600000)); // Set expiration time (1 hour)
+        URL preSignedUrl = s3Client.generatePresignedUrl(generatePresignedUrlRequest);
+
+        // Now you can store preSignedUrl in your database and use it to display the image in the UI
+        System.out.println("Pre-signed URL: " + preSignedUrl);
+
+        return preSignedUrl;
     }
 
     public byte[] downloadFile(String fileName) {
@@ -95,7 +111,7 @@ public class StorageService {
             objectListing = s3Client.listObjects(listObjectsRequest);
             for (S3ObjectSummary objectSummary :
                     objectListing.getObjectSummaries()) {
-                System.out.println( " - " + objectSummary.getKey() + "  " +
+                System.out.println(" - " + objectSummary.getKey() + "  " +
                         "(size = " + objectSummary.getSize() +
                         ")");
                 result.add(objectSummary.getKey());
