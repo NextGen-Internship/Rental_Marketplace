@@ -1,9 +1,8 @@
 package com.devminds.rentify.service;
 
-import com.devminds.rentify.auth.DuplicateEntityException;
+import com.devminds.rentify.exception.DuplicateEntityException;
 import com.devminds.rentify.entity.User;
 import com.devminds.rentify.repository.UserRepository;
-import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;

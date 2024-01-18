@@ -1,4 +1,4 @@
-package com.devminds.rentify.auth;
+package com.devminds.rentify.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

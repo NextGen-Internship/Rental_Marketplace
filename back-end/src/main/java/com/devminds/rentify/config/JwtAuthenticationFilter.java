@@ -1,4 +1,4 @@
-package com.devminds.rentify.configuration;
+package com.devminds.rentify.config;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

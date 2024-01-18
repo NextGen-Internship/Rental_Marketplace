@@ -1,4 +1,4 @@
-package com.devminds.rentify.auth;
+package com.devminds.rentify.dto;
 
 import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
