@@ -9,7 +9,6 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
-import lombok.NonNull;
 
 @Data
 @Entity
@@ -17,7 +16,7 @@ import lombok.NonNull;
 public class Address {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Id
-    private int id;
+    private Long id;
     @Column
     @NotEmpty
     @Size(max = 100)

@@ -10,6 +10,5 @@ const NotFound = () => {
     </div>
   )
 }
-// add this to app.js
 
 export default NotFound

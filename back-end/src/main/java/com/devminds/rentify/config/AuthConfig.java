@@ -15,7 +15,9 @@ public class AuthConfig {
                 .requestMatchers("/rentify/categories").permitAll()
                 .requestMatchers("/rentify/categories/*").permitAll()
                 .requestMatchers("/rentify/items").permitAll()
-                .requestMatchers("/rentify/items/*").permitAll()
+                .requestMatchers("/rentify/items/**").permitAll()
+                .requestMatchers("/rentify/addresses").permitAll()
+                .requestMatchers("/rentify/addresses/**").permitAll()
 //                .requestMatchers("/h2/**").permitAll()
                 .anyRequest().authenticated());
         return http.build();

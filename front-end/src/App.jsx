@@ -1,5 +1,4 @@
 import './App.css';
-import Hello from './components/Hello';
 import Navbar from './components/navbar/Navbar';
 import Home from './components/home/Home';
 import NotFound from './components/not-found/NotFound';
@@ -18,19 +17,13 @@ function App() {
         <Routes>
             
           <Route exact path="/" element={<Home />} />
-            
-          {/* this is route parameter */}
           <Route path="/items/category/:id" element={<CategoryDetails />} /> 
-
           <Route path="items/:id" element={<ItemDetails />} />   
-
           <Route exact path="/login" element={<Login />} />          
-          
-          {/* catch any other path */}
           <Route path="*" element={<NotFound/>}/> 
           <Route path="/notfound" element={<NotFound/>}/> 
             
-          </Routes>
+        </Routes>
 
           <Footer />
       </div>
