@@ -4,49 +4,44 @@ import "./Login.css";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-
-
 function Login() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
 
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const handleTogglePassword = () => {
+    setShowPassword(!showPassword);
+  };
 
   const navigate = useNavigate();
-
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
-      const response = await axios.post('http://localhost:8080/rentify/login', {
+      const response = await axios.post("http://localhost:8080/rentify/login", {
         email,
         password,
       });
 
       const { token } = response.data;
-      localStorage.setItem('token', token);
-      console.log('Login successful:', response.data);
+      localStorage.setItem("token", token);
+      console.log("Login successful:", response.data);
 
       navigate("/");
-
     } catch (error) {
       if (error.response && error.response.status === 404) {
-        console.error('User not found:', error.response.data);
+        console.error("User not found:", error.response.data);
       } else {
-        console.error('Login failed:', error);
-      } 
+        console.error("Login failed:", error);
+      }
     }
   };
-
-     
-  
 
   const handleGoogleLogin = async (response) => {
     const jwt = response.credential;
     console.log(response);
     localStorage.setItem("jwt token", jwt);
-
-  
 
     try {
       const backendResponse = await axios.post(
@@ -64,7 +59,6 @@ function Login() {
     }
   };
 
-
   return (
     <div className="login-container">
       <div className="login">
@@ -77,12 +71,25 @@ function Login() {
           </label>
           <label>
             Password
-            <input type="text" onChange={(e) => setPassword(e.target.value)} />
+            <input
+              type={showPassword ? "text" : "password"}
+              onChange={(e) => setPassword(e.target.value)}
+            />
           </label>
-          <button type = "submit" > Submit</button>
+          <button type="submit"> Submit</button>
+
+          <div className="login-password-btn">
+          <button
+            type="button"
+            className="toggle-password-button"
+            onClick={handleTogglePassword}
+          >
+            {showPassword ? "Hide" : "Show"}
+          </button>
+        </div>
         </form>
 
-      
+     
 
         <GoogleLogin
           onSuccess={handleGoogleLogin}
@@ -91,7 +98,6 @@ function Login() {
       </div>
     </div>
   );
-  
-  }
+}
 
 export default Login;

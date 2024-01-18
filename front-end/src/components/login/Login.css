@@ -76,3 +76,24 @@
   height: 100vh;
   width: 100vw;
 }
+
+.login-password-btn {
+  position: absolute;
+  left: 48em;
+  top: 19em;
+  }
+
+.register-password-btn {
+position: absolute;
+left: 48em;
+top: 28.4em;
+}
+
+.error-message {
+  color: #f0975d;
+}
+
+.PhoneInput {
+  margin: 0;
+  width: 18em;
+}
