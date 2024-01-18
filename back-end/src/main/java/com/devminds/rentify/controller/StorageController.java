@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @CrossOrigin
 @RestController
@@ -45,4 +47,10 @@ public class StorageController {
     public ResponseEntity<String> deleteFile(@PathVariable String fileName) {
         return new ResponseEntity<>(service.deleteFile(fileName), HttpStatus.OK);
     }
+
+    @GetMapping("/names")
+    public ResponseEntity<List<String>> getFileNames() {
+        return new ResponseEntity<>(service.listObjectsInBucket(), HttpStatus.OK);
+    }
+
 }
