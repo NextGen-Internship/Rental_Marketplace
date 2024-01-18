@@ -3,7 +3,7 @@ import "./Login.css";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import  "react-phone-number-input/style.css";
-import PhoneInput from "react-phone-number-input";
+
 
 function Register() {
 
@@ -53,10 +53,54 @@ function Register() {
     });
 
     let isValid = true;
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!emailRegex.test(formValues.email)) {
+      setErrorMessages((prevErrors) => ({
+        ...prevErrors,
+        email: "Invalid email format",
+      }));
+      isValid = false;
+    }
+
+    if (formValues.password.length < 8) {
+      setErrorMessages((prevErrors) => ({
+        ...prevErrors,
+        password: "Password must be at least 8 characters long",
+      }));
+      isValid = false;
+    }
+
+     if (formValues.password !== formValues.confirmPassword) {
+    setErrorMessages((prevErrors) => ({
+      ...prevErrors,
+      confirmPassword: "Password do not match",
+    }));
+    isValid = false;
+  }
+
+  for (const key in formValues) {
+    if (formValues[key] === "") {
+      setErrorMessages((prevErrors) => ({
+        ...prevErrors,
+        [key]: "This field is required",
+      }));
+      isValid = false;
+    }
+  }
 
 
     if (isValid) {
-      
+
+      for (const key in formValues) {
+        if (formValues[key] === "") {
+          setErrorMessages((prevErrors) => ({
+            ...prevErrors,
+            [key]: "This field is required",
+          }));
+          isValid = false;
+        }
+      }
 
       try {
         setLoading(true);
@@ -67,14 +111,9 @@ function Register() {
         ).then((response) => {
           console.log("Registration successful:", response.data.token);
           localStorage.setItem("register_token", response.data.token);
-        });
-        console.log("Registration successful:", response.data);
-        
-        navigate("/login");
+          navigate("/login");
+        });  
       } catch (error) {
-     
-
-
         if (error.response && error.response.data) {
           const { data } = error.response;
           console.log("Registration failed:", data);
@@ -108,11 +147,7 @@ function Register() {
         setLoading(false);
       }
 
-
       }
-
- 
-
 
   };
 
@@ -173,11 +208,15 @@ function Register() {
               className="toggle-password-button"
               onClick={handleTogglePassword}
             >
-              {showPassword ? "Hide" : "Show"}
+              {showPassword ? " Hide" : " Show"}
             </button>
           </div>
      
-          <PhoneInput defaultCountry="BG" value={value} onChange={setValue} />
+          <label>
+            Phone
+            <input type="text" name="phoneNumber" onChange={handleInputChange} />
+            <p className="error-message">{errorMessages.phoneNumber}</p>
+          </label>
         
         </form>
         <button type="submit" onClick={handleSubmit}>

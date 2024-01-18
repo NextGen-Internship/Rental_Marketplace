@@ -8,15 +8,22 @@ function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const navigate = useNavigate();
 
   const handleTogglePassword = () => {
     setShowPassword(!showPassword);
   };
 
-  const navigate = useNavigate();
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!email || !password) {
+      setErrorMessage("Please enter both email and password.");
+      return;
+    }
 
     try {
       const response = await axios.post("http://localhost:8080/rentify/login", {
@@ -30,11 +37,10 @@ function Login() {
 
       navigate("/");
     } catch (error) {
-      if (error.response && error.response.status === 404) {
-        console.error("User not found:", error.response.data);
-      } else {
+      
+        setErrorMessage("Email or Password are incorrect");
         console.error("Login failed:", error);
-      }
+      
     }
   };
 
@@ -87,7 +93,9 @@ function Login() {
             {showPassword ? "Hide" : "Show"}
           </button>
         </div>
+        {errorMessage && <p className="error-message">{errorMessage}</p>}
         </form>
+       
 
      
 
