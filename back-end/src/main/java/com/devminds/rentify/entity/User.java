@@ -14,7 +14,6 @@ import jakarta.validation.constraints.*;
 import lombok.Data;
 import org.hibernate.validator.constraints.UniqueElements;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -56,7 +55,7 @@ public class User {
 
 
     @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "id")  // Foreign key in the Address table
+    @JoinColumn(name = "id")
     private List<Address> addresses;
 
 

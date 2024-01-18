@@ -12,7 +12,7 @@ const Hello = () => {
           const result = await fetchData(endpoint);
           setData(result);
         } catch (error) {
-          // Handle error
+          console.log(error);
         }
       };
   

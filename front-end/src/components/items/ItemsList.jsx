@@ -20,7 +20,6 @@ const ItemsList = ({ searchTerm }) => {
             const result = await fetchData(endpoint + (Object.keys(endpointSuffix).length === 0 ?  '' : '/category/' + endpointSuffix.id));
             setItems(result);
           } catch (error) {
-            // Handle error
             console.log(error);
           }
         };

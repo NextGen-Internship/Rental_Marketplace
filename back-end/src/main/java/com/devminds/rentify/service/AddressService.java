@@ -35,8 +35,6 @@ public class AddressService {
         return addressRepository.findByPostCode(postalCode);
     }
 
-    // todo maybe dto
-    // todo better filtration
     public Address saveAddress(Address address) {
         return addressRepository.save(address);
     }
