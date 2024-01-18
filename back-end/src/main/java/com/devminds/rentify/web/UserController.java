@@ -1,6 +1,6 @@
 package com.devminds.rentify.web;
 
-import com.devminds.rentify.service.UserService;
+import com.devminds.rentify.service.UserServiceImpl;
 import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin(origins = "http://localhost:3000")
@@ -8,9 +8,9 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/rentify")
 public class UserController {
 
-    private final UserService userService;
+    private final UserServiceImpl userService;
 
-    public UserController(UserService userService) {
+    public UserController(UserServiceImpl userService) {
         this.userService = userService;
     }
 

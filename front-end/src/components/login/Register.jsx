@@ -1,22 +1,21 @@
 import axios from "axios";
+import { GoogleLogin } from "@react-oauth/google";
 import "./Login.css";
 import { useState } from "react";
-
+import { FreeBreakfast } from "@mui/icons-material";
+import { json } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 function Register() {
+
+  const navigate = useNavigate();
   const [formValues, setFormValues] = useState({
     firstName: "",
     lastName: "",
     email: "",
     password: "",
     confirmPassword: "",
-    phoneNumber: "",
-    address: {
-      city: "",
-      postCode: "",
-      street: "",
-      streetNumber: "",
-    },
+    phoneNumber: ""
   });
 
   const [errorMessages, setErrorMessages] = useState({
@@ -25,14 +24,10 @@ function Register() {
     email: "",
     password: "",
     confirmPassword: "",
-    phoneNumber: "",
-    address: {
-      city: "",
-      postCode: "",
-      street: "",
-      streetNumber: "",
-    },
+    phoneNumber: ""
   });
+
+  const [loading, setLoading] = useState(false);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -53,7 +48,9 @@ function Register() {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit =  async(e) => {
+
+    console.log("bachka butona")
     e.preventDefault();
     setErrorMessages({
       firstName: "",
@@ -62,44 +59,76 @@ function Register() {
       password: "",
       confirmPassword: "",
       phoneNumber: "",
-       address: {
-      city: "",
-      postCode: "",
-      street: "",
-      streetNumber: "",
-    },
+
     });
 
     let isValid = true;
-    for (const key in formValues) {
-      if (typeof formValues[key] === "object") {
-        for (const addressKey in formValues[key]) {
-          if (formValues[key][addressKey] === "") {
-            setErrorMessages((prevErrors) => ({
-              ...prevErrors,
-              [key]: {
-                ...prevErrors[key],
-                [addressKey]: "This field is required",
-              },
-            }));
-            isValid = false;
-          }
-        }
-      } else if (formValues[key] === "") {
-        setErrorMessages((prevErrors) => ({
-          ...prevErrors,
-          [key]: "This field is required",
-        }));
-        isValid = false;
-      }
-    }
+
 
     if (isValid) {
-      axios.post("http://localhost:8080/rentify/register", formValues)
-      .then(response => {
-        console.log('Registration successful:', response.data);
-      })
-    }
+      
+      try {
+        setLoading(true);
+        const response = await axios.post(
+          "http://localhost:8080/rentify/register",
+          formValues
+        );
+        console.log("Registration successful:", response.data);
+        navigate("/login");
+      } catch (error) {
+     
+
+
+        if (error.response && error.response.data) {
+          const { data } = error.response;
+          console.log("Registration failed:", data);
+      
+          const errorMessage = data.errorMessage || '';
+          
+          // Extract field name from error message
+          const fieldNameMatch = errorMessage.match(/User with (\w+) .+ already exists/);
+          const fieldName = fieldNameMatch ? fieldNameMatch[1].toLowerCase() : '';
+      
+          if (fieldName === "email") {
+            setErrorMessages((prevErrors) => ({
+              ...prevErrors,
+              email: errorMessage,
+            }));
+          } else if (fieldName === "phonenumber") {
+            setErrorMessages((prevErrors) => ({
+              ...prevErrors,
+              phoneNumber: errorMessage,
+            }));
+          } else {
+            // Default case when field name is not recognized
+            setErrorMessages((prevErrors) => ({
+              ...prevErrors,
+              email: errorMessage,
+            }));
+          }
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+      } finally {
+        setLoading(false);
+      }
+
+
+      }
+
+ 
+
   };
 
   return (
@@ -151,12 +180,13 @@ function Register() {
             />
             <p className="error-message">{errorMessages.phoneNumber}</p>
           </label>
-
-          <button type="submit" onClick={handleSubmit}>Submit</button>
+          <button type="submit" >Submit</button>
         </form>
       </div>
     </div>
   );
-}
+  }
+
+
 
 export default Register;

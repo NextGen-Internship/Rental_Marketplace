@@ -9,15 +9,27 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class AuthController {
 
-    private final AuthenticationService service;
+    private final AuthService authService;
+
+
 
     @PostMapping("/register")
-    public ResponseEntity<AuthenticationRespone> register(@RequestBody UserRegisterDto request){
-        return ResponseEntity.ok(service.register(request));
+    public ResponseEntity<AuthenticationRespone> register(@RequestBody UserRegisterDto userRegisterDto){
+
+        try {
+            AuthenticationRespone authenticationResponse = authService.register(userRegisterDto);
+            return ResponseEntity.ok(authenticationResponse);
+        } catch (DuplicateEntityException e) {
+            AuthenticationRespone errorResponse = AuthenticationRespone.builder()
+                    .errorMessage(e.getMessage())
+                    .build();
+            return ResponseEntity.badRequest().body(errorResponse);
+        }
     }
+
 
     @PostMapping("/login")
     public ResponseEntity<AuthenticationRespone> login(@RequestBody LoginDto request){
-        return ResponseEntity.ok(service.login(request));
+        return ResponseEntity.ok(authService.login(request));
     }
 }
