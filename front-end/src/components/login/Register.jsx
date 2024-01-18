@@ -40,7 +40,6 @@ function Register() {
 
   const handleSubmit =  async(e) => {
 
-    console.log("bachka butona")
     e.preventDefault();
     setErrorMessages({
       firstName: "",

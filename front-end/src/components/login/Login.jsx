@@ -15,8 +15,6 @@ function Login() {
     setShowPassword(!showPassword);
   };
 
-
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -30,6 +28,7 @@ function Login() {
         email,
         password,
       });
+      navigate("/");
 
       const { token } = response.data;
       localStorage.setItem("token", token);
@@ -37,10 +36,8 @@ function Login() {
 
       navigate("/");
     } catch (error) {
-      
-        setErrorMessage("Email or Password are incorrect");
-        console.error("Login failed:", error);
-      
+      setErrorMessage("Email or Password are incorrect");
+      console.error("Login failed:", error);
     }
   };
 
@@ -85,19 +82,16 @@ function Login() {
           <button type="submit"> Submit</button>
 
           <div className="login-password-btn">
-          <button
-            type="button"
-            className="toggle-password-button"
-            onClick={handleTogglePassword}
-          >
-            {showPassword ? "Hide" : "Show"}
-          </button>
-        </div>
-        {errorMessage && <p className="error-message">{errorMessage}</p>}
+            <button
+              type="button"
+              className="toggle-password-button"
+              onClick={handleTogglePassword}
+            >
+              {showPassword ? "Hide" : "Show"}
+            </button>
+          </div>
+          {errorMessage && <p className="error-message">{errorMessage}</p>}
         </form>
-       
-
-     
 
         <GoogleLogin
           onSuccess={handleGoogleLogin}

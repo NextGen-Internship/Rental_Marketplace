@@ -38,6 +38,7 @@ public class AuthConfig {
                         auth -> auth
                                 .requestMatchers("/rentify/login").permitAll()
                                 .requestMatchers("/rentify/register").permitAll()
+                                .requestMatchers("/rentify/google-login").permitAll()
                                 .requestMatchers("/rentify/categories").permitAll()
                                 .requestMatchers("/rentify/categories/*").permitAll()
                                 .requestMatchers("/rentify/items").permitAll()
