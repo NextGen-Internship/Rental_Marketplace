@@ -1,23 +1,19 @@
-.login-container body,
-.login-container h1,
-.login-container h2,
-.login-container p,
-.login-container input,
-.login-container button {
+#root div {
   margin: 0;
-  padding: 0;
 }
 
 .login-container {
-  background-color: #1f41a9;
-  background-image: url(../../../src/assets/BG.svg);
+  font-family: 'Arial', sans-serif;
+  background-color: #1f41a9; 
+  background-image: url(../../../src/assets/BG.svg); 
   background-size: cover;
   background-position: center;
-  font-family: 'Arial', sans-serif;
-  display: flex;
   align-items: center;
   justify-content: center;
-  height: 100%;
+  display: flex;
+  flex-direction: column;
+  height: 100vh; 
+  width: 100vw;
 }
 
 .login-container .login {
@@ -70,9 +66,14 @@
   border: 2px solid #4caf50;
 }
 
-.login-container .app-container {
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
-  width: 100vw;
-}
+
+.password-btn {
+     width: 6em;
+     display: inline-block;
+  }
+
+  .error-message {
+    color: #f0975d;
+  }
+
+  

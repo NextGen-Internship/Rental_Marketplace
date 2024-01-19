@@ -1,6 +1,7 @@
 package com.devminds.rentify.dto;
 
 import com.devminds.rentify.entity.Category;
+import jakarta.validation.constraints.NotBlank;
 import com.devminds.rentify.entity.User;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;

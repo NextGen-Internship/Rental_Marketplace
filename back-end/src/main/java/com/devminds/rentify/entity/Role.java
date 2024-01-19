@@ -13,6 +13,7 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 
+
 @Data
 @Entity
 @Table(name = "user_role")
@@ -20,17 +21,29 @@ import lombok.Data;
 public class Role {
 
 
-    @GeneratedValue(strategy = GenerationType.AUTO)
+
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
+    @Column(name = "id")
     private int id;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "role_name")
-    private UserRole role;
+    private UserRole role ;
+
 
 
     @NotEmpty
     @Size(max = 255)
     @Column(name = "role_description")
     private String description;
+
+
+    public Role() {
+        this.description = "Some measafgasfd";
+    }
+    public Role(UserRole role) {
+        this.role = role;
+        this.description = "Some measafgasfd";
+    }
 }

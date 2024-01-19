@@ -22,7 +22,7 @@ public class AddressService {
         return addressRepository.findAll();
     }
 
-    public Address getAddressById(long id) {
+    public Address getAddressById(int id) {
         return addressRepository.findById(id)
                 .orElseThrow(() -> new AddressNotFoundException(String.format(ADDRESS_NOT_FOUND_MESSAGE, id)));
     }
@@ -39,7 +39,7 @@ public class AddressService {
         return addressRepository.save(address);
     }
 
-    public void deleteAddressById(long id) {
+    public void deleteAddressById(int id) {
         addressRepository.deleteById(id);
     }
 }

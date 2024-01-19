@@ -1,8 +1,10 @@
 .navbar {
-    padding: 30px; 
+    padding: 32px 0px;
     display: flex;
     align-items: center;
-    max-height: 70px; 
+    justify-content: space-between;
+    max-height: 70px;
+    margin: 0 auto;
     border-bottom: 1px solid #f2f2f2;
 }
 

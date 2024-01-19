@@ -33,9 +33,9 @@
 }
 
 .items-list-item h5 {
-    font-size: 16px; /* Adjust the font size based on your design */
+    font-size: 16px; 
     color: #888;
-    margin-top: 10px; /* Adjust the margin based on your design */
+    margin-top: 10px;
 }
 
 .items-list-item p {

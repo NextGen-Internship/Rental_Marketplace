@@ -1,26 +1,29 @@
 package com.devminds.rentify.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
+import jakarta.validation.valueextraction.UnwrapByDefault;
 import lombok.Data;
+
 
 @Data
 @Entity
 @Table(name = "address")
 public class Address {
-    @GeneratedValue(strategy = GenerationType.AUTO)
+
     @Id
-    private Long id;
+
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
+
+
     @Column
     @NotEmpty
     @Size(max = 100)
     private String city;
+
+
     @Column
     @NotEmpty
     @Size(max = 100)
@@ -35,6 +38,5 @@ public class Address {
     @NotEmpty
     @Size(max = 10)
     private String streetNumber;
-
 
 }
