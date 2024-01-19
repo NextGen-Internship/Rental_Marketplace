@@ -29,8 +29,6 @@ AuthenticationServiceImpl implements AuthService {
     private final AuthenticationManager authenticationManager;
     private final UserMapper userMapper;
     private final RoleRepository roleRepository;
-
-
     @Override
     public AuthenticationRespone register(UserRegisterDto userRegisterDto) {
 

@@ -18,7 +18,7 @@ import java.util.Date;
 public class History {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Id
-    private int id;
+    private long id;
 
     @ManyToOne
     private User user;

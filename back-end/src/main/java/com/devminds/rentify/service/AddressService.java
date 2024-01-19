@@ -22,9 +22,8 @@ public class AddressService {
         return addressRepository.findAll();
     }
 
-    public Address getAddressById(int id) {
-        return addressRepository.findById(id)
-                .orElseThrow(() -> new AddressNotFoundException(String.format(ADDRESS_NOT_FOUND_MESSAGE, id)));
+    public Address getAddressById(long id) {
+        return addressRepository.findById(id).orElseThrow(() -> new AddressNotFoundException(String.format(ADDRESS_NOT_FOUND_MESSAGE, id)));
     }
 
     public List<Address> getAddressesByCity(String city) {
@@ -39,7 +38,7 @@ public class AddressService {
         return addressRepository.save(address);
     }
 
-    public void deleteAddressById(int id) {
+    public void deleteAddressById(long id) {
         addressRepository.deleteById(id);
     }
 }

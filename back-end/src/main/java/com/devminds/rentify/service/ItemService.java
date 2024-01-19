@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ItemService {
@@ -29,6 +30,10 @@ public class ItemService {
                 .toList();
     }
 
+    public Item findById(Long itemId) {
+        Optional<Item> itemOptional = itemRepository.findById(itemId);
+        return itemOptional.orElse(null);
+    }
     public ItemDto getItemById(Long id) {
         return itemRepository.findById(id)
                 .map(this::mapItemToItemDto)

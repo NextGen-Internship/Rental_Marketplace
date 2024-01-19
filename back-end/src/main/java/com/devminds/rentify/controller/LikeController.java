@@ -2,6 +2,8 @@ package com.devminds.rentify.controller;
 
 import com.devminds.rentify.config.JwtService;
 import com.devminds.rentify.dto.LikeDto;
+import com.devminds.rentify.entity.Item;
+import com.devminds.rentify.entity.User;
 import com.devminds.rentify.service.ItemService;
 import com.devminds.rentify.service.LikedItemService;
 import com.devminds.rentify.service.UserService;
@@ -9,6 +11,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/rentify/like")
@@ -25,12 +29,15 @@ public class LikeController {
         try {
             String email = jwtService.extractUsername(token);
 
-            var user = userService.findByEmail(email);
+
+            Optional<User> userOptional = userService.findByEmail(email);
+            User user = userOptional.orElse(null);
 
             if (user == null) {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User not authenticated");
             }
-            var item = itemService.getItemById(likeRequest.getItemId());
+
+            Item item = itemService.findById(likeDto.getItemId());
             if (item == null) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Item not found");
             }

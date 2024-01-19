@@ -51,12 +51,12 @@ const ItemsList = ({ searchTerm }) => {
             });
             if (!response.ok) {
                 // If the server returns an error, revert the local state
-                setLikedItems(new Set(likedItems));
-                // Optionally, you can show an error message to the user
-                console.error('Error recording like:', response.statusText);
+                throw new Error(`Error recording like: ${response.statusText}`);
+
               }
             } catch (error) {
-              // Handle any network errors
+                setLikedItems(new Set(likedItems)); // Rollback the local state
+                setError(error); // Update the error state
               console.error('Network error:', error);
             }
     };

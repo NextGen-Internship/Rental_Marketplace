@@ -24,6 +24,8 @@ public class LikedItemService {
         likedItemRepository.save(likedItem);
     }
 
+
+
     public List<Item> getLikedItemsByUser(User user) {
         List<LikedItem> likedItems = likedItemRepository.findByUser(user);
         return likedItems.stream()

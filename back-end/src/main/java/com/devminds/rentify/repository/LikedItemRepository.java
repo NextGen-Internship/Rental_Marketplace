@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface LikedItemRepository extends JpaRepository<LikedItem , Integer> {
+public interface LikedItemRepository extends JpaRepository<LikedItem , Long> {
 
     List<LikedItem> findByItem(Item item);
 
