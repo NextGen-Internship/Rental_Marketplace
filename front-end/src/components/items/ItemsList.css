@@ -1,5 +1,3 @@
-/* ItemsList.css */
-
 .items-list {
     text-align: center;
     display: flex;
@@ -9,9 +7,9 @@
 
 .items-list-item {
     position: relative;
-    width: 250px; /* Adjust the width based on your design */
-    padding: 20px; /* Adjust padding for better spacing */
-    margin: 15px; /* Adjust margin for better spacing */
+    width: 250px; 
+    padding: 20px; 
+    margin: 15px; 
     list-style: none;
     transition: transform 0.3s ease-in-out;
     border: 2px solid orange;
@@ -30,20 +28,20 @@
 }
 
 .items-list-item h2 {
-    font-size: 18px; /* Adjust the font size based on your design */
+    font-size: 18px;
     color: #333;
 }
 
 .items-list-item h5 {
-    font-size: 16px; /* Adjust the font size based on your design */
+    font-size: 16px; 
     color: #888;
-    margin-top: 10px; /* Adjust the margin based on your design */
+    margin-top: 10px;
 }
 
 .items-list-item p {
-    font-size: 16px; /* Adjust the font size based on your design */
+    font-size: 16px; 
     color: #888;
-    margin-top: 10px; /* Adjust the margin based on your design */
+    margin-top: 10px; 
 }
 
 .items-list-item .like-button {

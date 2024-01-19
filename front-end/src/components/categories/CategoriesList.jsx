@@ -18,14 +18,12 @@ const endpoint = 'categories';
 const CategoriesList = () => {
   const [categories, setCategories] = useState(null);
 
-  // todo refactor this, maybe in a service
   useEffect(() => {
     const fetchCategories = async () => {
       try {
         const result = await fetchData(endpoint);
         setCategories(result);
       } catch (error) {
-        // Handle error
         console.log(error);
       }
     };

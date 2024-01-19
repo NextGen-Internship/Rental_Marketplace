@@ -10,15 +10,12 @@ const CategoryDetails = () => {
   const [category, setCategory] = useState();
   const navigate = useNavigate();
 
-  // todo refactor this, maybe in a service
   useEffect(() => {
     const fetchCategory = async () => {
       try {
         const result = await fetchData(endpoint + id) ;
         setCategory(result);
-        // console.log(result);
       } catch (error) {
-        // Handle error
         navigate("/notfound");
       }
     };
@@ -32,7 +29,6 @@ const CategoryDetails = () => {
       { category && <h2>Items in category {category.name} </h2> }
       { category && <p>Category description: {category.description}</p> }
       <ItemsList /> 
-      {/* todo -> fetch fitered items */}
     </div>
   )
 }

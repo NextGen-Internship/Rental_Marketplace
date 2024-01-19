@@ -12,7 +12,7 @@ import java.util.List;
 
 @Service
 public class ItemService {
-    private static final String ITEM_NOT_FOUND_MESSAGE = "Item with %f id not found.";
+    private static final String ITEM_NOT_FOUND_MESSAGE = "Item with %d id not found.";
     private final ItemRepository itemRepository;
     private final ModelMapper modelMapper;
 
@@ -35,8 +35,11 @@ public class ItemService {
                 .orElseThrow(() -> new ItemNotFoundException(String.format(ITEM_NOT_FOUND_MESSAGE, id)));
     }
 
-    public List<ItemDto> getItemsByCategoryId() {
-        return null;
+    public List<ItemDto> getItemsByCategoryId(Long id) {
+        return itemRepository.findByCategoryId(id)
+                .stream()
+                .map(this::mapItemToItemDto)
+                .toList();
     }
 
     private ItemDto mapItemToItemDto(Item item) {
