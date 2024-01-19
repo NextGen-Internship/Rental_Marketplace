@@ -44,7 +44,7 @@ function Login() {
   const handleGoogleLogin = async (response) => {
     const jwt = response.credential;
     console.log(response);
-    localStorage.setItem("jwt token", jwt);
+    localStorage.setItem("google_token", jwt);
 
     try {
       const backendResponse = await axios.post(
@@ -79,9 +79,8 @@ function Login() {
               onChange={(e) => setPassword(e.target.value)}
             />
           </label>
-          <button type="submit"> Submit</button>
-
-          <div className="login-password-btn">
+          {errorMessage && <p className="error-message">{errorMessage}</p>}
+          <div className="password-btn">
             <button
               type="button"
               className="toggle-password-button"
@@ -90,7 +89,7 @@ function Login() {
               {showPassword ? "Hide" : "Show"}
             </button>
           </div>
-          {errorMessage && <p className="error-message">{errorMessage}</p>}
+          <button type="submit"> Submit</button>
         </form>
 
         <GoogleLogin
@@ -98,6 +97,7 @@ function Login() {
           clientId="1022611064919-anjhq49aic100ll017uci89hnctoqf6g.apps.googleusercontent.com"
         />
       </div>
+      
     </div>
   );
 }

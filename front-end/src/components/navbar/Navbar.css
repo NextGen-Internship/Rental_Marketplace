@@ -1,8 +1,9 @@
-/* navbar */
+
 .navbar {
-    padding: 20px;
+    padding: 32px 0px;
     display: flex;
     align-items: center;
+    justify-content: space-between;
     max-height: 50px;
     margin: 0 auto;
     border-bottom: 1px solid #f2f2f2;

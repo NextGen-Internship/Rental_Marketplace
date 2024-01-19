@@ -2,8 +2,6 @@ import axios from "axios";
 import "./Login.css";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import  "react-phone-number-input/style.css";
-
 
 function Register() {
 
@@ -16,8 +14,6 @@ function Register() {
     confirmPassword: "",
     phoneNumber: ""
   });
-
-  const [value, setValue] = useState();
 
   const [errorMessages, setErrorMessages] = useState({
     firstName: "",
@@ -187,6 +183,7 @@ function Register() {
               name="password"
               onChange={handleInputChange}
             />
+            
             <p className="error-message">{errorMessages.password}</p>
           </label>
 
@@ -200,8 +197,14 @@ function Register() {
             <p className="error-message">{errorMessages.confirmPassword}</p>
           </label>
 
-
-          <div className="register-password-btn">
+          <label>
+            Phone
+            <input type="text" name="phoneNumber" onChange={handleInputChange} />
+            <p className="error-message">{errorMessages.phoneNumber}</p>
+          </label>
+        
+        </form>
+        <div className="password-btn">
             <button
               type="button"
               className="toggle-password-button"
@@ -210,14 +213,6 @@ function Register() {
               {showPassword ? " Hide" : " Show"}
             </button>
           </div>
-     
-          <label>
-            Phone
-            <input type="text" name="phoneNumber" onChange={handleInputChange} />
-            <p className="error-message">{errorMessages.phoneNumber}</p>
-          </label>
-        
-        </form>
         <button type="submit" onClick={handleSubmit}>
           Submit
         </button>
