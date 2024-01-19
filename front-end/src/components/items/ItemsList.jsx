@@ -13,6 +13,9 @@ const ItemsList = ({ searchTerm }) => {
     const [likedItems, setLikedItems] = useState(new Set());
     const [items, setItems] = useState([]);
 
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+
     useEffect(() => {
         const fetchItems = async () => {
           try {
@@ -27,7 +30,7 @@ const ItemsList = ({ searchTerm }) => {
         fetchItems();
       }, []);
 
-    const handleLikeClick = (itemId) => {
+    const handleLikeClick =  async (itemId) => {
         // Toggle the liked state
         const updatedLikedItems = new Set(likedItems);
         if (likedItems.has(itemId)) {
@@ -36,8 +39,26 @@ const ItemsList = ({ searchTerm }) => {
             updatedLikedItems.add(itemId);
         }
         setLikedItems(updatedLikedItems);
-        // todo 
-        // post request to add a like, or remove a like
+        try {
+            // Make a POST request to your Spring Boot backend
+            const response = await fetch('http://localhost:8080/rentify/like', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer YOUR_TOKEN_HERE', // Include the user's token
+              },
+              body: JSON.stringify({ itemId }),
+            });
+            if (!response.ok) {
+                // If the server returns an error, revert the local state
+                setLikedItems(new Set(likedItems));
+                // Optionally, you can show an error message to the user
+                console.error('Error recording like:', response.statusText);
+              }
+            } catch (error) {
+              // Handle any network errors
+              console.error('Network error:', error);
+            }
     };
 
     const filteredItems = items.filter(item =>

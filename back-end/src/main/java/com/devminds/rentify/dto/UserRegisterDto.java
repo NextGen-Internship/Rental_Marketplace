@@ -16,7 +16,7 @@ import java.util.List;
 @Data
 @Builder
 @AllArgsConstructor
-public class UserRegisterDto implements UserDetails {
+public class UserRegisterDto  {
 
     @NotEmpty(message = "firstName is required")
     private String firstName;
@@ -41,33 +41,5 @@ public class UserRegisterDto implements UserDetails {
     @NotEmpty(message = "Address is required")
     private List<AddressDto> addresses;
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
-    }
 
-    @Override
-    public String getUsername() {
-        return email;
-    }
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return true;
-    }
 }
