@@ -1,4 +1,4 @@
-package com.devminds.rentify.configuration;
+package com.devminds.rentify.config;
 
 import com.devminds.rentify.repository.UserRepository;
 import lombok.RequiredArgsConstructor;

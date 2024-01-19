@@ -11,6 +11,7 @@ function Login() {
   const [errorMessage, setErrorMessage] = useState("");
   const navigate = useNavigate();
 
+
   const handleTogglePassword = () => {
     setShowPassword(!showPassword);
   };
@@ -28,8 +29,7 @@ function Login() {
         email,
         password,
       });
-      navigate("/");
-
+    
       const { token } = response.data;
       localStorage.setItem("token", token);
       console.log("Login successful:", response.data);
@@ -37,16 +37,17 @@ function Login() {
       navigate("/");
     } catch (error) {
       setErrorMessage("Email or Password are incorrect");
-      console.error("Login failed:", error);
     }
   };
 
   const handleGoogleLogin = async (response) => {
+    
     const jwt = response.credential;
     console.log(response);
     localStorage.setItem("google_token", jwt);
 
     try {
+
       const backendResponse = await axios.post(
         "http://localhost:8080/rentify/google-login",
         {},
@@ -55,10 +56,12 @@ function Login() {
             "Content-Type": "application/json",
             Authorization: jwt,
           },
+          
         }
+      
       );
+      navigate("/");
     } catch (error) {
-      console.error("Error sending user data to backend:", error);
     }
   };
 

@@ -1,5 +1,8 @@
 package com.devminds.rentify.auth;
 
+import com.devminds.rentify.exception.DuplicateEntityException;
+import com.devminds.rentify.dto.LoginDto;
+import com.devminds.rentify.dto.UserRegisterDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

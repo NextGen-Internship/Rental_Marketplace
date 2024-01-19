@@ -104,17 +104,14 @@ function Register() {
           formValues
           
         ).then((response) => {
-          console.log("Registration successful:", response.data.token);
           localStorage.setItem("register_token", response.data.token);
           navigate("/login");
         });  
       } catch (error) {
         if (error.response && error.response.data) {
           const { data } = error.response;
-          console.log("Registration failed:", data);
       
           const errorMessage = data.errorMessage || '';
-          
           
           const fieldNameMatch = errorMessage.match(/User with (\w+) .+ already exists/);
           const fieldName = fieldNameMatch ? fieldNameMatch[1].toLowerCase() : '';

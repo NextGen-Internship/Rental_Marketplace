@@ -1,6 +1,9 @@
 package com.devminds.rentify.auth;
 
-import com.devminds.rentify.configuration.JwtService;
+import com.devminds.rentify.config.UserMapper;
+import com.devminds.rentify.config.JwtService;
+import com.devminds.rentify.dto.LoginDto;
+import com.devminds.rentify.dto.UserRegisterDto;
 import com.devminds.rentify.entity.Role;
 import com.devminds.rentify.entity.User;
 import com.devminds.rentify.enums.UserRole;
@@ -20,7 +23,7 @@ import org.springframework.security.core.AuthenticationException;
 public class
 AuthenticationServiceImpl implements AuthService {
 
-   private final UserService userService;
+    private final UserService userService;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
@@ -37,26 +40,14 @@ AuthenticationServiceImpl implements AuthService {
 
         User user = userMapper.mapToUser(userRegisterDto);
 
-        if (user.getPassword().equals(userRegisterDto.getConfirmPassword())) {
-            user.setPassword(passwordEncoder.encode(userRegisterDto.getPassword()));
+        userService.saveUser(user);
 
-            user.setRole(role);
+        var token = jwtService.generateToken(user);
+        return AuthenticationRespone.builder()
+                .token(token)
+                .email(user.getEmail()).build();
 
-            userService.saveUser(user);
-
-
-            var token = jwtService.generateToken(user);
-            return AuthenticationRespone.builder()
-                    .token(token)
-                    .email(user.getEmail()).build();
-        }
-
-        //Todo Not equals password
-        return  null;
     }
-
-
-
 
     @Override
     public AuthenticationRespone login(LoginDto loginDto) {

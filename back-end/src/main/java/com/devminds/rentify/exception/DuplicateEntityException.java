@@ -1,4 +1,4 @@
-package com.devminds.rentify.auth;
+package com.devminds.rentify.exception;
 
 public class DuplicateEntityException extends RuntimeException {
 

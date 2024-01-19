@@ -1,5 +1,6 @@
-package com.devminds.rentify.auth;
+package com.devminds.rentify.dto;
 
+import com.devminds.rentify.dto.AddressDto;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
