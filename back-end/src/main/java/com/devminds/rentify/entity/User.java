@@ -1,7 +1,18 @@
 package com.devminds.rentify.entity;
 
+
 import com.devminds.rentify.enums.UserRole;
 import jakarta.persistence.*;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 import jakarta.validation.constraints.*;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
@@ -46,28 +57,31 @@ public class User implements UserDetails {
     @Column(name = "profile_picture")
     private String profilePicture;
 
+
     @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "id")  // Foreign key in the Address table
+    @JoinColumn(name = "id")
     private List<Address> addresses;
 
 
-    @OneToMany
-    private List<Item> items;
+//    @OneToMany
+//    @JoinColumn(name = "id")
+//    private List<Item> items = new ArrayList<>();
 
     @ManyToOne
     @JoinColumn(name = "role_id")
     private Role role;
 
 
-    @OneToMany
-    private List<Payment> payments;
+//    @OneToMany
+//    private List<Payment> payments;
 
 
-    @OneToMany
-    private List<Rent> rents;
-
-    @OneToMany
-    private List<History> histories;
+//
+//    @OneToMany
+//    private List<Rent> rents;
+//
+//    @OneToMany
+//    private List<History> histories;
 
 
     @Override

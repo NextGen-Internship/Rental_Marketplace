@@ -28,8 +28,13 @@ public class ItemController {
         return ResponseEntity.ok(itemService.getAllItems());
     }
 
-    @GetMapping("/id")
+    @GetMapping("/{id}")
     public ResponseEntity<ItemDto> getItemById(@PathVariable Long id) {
         return ResponseEntity.ok(itemService.getItemById(id));
+    }
+
+    @GetMapping("/category/{id}")
+    public ResponseEntity<List<ItemDto>> getItemsByCategoryId(@PathVariable Long id) {
+        return ResponseEntity.ok(itemService.getItemsByCategoryId(id));
     }
 }

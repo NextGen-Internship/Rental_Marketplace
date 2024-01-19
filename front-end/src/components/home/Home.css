@@ -2,21 +2,18 @@ div {
     margin: 20px;
 }
 
-/* Add styles for the search container */
 .search-container {
     display: flex;
     align-items: center;
     margin-bottom: 20px;
 }
 
-/* Add styles for the search icon */
 .search-icon {
     margin-right: 10px;
 }
 
-/* Add styles for the search input */
 input {
-    width: 100%; /* Make the input field 100% of its container */
+    width: 100%; 
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;

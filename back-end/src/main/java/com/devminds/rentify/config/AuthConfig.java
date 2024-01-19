@@ -13,7 +13,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 @RequiredArgsConstructor
 @Configuration
-@EnableWebSecurity//Enable web security features
+@EnableWebSecurity
 @EnableWebMvc
 public class AuthConfig {
 
@@ -23,6 +23,7 @@ public class AuthConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+
         http
                 .csrf(crsf -> crsf.disable())
                 .authorizeHttpRequests(
@@ -34,6 +35,8 @@ public class AuthConfig {
                                 .requestMatchers("/rentify/categories/*").permitAll()
                                 .requestMatchers("/rentify/items").permitAll()
                                 .requestMatchers("/rentify/items/*").permitAll()
+                                .requestMatchers("/rentify/addresses").permitAll()
+                                .requestMatchers("/rentify/addresses/**").permitAll()
                                 .anyRequest().authenticated()
 
                 )

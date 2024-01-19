@@ -13,8 +13,10 @@ import lombok.Data;
 public class Address {
 
     @Id
+
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
 
     @Column
     @NotEmpty

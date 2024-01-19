@@ -1,15 +1,15 @@
-
 .navbar {
     padding: 32px 0px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    max-height: 50px;
+    max-height: 70px;
     margin: 0 auto;
     border-bottom: 1px solid #f2f2f2;
 }
 
 .navbar h1 {
+    font-size: 24px; 
     color: orange;
 }
 
@@ -18,9 +18,10 @@
 }
 
 .navbar a {
-    margin-left: 16px;
+    margin-left: 20px; 
+    font-size: 16px; 
     text-decoration: none;
-    padding: 6px;
+    padding: 10px; 
 }
 
 .navbar a:hover {
