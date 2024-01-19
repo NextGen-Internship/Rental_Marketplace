@@ -6,7 +6,6 @@ import com.devminds.rentify.dto.LoginDto;
 import com.devminds.rentify.dto.UserRegisterDto;
 import com.devminds.rentify.entity.Role;
 import com.devminds.rentify.entity.User;
-import com.devminds.rentify.enums.UserRole;
 import com.devminds.rentify.exception.UserNotFoundException;
 import com.devminds.rentify.repository.RoleRepository;
 import com.devminds.rentify.service.UserService;
@@ -33,11 +32,10 @@ public class AuthenticationServiceImpl implements AuthService {
     @Override
     public AuthenticationRespone register(UserRegisterDto userRegisterDto) {
 
-
-
         User user = userMapper.mapToUser(userRegisterDto);
         user.setRole(roleRepository.findById());
         user.setPassword(passwordEncoder.encode(userRegisterDto.getPassword()));
+        user.setRole(roleRepository.findUserRole().orElse(null));
         userService.saveUser(user);
 
         var token = jwtService.generateToken(user);

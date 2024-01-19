@@ -1,8 +1,6 @@
 package com.devminds.rentify.dto;
 
 import com.devminds.rentify.dto.AddressDto;
-import com.devminds.rentify.entity.Role;
-import com.devminds.rentify.repository.RoleRepository;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
