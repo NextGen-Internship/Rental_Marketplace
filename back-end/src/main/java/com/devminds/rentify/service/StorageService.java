@@ -23,8 +23,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import static software.amazon.awssdk.awscore.AwsExecutionAttribute.AWS_REGION;
-
 @Service
 public class StorageService {
 
@@ -44,8 +42,6 @@ public class StorageService {
         String fileName = file.getOriginalFilename();
         s3Client.putObject(new PutObjectRequest(bucketName, fileName, fileObj));
         fileObj.delete();
-        //return "File uploaded : " + fileName;
-
 
         String filePath = fileName;
         // Set the key (object name) under which the file will be stored in the bucket
@@ -58,9 +54,6 @@ public class StorageService {
                         .withMethod(HttpMethod.GET)
                         .withExpiration(new Date(System.currentTimeMillis() + 3600000)); // Set expiration time (1 hour)
         URL preSignedUrl = s3Client.generatePresignedUrl(generatePresignedUrlRequest);
-
-        // Now you can store preSignedUrl in your database and use it to display the image in the UI
-        System.out.println("Pre-signed URL: " + preSignedUrl);
 
         return preSignedUrl;
     }
@@ -83,11 +76,6 @@ public class StorageService {
         return fileName + " removed ...";
     }
 
-//    private void uploadFileTos3bucket(String fileName, File file) {
-//        s3Client.putObject(new PutObjectRequest(bucketName, fileName, file)
-//                .withCannedAcl(CannedAccessControlList.PublicRead));
-//    }
-
     private File convertMultiPartFileToFile(MultipartFile file) throws IOException {
         File convertedFile = new File(file.getOriginalFilename());
         try (FileOutputStream fos = new FileOutputStream(convertedFile)) {
@@ -98,9 +86,6 @@ public class StorageService {
         return convertedFile;
     }
 
-    //    private String generateFileName(MultipartFile multiPart) {
-//        return new Date().getTime() + "-" + multiPart.getOriginalFilename().replace(" ", "_");
-//    }
     public List<String> listObjectsInBucket() {
         List<String> result = new ArrayList<>();
         ListObjectsRequest listObjectsRequest = new ListObjectsRequest()
@@ -111,9 +96,6 @@ public class StorageService {
             objectListing = s3Client.listObjects(listObjectsRequest);
             for (S3ObjectSummary objectSummary :
                     objectListing.getObjectSummaries()) {
-                System.out.println(" - " + objectSummary.getKey() + "  " +
-                        "(size = " + objectSummary.getSize() +
-                        ")");
                 result.add(objectSummary.getKey());
             }
             listObjectsRequest.setMarker(objectListing.getNextMarker());
