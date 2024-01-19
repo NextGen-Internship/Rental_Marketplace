@@ -58,6 +58,7 @@ public class User implements UserDetails {
     private String profilePicture;
 
 
+
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "id")
     private List<Address> addresses;
@@ -116,6 +117,6 @@ public class User implements UserDetails {
 
 
     private UserRole getUserRoleFromRole() {
-        return role.getRole();
+        return role != null ? role.getRole() : UserRole.USER;
     }
 }

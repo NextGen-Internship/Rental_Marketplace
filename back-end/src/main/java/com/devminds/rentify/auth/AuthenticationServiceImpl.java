@@ -35,11 +35,9 @@ AuthenticationServiceImpl implements AuthService {
     public AuthenticationRespone register(UserRegisterDto userRegisterDto) {
 
 
-        var role = new Role(UserRole.USER);
-        roleRepository.save(role);
 
         User user = userMapper.mapToUser(userRegisterDto);
-
+        user.setPassword(passwordEncoder.encode(userRegisterDto.getPassword()));
         userService.saveUser(user);
 
         var token = jwtService.generateToken(user);
