@@ -18,6 +18,7 @@ import java.util.List;
 @AllArgsConstructor
 public class UserRegisterDto  {
 
+
     @NotEmpty(message = "firstName is required")
     private String firstName;
 
@@ -37,7 +38,4 @@ public class UserRegisterDto  {
 
     @NotEmpty(message = "phoneNumber is required")
     private String phoneNumber;
-
-
-
 }

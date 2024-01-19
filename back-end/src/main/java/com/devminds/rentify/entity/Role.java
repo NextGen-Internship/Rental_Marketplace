@@ -39,9 +39,9 @@ public class Role {
     private String description;
 
 
-
     public Role() {
         this.role = UserRole.USER;
         this.description = "Some default description";
+
     }
 }
