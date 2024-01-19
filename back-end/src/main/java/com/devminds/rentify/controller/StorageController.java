@@ -18,11 +18,10 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @CrossOrigin
 @RestController
-@RequestMapping("/file")
+@RequestMapping("rentify/images")
 public class StorageController {
     @Autowired
     private StorageService service;
@@ -32,8 +31,14 @@ public class StorageController {
         return new ResponseEntity<>(service.uploadFile(file), HttpStatus.OK);
     }
 
+    @PostMapping("/upload-images")
+    public ResponseEntity<List<URL>> uploadFiles(@RequestParam(value = "files") List<MultipartFile> files)
+            throws IOException {
+        return new ResponseEntity<>(service.uploadFiles(files), HttpStatus.OK);
+    }
+
     @GetMapping("/download/{fileName}")
-    public ResponseEntity<ByteArrayResource> downloadFile(@PathVariable String fileName) {
+    public ResponseEntity<ByteArrayResource> downloadFile(@PathVariable String fileName) throws IOException {
         byte[] data = service.downloadFile(fileName);
         ByteArrayResource resource = new ByteArrayResource(data);
         return ResponseEntity
@@ -49,7 +54,7 @@ public class StorageController {
         return new ResponseEntity<>(service.deleteFile(fileName), HttpStatus.OK);
     }
 
-    @GetMapping("/names")
+    @GetMapping
     public ResponseEntity<List<String>> getFileNames() {
         return new ResponseEntity<>(service.listObjectsInBucket(), HttpStatus.OK);
     }
