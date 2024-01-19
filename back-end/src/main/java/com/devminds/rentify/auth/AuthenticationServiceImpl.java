@@ -20,8 +20,7 @@ import org.springframework.security.core.AuthenticationException;
 
 @Service
 @RequiredArgsConstructor
-public class
-AuthenticationServiceImpl implements AuthService {
+public class AuthenticationServiceImpl implements AuthService {
 
     private final UserService userService;
     private final PasswordEncoder passwordEncoder;
@@ -37,6 +36,7 @@ AuthenticationServiceImpl implements AuthService {
 
 
         User user = userMapper.mapToUser(userRegisterDto);
+        user.setRole(roleRepository.findById());
         user.setPassword(passwordEncoder.encode(userRegisterDto.getPassword()));
         userService.saveUser(user);
 

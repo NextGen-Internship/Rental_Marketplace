@@ -1,6 +1,8 @@
 package com.devminds.rentify.dto;
 
 import com.devminds.rentify.dto.AddressDto;
+import com.devminds.rentify.entity.Role;
+import com.devminds.rentify.repository.RoleRepository;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
@@ -16,7 +18,7 @@ import java.util.List;
 @Data
 @Builder
 @AllArgsConstructor
-public class UserRegisterDto implements UserDetails {
+public class UserRegisterDto  {
 
     @NotEmpty(message = "firstName is required")
     private String firstName;
@@ -38,36 +40,6 @@ public class UserRegisterDto implements UserDetails {
     @NotEmpty(message = "phoneNumber is required")
     private String phoneNumber;
 
-    @NotEmpty(message = "Address is required")
-    private List<AddressDto> addresses;
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
-    }
 
-    @Override
-    public String getUsername() {
-        return email;
-    }
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return true;
-    }
 }
