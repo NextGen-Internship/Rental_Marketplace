@@ -15,12 +15,7 @@ function App() {
       <div className="App">
         <Navbar />
         
-        <div className="login-register">
-          <Routes>
-            <Route exact path="/login" element={<Login />} />
-            <Route exact path="/register" element={<Register />} />
-          </Routes>
-        </div>
+     
 
         <Routes>
           <Route exact path="/" element={<Home />} />
@@ -30,6 +25,8 @@ function App() {
 
           <Route path="items/:id" element={<ItemDetails />} />
 
+           <Route exact path="/login" element={<Login />} />
+            <Route exact path="/register" element={<Register />} />
           {/* catch any other path */}
           <Route path="*" element={<NotFound />} />
           <Route path="/notfound" element={<NotFound />} />

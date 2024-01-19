@@ -2,7 +2,7 @@
   margin: 0;
 }
 
-.login-register {
+.login-container {
   font-family: 'Arial', sans-serif;
   background-color: #1f41a9; 
   background-image: url(../../../src/assets/BG.svg); 
