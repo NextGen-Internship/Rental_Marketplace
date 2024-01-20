@@ -38,7 +38,7 @@ public class AuthenticationServiceImpl implements AuthService {
     public AuthenticationRespone register(UserRegisterDto userRegisterDto) {
 
         User user = userMapper.mapToUser(userRegisterDto);
-        user.setRole(roleRepository.findById());
+        user.setRole(roleRepository.findUserRole().get());
         user.setPassword(passwordEncoder.encode(userRegisterDto.getPassword()));
         user.setRole(roleRepository.findUserRole().orElse(null));
 

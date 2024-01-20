@@ -52,24 +52,24 @@ public class Item {
     @ManyToOne
     private Category category;
 
-    @ManyToOne
-    private User user;
+//    @ManyToOne
+//    private User user;
 
     @ManyToOne
     private Address address;
 
-    @OneToMany
-    private List<History> histories;
-
-    @OneToMany
-    private List<Picture> pictures;
-
-    @OneToMany
-    private List<LikedItem> likedItems;
-
-    @OneToMany
-    private List<Rent> rents;
-
-    @OneToMany
-    private List<Review> reviews;
+//    @OneToMany
+//    private List<History> histories;
+//
+//    @OneToMany
+//    private List<Picture> pictures;
+//
+//    @OneToMany
+//    private List<LikedItem> likedItems;
+//
+//    @OneToMany
+//    private List<Rent> rents;
+//
+//    @OneToMany
+//    private List<Review> reviews;
 }
