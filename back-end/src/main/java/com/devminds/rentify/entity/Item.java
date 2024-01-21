@@ -52,8 +52,8 @@ public class Item {
     @ManyToOne
     private Category category;
 
-//    @ManyToOne
-//    private User user;
+    @ManyToOne
+    private User user;
 
     @ManyToOne
     private Address address;

@@ -36,8 +36,9 @@ public class AuthConfig {
                                 .requestMatchers("/rentify/items").permitAll()
                                 .requestMatchers("/rentify/items/**").permitAll()
                                 .requestMatchers("/rentify/addresses").permitAll()
+                                .requestMatchers("/rentify/users").permitAll()
+                                .requestMatchers("/rentify/users/**").permitAll()
                                 .requestMatchers("/rentify/addresses/**").permitAll()
-
                                 .requestMatchers("/rentify/images").permitAll()
                                 .requestMatchers("/rentify/images/**").permitAll()
                                 .anyRequest().authenticated()

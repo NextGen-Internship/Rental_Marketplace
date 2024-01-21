@@ -2,7 +2,6 @@ package com.devminds.rentify.dto;
 
 import com.devminds.rentify.entity.Category;
 import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
@@ -11,7 +10,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 @Data
-public class ItemDto {
+public class PlainItemDto {
     private Long id;
 
     @NotEmpty
@@ -33,7 +32,4 @@ public class ItemDto {
     private float deposit;
 
     private Category category;
-
-    @NotNull
-    private PlainUserDto user;
 }
