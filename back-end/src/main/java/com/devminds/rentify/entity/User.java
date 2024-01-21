@@ -81,8 +81,8 @@ public class User implements UserDetails {
     @OneToMany
     private List<Rent> rents;
 
-    @OneToMany
-    private List<History> histories;
+    @OneToMany(mappedBy = "user")
+    private List<History> histories = new ArrayList<>();
 
 
     @Override

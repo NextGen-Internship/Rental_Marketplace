@@ -19,5 +19,4 @@ public class UserDto {
     private List<Address> addresses;
     private List<PlainItemDto> items = new ArrayList<>();
     private Role role;
-
 }
