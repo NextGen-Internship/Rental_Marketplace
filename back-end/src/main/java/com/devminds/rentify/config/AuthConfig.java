@@ -43,6 +43,8 @@ public class AuthConfig {
                                 .requestMatchers("/rentify/images/**").permitAll()
                                 .requestMatchers("/rentify/views").permitAll()
                                 .requestMatchers("/rentify/views/**").permitAll()
+                                .requestMatchers("/rentify/likes").permitAll()
+                                .requestMatchers("/rentify/likes/**").permitAll()
                                 .anyRequest().authenticated()
 
                 )
