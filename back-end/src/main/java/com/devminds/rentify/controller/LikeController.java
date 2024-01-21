@@ -37,11 +37,11 @@ public class LikeController {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User not authenticated");
             }
 
-            Item item = itemService.findById(likeDto.getItemId());
-            if (item == null) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Item not found");
-            }
-            likeService.saveLike(user, item);
+           // Optional<Item> item = itemService.findById(likeDto.getItemId());
+//            if (item == null) {
+//                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Item not found");
+//            }
+//            likeService.saveLike(user, item);
 
             return ResponseEntity.ok("Like recorded successfully");
         } catch (Exception e) {

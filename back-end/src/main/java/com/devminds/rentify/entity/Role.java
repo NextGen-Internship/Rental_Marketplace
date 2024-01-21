@@ -37,10 +37,7 @@ public class Role {
 
 
     public Role() {
-        this.description = "Some measafgasfd";
-    }
-    public Role(UserRole role) {
-        this.role = role;
-        this.description = "Some measafgasfd";
+        this.role = UserRole.USER;
+
     }
 }

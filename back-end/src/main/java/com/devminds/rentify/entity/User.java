@@ -2,6 +2,7 @@ package com.devminds.rentify.entity;
 
 
 import com.devminds.rentify.enums.UserRole;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -19,6 +20,8 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -58,30 +61,31 @@ public class User implements UserDetails {
     private String profilePicture;
 
 
+
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "id")
     private List<Address> addresses;
 
 
-//    @OneToMany
-//    @JoinColumn(name = "id")
-//    private List<Item> items = new ArrayList<>();
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+    @JsonIgnore
+    private List<Item> items = new ArrayList<>();
 
     @ManyToOne
     @JoinColumn(name = "role_id")
     private Role role;
 
 
-//    @OneToMany
-//    private List<Payment> payments;
+    @OneToMany
+    private List<Payment> payments;
 
 
-//
-//    @OneToMany
-//    private List<Rent> rents;
-//
-//    @OneToMany
-//    private List<History> histories;
+
+    @OneToMany
+    private List<Rent> rents;
+
+    @OneToMany
+    private List<History> histories;
 
 
     @Override
@@ -116,6 +120,7 @@ public class User implements UserDetails {
 
 
     private UserRole getUserRoleFromRole() {
-        return role.getRole();
+        return role != null ? role.getRole() : UserRole.USER;
+
     }
 }

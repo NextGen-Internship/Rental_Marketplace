@@ -21,6 +21,7 @@ spring:
         show-sql: true
         properties:
           hibernate:
+
             format_sql: true
 
   servlet:
@@ -43,3 +44,4 @@ cloud:
 application:
   bucket:
     name: ${S3_BUCKET_NAME}
+

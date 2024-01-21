@@ -23,9 +23,12 @@ public class CorsConfig implements WebMvcConfigurer {
 
                 registry.addMapping("/rentify/register")
                         .allowedOrigins("http://localhost:3000")
-                        .allowedMethods("POST") // Adjust the allowed methods as needed
+                        .allowedMethods("POST")
                         .allowedHeaders("*")
                         .allowCredentials(true);
+
+
+
             }
         };
     }

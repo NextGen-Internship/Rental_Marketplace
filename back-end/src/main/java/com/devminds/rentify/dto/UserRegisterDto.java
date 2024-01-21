@@ -17,7 +17,6 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 public class UserRegisterDto  {
-
     @NotEmpty(message = "firstName is required")
     private String firstName;
 
@@ -37,9 +36,4 @@ public class UserRegisterDto  {
 
     @NotEmpty(message = "phoneNumber is required")
     private String phoneNumber;
-
-    @NotEmpty(message = "Address is required")
-    private List<AddressDto> addresses;
-
-
 }

@@ -4,6 +4,9 @@ import com.devminds.rentify.exception.DuplicateEntityException;
 import com.devminds.rentify.dto.LoginDto;
 import com.devminds.rentify.dto.UserRegisterDto;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,9 +18,8 @@ public class AuthController {
     private final AuthService authService;
 
 
-
     @PostMapping("/register")
-    public ResponseEntity<AuthenticationRespone> register(@RequestBody UserRegisterDto userRegisterDto){
+    public ResponseEntity<AuthenticationRespone> register(@RequestBody UserRegisterDto userRegisterDto) {
 
         try {
             AuthenticationRespone authenticationResponse = authService.register(userRegisterDto);
@@ -32,7 +34,8 @@ public class AuthController {
 
 
     @PostMapping("/login")
-    public ResponseEntity<AuthenticationRespone> login(@RequestBody LoginDto request){
+    public ResponseEntity<AuthenticationRespone> login(@RequestBody LoginDto request) {
         return ResponseEntity.ok(authService.login(request));
     }
+
 }
