@@ -1,26 +1,34 @@
-import { Link } from 'react-router-dom';
-import { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import logo from '../../assets/rentify-logo.svg';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import LogoutIcon from '@mui/icons-material/Logout';
 import PersonIcon from '@mui/icons-material/Person';
 import "./Navbar.css";
 
-const Navbar = ({ isLoggedIn, setIsLoggedIn, onLogin, onLogout }) => {
+const Navbar = () => {
+  const location = useLocation();
+  const [isLoggedIn, setIsLoggedIn] = useState(
+    localStorage.getItem('google_token') !== null || localStorage.getItem('token') !== null ? true : false);
+
   useEffect(() => {
     const googleToken = localStorage.getItem('google_token');
-    setIsLoggedIn(!!googleToken);
-  }, [isLoggedIn]);
+    const regularToken = localStorage.getItem('token');
+
+    if (googleToken !== null || regularToken !== null) {
+      setIsLoggedIn(true);
+    }
+    console.log(isLoggedIn)
+  }, [location]);
 
   const handleLogout = () => {
     Object.keys(localStorage).forEach(key => { localStorage.removeItem(key); });
     setIsLoggedIn(false);
-    onLogout();
   };
 
   return (
     <nav className="navbar">
-      <Link to="/"> <img src={logo} width={"200px"} /> </Link>
+      <Link to="/"> <img src={logo} width={"200px"} alt="Logo" /> </Link>
       <div className="links">
         <Link to="/">Home</Link>
         <Link to="/create">Add Item</Link>
@@ -32,7 +40,7 @@ const Navbar = ({ isLoggedIn, setIsLoggedIn, onLogin, onLogout }) => {
           </>
         ) : (
           <>
-            <Link to="/login" onClick={onLogin}>Login</Link>
+            <Link to="/login">Login</Link>
             <Link to="/register">Register</Link>
           </>
         )}
