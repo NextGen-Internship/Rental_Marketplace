@@ -14,7 +14,7 @@ import lombok.Data;
 public class LikedItem {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Id
-    private int id;
+    private Long id;
 
     @ManyToOne
     private Item item;

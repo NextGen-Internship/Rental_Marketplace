@@ -1,4 +1,3 @@
-
 INSERT INTO address (city, street, post_code, street_number)
 VALUES
     ('City A', 'Main Street', '12345', '1'),

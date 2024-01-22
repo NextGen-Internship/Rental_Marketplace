@@ -2,7 +2,6 @@ package com.devminds.rentify.config;
 
 import com.devminds.rentify.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -21,17 +20,17 @@ public class ApplicationConfig {
     private final UserRepository repository;
 
     @Bean
-   public UserDetailsService userDetailsService (){
+    public UserDetailsService userDetailsService() {
         return username -> repository.findByEmail(username)
-                .orElseThrow( () -> new UsernameNotFoundException("User not found"));
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
     }
 
     @Bean
-    public AuthenticationProvider authenticationProvider (){
+    public AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-         authProvider.setUserDetailsService(userDetailsService());
-         authProvider.setPasswordEncoder(passwordEncoder());
-         return authProvider;
+        authProvider.setUserDetailsService(userDetailsService());
+        authProvider.setPasswordEncoder(passwordEncoder());
+        return authProvider;
     }
 
     @Bean

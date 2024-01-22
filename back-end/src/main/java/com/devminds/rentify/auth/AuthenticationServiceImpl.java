@@ -1,12 +1,10 @@
 package com.devminds.rentify.auth;
 
-import com.devminds.rentify.config.UserMapper;
 import com.devminds.rentify.config.JwtService;
+import com.devminds.rentify.config.UserMapper;
 import com.devminds.rentify.dto.LoginDto;
 import com.devminds.rentify.dto.UserRegisterDto;
-import com.devminds.rentify.entity.Role;
 import com.devminds.rentify.entity.User;
-import com.devminds.rentify.enums.UserRole;
 import com.devminds.rentify.exception.UserNotFoundException;
 import com.devminds.rentify.repository.RoleRepository;
 import com.devminds.rentify.service.UserService;
@@ -14,14 +12,15 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.security.core.AuthenticationException;
 
 @Service
 @RequiredArgsConstructor
-public class
-AuthenticationServiceImpl implements AuthService {
+
+public class AuthenticationServiceImpl implements AuthService {
+
 
     private final UserService userService;
     private final PasswordEncoder passwordEncoder;
@@ -34,11 +33,10 @@ AuthenticationServiceImpl implements AuthService {
     @Override
     public AuthenticationRespone register(UserRegisterDto userRegisterDto) {
 
-
-        var role = new Role(UserRole.USER);
-        roleRepository.save(role);
-
         User user = userMapper.mapToUser(userRegisterDto);
+        user.setRole(roleRepository.findUserRole().get());
+        user.setPassword(passwordEncoder.encode(userRegisterDto.getPassword()));
+        user.setRole(roleRepository.findUserRole().orElse(null));
 
         userService.saveUser(user);
 

@@ -21,7 +21,6 @@ import lombok.Data;
 public class Role {
 
 
-
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "id")
@@ -29,8 +28,7 @@ public class Role {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "role_name")
-    private UserRole role ;
-
+    private UserRole role;
 
 
     @NotEmpty
@@ -40,10 +38,8 @@ public class Role {
 
 
     public Role() {
-        this.description = "Some measafgasfd";
-    }
-    public Role(UserRole role) {
-        this.role = role;
-        this.description = "Some measafgasfd";
+        this.role = UserRole.USER;
+        this.description = "Some default description";
+
     }
 }
