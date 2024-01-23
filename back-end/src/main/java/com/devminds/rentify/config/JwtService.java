@@ -41,16 +41,6 @@ public class JwtService {
 
 
 
-//    @PostConstruct
-//    private void init() {
-//        try {
-//            byte[] keyBytes = Hex.decode(this.secretKey);
-//            this.signInKey = Keys.hmacShaKeyFor(keyBytes);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//    }
-
     @PostConstruct
     private void init() {
         try {
@@ -62,19 +52,6 @@ public class JwtService {
     }
 
 
-
-    private Key getSignInKeyFromConfig() throws IOException {
-        if (signInKey == null) {
-            throw new IllegalStateException("signInKey is null");
-        }
-        return signInKey;
-    }
-
-
-    private String loadSecretKeyFromConfig() {
-
-        return secretKey;
-    }
 
 
 
@@ -89,8 +66,7 @@ public class JwtService {
     }
 
     public String generateToken(Map<String, Object> extraClaims, User userDetails) {
-        Key key = Keys.hmacShaKeyFor(secretKey.getBytes());
-        String token = Jwts.builder()
+      return Jwts.builder()
                 .setClaims(extraClaims)
                 .setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
@@ -98,23 +74,14 @@ public class JwtService {
                 .signWith(signInKey, SignatureAlgorithm.HS256)
                 .compact();
 
-        // Log the generated token
-        logGeneratedToken(token);
 
-        return token;
-    }
-    private void logGeneratedToken(String token) {
 
-        System.out.println("Generated Token: " + token);
     }
 
-    private void logExceptionDuringTokenProcessing(Exception e) {
-      ;
-        e.printStackTrace();
-    }
+
+
 
     public boolean isTokenValid(String token, UserDetails userDetails) {
-        System.out.println("Signing Key for Token Generation: " + signInKey);
         final String username = extractUsername(token);
         return (username.equals(userDetails.getUsername())) && !isTokenExpired(token);
     }
@@ -129,33 +96,13 @@ public class JwtService {
 
 
     public String extractUsername(String token) {
-        try {
-
-            System.out.println("Received Token: " + token);
-            Key verificationKey = getSignInKeyFromConfig();
-            System.out.println("Verification Key for Token Extraction: " + verificationKey);
-            // Extract claims and log the email value
-            Claims claims = extractAllClaims(token);
-
 
             return extractClaim(token, Claims::getSubject);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
+
     }
 
     private Claims extractAllClaims(String token) {
-        try {
-            System.out.println("Verification Key for Token Extraction: " + signInKey);
-
-
             return Jwts.parserBuilder().setSigningKey(signInKey).build().parseClaimsJws(token).getBody();
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.out.println("Exception during extractAllClaims: " + e.getMessage());
-            return null;
-        }
     }
 
 

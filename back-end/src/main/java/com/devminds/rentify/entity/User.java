@@ -73,9 +73,9 @@ public class User implements UserDetails {
     @JoinColumn(name = "role_id")
     private Role role;
 
-
-    @OneToMany
-    private List<Payment> payments;
+//
+//    @OneToMany
+//    private List<Payment> payments;
 
 
     @OneToMany
