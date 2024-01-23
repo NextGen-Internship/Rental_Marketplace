@@ -9,7 +9,7 @@
 }
 
 .navbar h1 {
-    font-size: 24px; 
+    font-size: 24px;
     color: orange;
 }
 
@@ -18,12 +18,19 @@
 }
 
 .navbar a {
-    margin-left: 20px; 
-    font-size: 16px; 
+    margin-left: 20px;
+    font-size: 16px;
     text-decoration: none;
-    padding: 10px; 
+    padding: 10px;
 }
 
 .navbar a:hover {
     color: orange;
+}
+
+.profile-picture {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    margin-left: 10px;
 }
