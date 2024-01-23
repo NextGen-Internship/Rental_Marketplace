@@ -47,4 +47,13 @@ public class ApplicationConfig {
         return config.getAuthenticationManager();
     }
 
+
+    @Bean
+    public Key signInKey() {
+        byte[] keyBytes = new byte[32];
+        new SecureRandom().nextBytes(keyBytes);
+        return Keys.hmacShaKeyFor(keyBytes);
+    }
 }
+
+

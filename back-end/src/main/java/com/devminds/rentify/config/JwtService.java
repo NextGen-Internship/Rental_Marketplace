@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -33,7 +34,6 @@ import java.util.Map;
 import java.util.function.Function;
 
 @Service
-@NoArgsConstructor
 public class JwtService {
     @Getter
     private  Key signInKey;
@@ -43,17 +43,9 @@ public class JwtService {
     @Value("${myapp.secretKey}")
     private  String secretKey ;
 
-
-    @PostConstruct
-    private void init() {
-        try {
-            byte[] keyBytes = Hex.decode(this.secretKey);
-            this.signInKey = new SecretKeySpec(keyBytes, SignatureAlgorithm.HS256.getJcaName());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    public JwtService(Key signInKey) {
+        this.signInKey = signInKey;
     }
-
     public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
         final Claims claims = extractAllClaims(token);
         return claimsResolver.apply(claims);
