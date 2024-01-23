@@ -1,8 +1,10 @@
 package com.devminds.rentify.config;
 
+import com.amazonaws.util.Base64;
 import com.devminds.rentify.repository.UserRepository;
 import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -22,6 +24,8 @@ import java.security.SecureRandom;
 public class ApplicationConfig {
 
     private final UserRepository repository;
+    @Value("${myapp.secretKey}")
+     private  String secretKey ;
 
     @Bean
     public UserDetailsService userDetailsService() {
@@ -50,9 +54,8 @@ public class ApplicationConfig {
 
     @Bean
     public Key signInKey() {
-        byte[] keyBytes = new byte[32];
-        new SecureRandom().nextBytes(keyBytes);
-        return Keys.hmacShaKeyFor(keyBytes);
+        byte[] keyBytes = Base64.decode(this.secretKey);
+         return  Keys.hmacShaKeyFor(keyBytes);
     }
 }
 

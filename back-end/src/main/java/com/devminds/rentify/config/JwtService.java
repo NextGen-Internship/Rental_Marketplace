@@ -40,8 +40,6 @@ public class JwtService {
 
     @Value("${myapp.validation}")
     private int TOKEN_VALIDITY_DURATION;
-    @Value("${myapp.secretKey}")
-    private  String secretKey ;
 
     public JwtService(Key signInKey) {
         this.signInKey = signInKey;
