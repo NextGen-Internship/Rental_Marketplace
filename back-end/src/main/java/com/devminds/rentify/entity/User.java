@@ -73,9 +73,9 @@ public class User implements UserDetails {
     @JoinColumn(name = "role_id")
     private Role role;
 
-
-    @OneToMany
-    private List<Payment> payments;
+//
+//    @OneToMany
+//    private List<Payment> payments;
 
 
     @OneToMany
@@ -92,7 +92,7 @@ public class User implements UserDetails {
 
     @Override
     public String getUsername() {
-        return email;
+        return this.email;
     }
 
     @Override

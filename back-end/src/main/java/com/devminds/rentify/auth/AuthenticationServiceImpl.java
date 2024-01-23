@@ -16,6 +16,8 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
+
 @Service
 @RequiredArgsConstructor
 
@@ -31,25 +33,20 @@ public class AuthenticationServiceImpl implements AuthService {
 
 
     @Override
-    public AuthenticationRespone register(UserRegisterDto userRegisterDto) {
+    public AuthenticationRespone register(UserRegisterDto userRegisterDto)  {
 
         User user = userMapper.mapToUser(userRegisterDto);
-        user.setRole(roleRepository.findUserRole().get());
+        user.setRole(roleRepository.findUserRole());
         user.setPassword(passwordEncoder.encode(userRegisterDto.getPassword()));
-        user.setRole(roleRepository.findUserRole().orElse(null));
-
         userService.saveUser(user);
-
-        var token = jwtService.generateToken(user);
         return AuthenticationRespone.builder()
-                .token(token)
                 .email(user.getEmail()).build();
 
     }
 
     @Override
-    public AuthenticationRespone login(LoginDto loginDto) {
-        try {
+    public AuthenticationRespone login(LoginDto loginDto)  {
+
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(loginDto.getEmail(), loginDto.getPassword())
             );
@@ -62,8 +59,8 @@ public class AuthenticationServiceImpl implements AuthService {
                     .token(token)
                     .email(user.getEmail())
                     .build();
-        } catch (AuthenticationException e) {
-            throw new BadCredentialsException("Invalid email or password");
-        }
+
+
+
     }
 }

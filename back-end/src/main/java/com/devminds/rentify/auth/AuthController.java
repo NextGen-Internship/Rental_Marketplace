@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.IOException;
+
 @RestController
 @RequestMapping("/rentify")
 @RequiredArgsConstructor
@@ -29,12 +31,14 @@ public class AuthController {
                     .errorMessage(e.getMessage())
                     .build();
             return ResponseEntity.badRequest().body(errorResponse);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 
 
     @PostMapping("/login")
-    public ResponseEntity<AuthenticationRespone> login(@RequestBody LoginDto request) {
+    public ResponseEntity<AuthenticationRespone> login(@RequestBody LoginDto request) throws IOException {
         return ResponseEntity.ok(authService.login(request));
     }
 }
