@@ -27,3 +27,10 @@
 .navbar a:hover {
     color: orange;
 }
+
+.profile-picture {
+    width: 30px; /* Adjust the width as needed */
+    height: 30px; /* Adjust the height as needed */
+    border-radius: 50%;
+    margin-left: 10px; /* Add margin for spacing */
+  }

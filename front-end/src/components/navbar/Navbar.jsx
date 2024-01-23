@@ -5,6 +5,7 @@ import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import LogoutIcon from '@mui/icons-material/Logout';
 import PersonIcon from '@mui/icons-material/Person';
 import "./Navbar.css";
+import { jwtDecode } from "jwt-decode";
 
 const Navbar = () => {
   const location = useLocation();
@@ -18,13 +19,30 @@ const Navbar = () => {
     if (googleToken !== null || regularToken !== null) {
       setIsLoggedIn(true);
     }
-    console.log(isLoggedIn)
+    console.log(isLoggedIn);
+
+    const token = googleToken !== null ? googleToken : regularToken;
+    if (token !== null) {
+      const decoded = jwtDecode(token);
+      console.log(decoded);
+
+      setUserProfile({
+        name: decoded.name,
+        picture: decoded.picture,
+      });
+    }
+
   }, [location]);
 
   const handleLogout = () => {
     Object.keys(localStorage).forEach(key => { localStorage.removeItem(key); });
     setIsLoggedIn(false);
   };
+
+  const [userProfile, setUserProfile] = useState({
+    name: "",
+    picture: "",
+  });
 
   return (
     <nav className="navbar">
@@ -35,7 +53,15 @@ const Navbar = () => {
         {isLoggedIn ? (
           <>
             <Link to="/likes"> <FavoriteBorderIcon /> </Link>
-            <Link to="/settings"> <PersonIcon /> </Link>
+            {userProfile.picture ? (
+              <Link to="/settings">  <img
+                src={userProfile.picture}
+                alt="Profile"
+                className="profile-picture"
+              /> </Link>
+            ) : (
+              <Link to="/settings"> <PersonIcon /> </Link>
+            )}
             <Link to="/" onClick={handleLogout}> <LogoutIcon /> </Link>
           </>
         ) : (
