@@ -33,12 +33,11 @@ public class AuthenticationServiceImpl implements AuthService {
 
 
     @Override
-    public AuthenticationRespone register(UserRegisterDto userRegisterDto) throws IOException {
+    public AuthenticationRespone register(UserRegisterDto userRegisterDto)  {
 
         User user = userMapper.mapToUser(userRegisterDto);
-        user.setRole(roleRepository.findUserRole().get());
+        user.setRole(roleRepository.findUserRole());
         user.setPassword(passwordEncoder.encode(userRegisterDto.getPassword()));
-        user.setRole(roleRepository.findUserRole().orElse(null));
         userService.saveUser(user);
         return AuthenticationRespone.builder()
                 .email(user.getEmail()).build();
@@ -46,7 +45,7 @@ public class AuthenticationServiceImpl implements AuthService {
     }
 
     @Override
-    public AuthenticationRespone login(LoginDto loginDto) throws IOException {
+    public AuthenticationRespone login(LoginDto loginDto)  {
 
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(loginDto.getEmail(), loginDto.getPassword())

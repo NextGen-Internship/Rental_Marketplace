@@ -12,6 +12,6 @@ import java.util.Optional;
 public interface RoleRepository extends JpaRepository<Role, Integer> {
 
     @Query("SELECT u FROM Role u WHERE u.id = 2")
-    Optional<Role> findUserRole();
+    Role findUserRole();
 
 }

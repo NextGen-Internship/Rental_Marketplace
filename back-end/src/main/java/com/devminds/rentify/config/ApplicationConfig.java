@@ -47,13 +47,4 @@ public class ApplicationConfig {
         return config.getAuthenticationManager();
     }
 
-    @Bean
-    public Key signInKey() {
-        // Provide a mechanism to load or generate your key
-        // For example, generating a random key for illustration purposes
-        byte[] keyBytes = new byte[32];
-        new SecureRandom().nextBytes(keyBytes);
-        return Keys.hmacShaKeyFor(keyBytes);
-    }
-
 }
