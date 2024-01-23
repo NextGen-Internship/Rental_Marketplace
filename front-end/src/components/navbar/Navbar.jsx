@@ -19,12 +19,10 @@ const Navbar = () => {
     if (googleToken !== null || regularToken !== null) {
       setIsLoggedIn(true);
     }
-    console.log(isLoggedIn);
 
     const token = googleToken !== null ? googleToken : regularToken;
     if (token !== null) {
       const decoded = jwtDecode(token);
-      console.log(decoded);
 
       setUserProfile({
         name: decoded.name,
