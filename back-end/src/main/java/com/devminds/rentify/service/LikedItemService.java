@@ -17,12 +17,18 @@ public class LikedItemService {
 
   private final  LikedItemRepository likedItemRepository;
 
-//    public void saveLike(User user, Optional<Item> item) {
-////        LikedItem likedItem = new LikedItem();
-////        likedItem.setUser(user);
-////        likedItem.setItem(item);
-////        likedItemRepository.save(likedItem);
-//    }
+    public void saveLike(User user, Item item) {
+        LikedItem existingLike = likedItemRepository.findByUserAndItem(user, item);
+
+        if (existingLike != null) {
+            likedItemRepository.delete(existingLike);
+        } else {
+            LikedItem likedItem = new LikedItem();
+            likedItem.setUser(user);
+            likedItem.setItem(item);
+            likedItemRepository.save(likedItem);
+        }
+    }
 
 
 
@@ -47,6 +53,7 @@ public class LikedItemService {
     public void unlikeItem(User user, Item item) {
         likedItemRepository.deleteByUserAndItem(user, item);
     }
+
 }
 
 

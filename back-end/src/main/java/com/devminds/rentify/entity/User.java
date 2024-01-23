@@ -62,7 +62,7 @@ public class User implements UserDetails {
 
 
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "id")
     private List<Address> addresses;
 
@@ -75,18 +75,18 @@ public class User implements UserDetails {
     @JoinColumn(name = "role_id")
     private Role role;
 
+//
+//    @OneToMany(fetch = FetchType.LAZY)
+//    private List<Payment> payments;
 
-    @OneToMany
-    private List<Payment> payments;
 
+//
+//    @OneToMany(fetch = FetchType.LAZY)
+//    private List<Rent> rents;
 
-
-    @OneToMany
-    private List<Rent> rents;
-
-    @OneToMany
-    private List<History> histories;
-
+//    @OneToMany(fetch = FetchType.LAZY)
+//    private List<History> histories;
+//
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

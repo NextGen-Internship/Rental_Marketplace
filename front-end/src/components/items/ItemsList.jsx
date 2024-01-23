@@ -12,6 +12,7 @@ const ItemsList = ({ searchTerm }) => {
 
     const [likedItems, setLikedItems] = useState(new Set());
     const [items, setItems] = useState([]);
+    const token = localStorage.getItem("token");
 
     useEffect(() => {
         const fetchItems = async () => {
@@ -27,8 +28,8 @@ const ItemsList = ({ searchTerm }) => {
         fetchItems();
       }, []);
 
-    const handleLikeClick = (itemId) => {
-        // Toggle the liked state
+    const handleLikeClick =  (itemId) => {
+    
         const updatedLikedItems = new Set(likedItems);
         if (likedItems.has(itemId)) {
             updatedLikedItems.delete(itemId);
@@ -37,8 +38,37 @@ const ItemsList = ({ searchTerm }) => {
         } 
         
         setLikedItems(updatedLikedItems);
-        // todo 
-        // post request to add a like, or remove a like
+
+        const postLikeRequest = async (likeDto, isUnlike) => {
+          
+            const headers = {
+              "Content-Type": "application/json",
+              "Authorization": token,
+            };
+          
+            const requestBody = {
+              ...likeDto,
+              isUnlike: isUnlike,
+            };
+          
+            try {
+              const response = await fetch("http://localhost:8080/rentify/liked", {
+                method: "POST",
+                headers: headers,
+                body: JSON.stringify(requestBody),
+              });
+          
+              if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+              }
+          
+              return response.json();
+            } catch (error) {
+              throw new Error(`Error during POST request: ${error.message}`);
+            }
+        };
+    
+                
     };
 
     const filteredItems = items.filter(item =>

@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/rentify/like")
+@RequestMapping("/rentify/favorite")
 @RequiredArgsConstructor
 public class LikeController {
 
@@ -24,8 +24,11 @@ public class LikeController {
     private final UserService userService;
     private final ItemService itemService;
 
-    @PostMapping("/like")
-    public ResponseEntity<String> likeItem(@RequestHeader("Authorization") String token, @RequestBody LikeDto likeDto) {
+
+//              const response = await fetch("http://localhost:8080/rentify/favorite/liked", {
+    @PostMapping("/liked")
+    public ResponseEntity<String> likeItem(@RequestHeader("Authorization") String token, @RequestBody LikeDto likeDto
+            , @RequestParam boolean isUnlike) {
         try {
             String email = jwtService.extractUsername(token);
 
@@ -37,15 +40,24 @@ public class LikeController {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User not authenticated");
             }
 
-           // Optional<Item> item = itemService.findById(likeDto.getItemId());
-//            if (item == null) {
-//                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Item not found");
-//            }
-//            likeService.saveLike(user, item);
+            Item  item = itemService.findById(likeDto.getItemId());
+            if (item == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Item not found");
+            }
+
+            if (isUnlike) {
+                likeService.unlikeItem(user, item);
+            } else {
+                likeService.saveLike(user, item);
+            }
+            likeService.saveLike(user , item);
 
             return ResponseEntity.ok("Like recorded successfully");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error recording like");
         }
     }
+
+
+
 }
