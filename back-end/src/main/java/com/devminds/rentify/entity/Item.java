@@ -23,10 +23,8 @@ import java.util.List;
 public class Item {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Id
-    private int id;
+    private Long id;
 
-    @NotEmpty
-    @Size(max = 100)
     @Column(name = "name")
     private String name;
 
@@ -60,18 +58,18 @@ public class Item {
     @ManyToOne
     private Address address;
 
-    @OneToMany
-    private List<History> histories;
-
-    @OneToMany
-    private List<Picture> pictures;
-
-    @OneToMany
-    private List<LikedItem> likedItems;
-
-    @OneToMany
-    private List<Rent> rents;
-
-    @OneToMany
-    private List<Review> reviews;
+//    @OneToMany
+//    private List<History> histories;
+//
+//    @OneToMany
+//    private List<Picture> pictures;
+//
+//    @OneToMany
+//    private List<LikedItem> likedItems;
+//
+//    @OneToMany
+//    private List<Rent> rents;
+//
+//    @OneToMany
+//    private List<Review> reviews;
 }

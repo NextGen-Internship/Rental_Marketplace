@@ -1,5 +1,8 @@
 package com.devminds.rentify.entity;
 
+
+import com.devminds.rentify.enums.UserRole;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -9,19 +12,27 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
-import org.hibernate.validator.constraints.UniqueElements;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 @Data
 @Entity
 @Table(name = "user")
-public class User {
-    @GeneratedValue(strategy = GenerationType.AUTO)
+public class User implements UserDetails {
+
     @Id
-    private int id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private Long id;
 
     @NotEmpty
     @Size(max = 30)
@@ -34,18 +45,14 @@ public class User {
     private String lastName;
 
     @NotEmpty
-    @Min(8)
     @Column(name = "password")
     private String password;
 
     @Column(name = "email")
-    @NotEmpty
-    @UniqueElements
     @Email
     private String email;
 
     @NotEmpty
-    @UniqueElements
     @Column(name = "phone")
     private String phoneNumber;
 
@@ -53,25 +60,64 @@ public class User {
     private String profilePicture;
 
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "id")
     private List<Address> addresses;
 
 
     @OneToMany
-    private List<Item> items;
+    @JoinColumn(name = "id")
+    private List<Item> items = new ArrayList<>();
 
     @ManyToOne
     @JoinColumn(name = "role_id")
     private Role role;
 
-    @OneToMany
-    private List<Payment> payments;
+//
+//    @OneToMany
+//    private List<Payment> payments;
 
 
     @OneToMany
     private List<Rent> rents;
 
-    @OneToMany
-    private List<History> histories;
+    @OneToMany(mappedBy = "user")
+    private List<History> histories = new ArrayList<>();
 
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority(getUserRoleFromRole().toString()));
+    }
+
+    @Override
+    public String getUsername() {
+        return this.email;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
+
+
+    private UserRole getUserRoleFromRole() {
+        return role != null ? role.getRole() : UserRole.USER;
+
+    }
 }

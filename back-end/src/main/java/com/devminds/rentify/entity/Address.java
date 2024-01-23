@@ -9,19 +9,24 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
-import lombok.NonNull;
+
 
 @Data
 @Entity
 @Table(name = "address")
 public class Address {
-    @GeneratedValue(strategy = GenerationType.AUTO)
+
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
+
     @Column
     @NotEmpty
     @Size(max = 100)
     private String city;
+
+
     @Column
     @NotEmpty
     @Size(max = 100)
@@ -36,6 +41,5 @@ public class Address {
     @NotEmpty
     @Size(max = 10)
     private String streetNumber;
-
 
 }

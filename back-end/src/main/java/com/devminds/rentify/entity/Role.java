@@ -1,10 +1,18 @@
 package com.devminds.rentify.entity;
 
 import com.devminds.rentify.enums.UserRole;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
+
 
 @Data
 @Entity
@@ -13,8 +21,9 @@ import lombok.Data;
 public class Role {
 
 
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
+    @Column(name = "id")
     private int id;
 
     @Enumerated(EnumType.STRING)
@@ -24,6 +33,13 @@ public class Role {
 
     @NotEmpty
     @Size(max = 255)
-    @Column(name = "description")
+    @Column(name = "role_description")
     private String description;
+
+
+    public Role() {
+        this.role = UserRole.USER;
+        this.description = "Some default description";
+
+    }
 }
