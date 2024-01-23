@@ -1,0 +1,56 @@
+.item-details-container {
+    height: 100vh;
+    max-width: 600px;
+    margin: auto;
+    margin-top: 20px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.price-deposit-box {
+    padding: 30px; /* Adjust padding for height and width */
+    border: 1px solid #0056b3;
+    border-radius: 8px;
+    margin: auto;
+    margin-bottom: 20px; /* Add margin at the bottom */
+}
+
+.description-box {
+    padding: 20px;
+    border: 1px solid #0056b3;
+    border-radius: 8px;
+    max-width: 100%;
+    margin: auto;
+    margin-bottom: 20px; 
+}
+
+.rent-button {
+    margin-top: 20px;
+    padding: 15px 20px;
+    font-size: 16px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.rent-button:hover {
+    background-color: #0056b3;
+}
+
+.item-details-container .item-name {
+    display: flex;
+    justify-content: center;
+}
+
+/* .item-details-content .item-buttons {
+    display: inline-block;
+    margin-left: 30px;
+}
+
+.price-deposit {
+    display: inline-block;
+} */
