@@ -4,6 +4,8 @@ import com.devminds.rentify.config.JwtService;
 import com.devminds.rentify.dto.LikeDto;
 import com.devminds.rentify.entity.Item;
 import com.devminds.rentify.entity.User;
+import com.devminds.rentify.exception.ItemNotFoundException;
+import com.devminds.rentify.exception.UserNotFoundException;
 import com.devminds.rentify.service.ItemService;
 import com.devminds.rentify.service.LikedItemService;
 import com.devminds.rentify.service.UserService;
@@ -27,34 +29,50 @@ public class LikeController {
 
 //              const response = await fetch("http://localhost:8080/rentify/favorite/liked", {
     @PostMapping("/liked")
-    public ResponseEntity<String> likeItem(@RequestHeader("Authorization") String token, @RequestBody LikeDto likeDto
-            , @RequestParam boolean isUnlike) {
+    public ResponseEntity<String> likeItem(@RequestHeader("Authorization") String token, @RequestBody LikeDto likeDto) {
         try {
+
+            System.out.println("Received Token: " + token);
+
+//            String cleanedToken = token.trim()
+
+            System.out.println("chistiqqtt tokeeenn: "+ token);
+            System.out.println("predivzimane na imeila");
             String email = jwtService.extractUsername(token);
-
-
+            System.out.println(email + "/////////tova e imeilaa");
             Optional<User> userOptional = userService.findByEmail(email);
             User user = userOptional.orElse(null);
 
-            if (user == null) {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User not authenticated");
-            }
 
-            Item  item = itemService.findById(likeDto.getItemId());
-            if (item == null) {
+            System.out.println("Useerr vzeet");
+
+//            Item  item = itemService.findById(likeDto.getItemId());
+
+            try {
+                // ...
+                Item item = itemService.findById(likeDto.getItemId());
+
+                if (likeDto.isUnlike()) {
+                    likeService.unlikeItem(user, item);
+                } else {
+                    likeService.saveLike(user, item);
+                }
+                // ...
+            } catch (ItemNotFoundException e) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Item not found");
+            } catch (UserNotFoundException e) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not authenticated");
             }
 
-            if (isUnlike) {
-                likeService.unlikeItem(user, item);
-            } else {
-                likeService.saveLike(user, item);
-            }
-            likeService.saveLike(user , item);
+
+//            likeService.saveLike(user , item);
 
             return ResponseEntity.ok("Like recorded successfully");
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error recording like");
+            e.printStackTrace();
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error recording like");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid or expired token");
+
         }
     }
 

@@ -4,6 +4,7 @@ import lombok.Data;
 
 @Data
 public class LikeDto {
-
    private long itemId;
+   private boolean isUnlike;
+
 }

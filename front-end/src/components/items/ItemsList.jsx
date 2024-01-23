@@ -12,7 +12,7 @@ const ItemsList = ({ searchTerm }) => {
 
     const [likedItems, setLikedItems] = useState(new Set());
     const [items, setItems] = useState([]);
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem("token").trim();
 
     useEffect(() => {
         const fetchItems = async () => {
@@ -28,48 +28,56 @@ const ItemsList = ({ searchTerm }) => {
         fetchItems();
       }, []);
 
-    const handleLikeClick =  (itemId) => {
-    
+   
+      const handleLikeClick = async (itemId) => {
+        console.log("handleLikeClick called for item:", itemId);
+      
         const updatedLikedItems = new Set(likedItems);
         if (likedItems.has(itemId)) {
-            updatedLikedItems.delete(itemId);
+          updatedLikedItems.delete(itemId);
         } else {
-            updatedLikedItems.add(itemId);
-        } 
-        
+          updatedLikedItems.add(itemId);
+        }
+      
+      
+        console.log("Token:", token);
+      
+        const isUnlike = !likedItems.has(itemId);
         setLikedItems(updatedLikedItems);
+        const requestBody = {
+          itemId: itemId,
+          isUnlike: isUnlike,
+      };
 
-        const postLikeRequest = async (likeDto, isUnlike) => {
-          
-            const headers = {
-              "Content-Type": "application/json",
-              "Authorization": token,
-            };
-          
-            const requestBody = {
-              ...likeDto,
-              isUnlike: isUnlike,
-            };
-          
-            try {
-              const response = await fetch("http://localhost:8080/rentify/liked", {
-                method: "POST",
-                headers: headers,
-                body: JSON.stringify(requestBody),
-              });
-          
-              if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
-              }
-          
-              return response.json();
-            } catch (error) {
-              throw new Error(`Error during POST request: ${error.message}`);
-            }
+      // console.log("Triimmeed tokeey" + trimmedToken)
+      
+      // const urlEncodedToken = encodeURIComponent(trimmedToken);
+        const headers = {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
         };
-    
-                
-    };
+        console.log("Token:", token);
+      
+        try {
+          const response = await fetch("http://localhost:8080/rentify/favorite/liked", {
+            method: "POST",
+            headers: headers,
+            body: JSON.stringify(requestBody),
+          });
+      
+          console.log("Like response:", response);
+      
+          if (!response.ok) {
+            console.log("hvurlq li wee")
+            throw new Error(`HTTP error! Status: ${response.status}`);
+          } 
+      
+          const responseData = await response.json();
+          console.log("Like response data:", responseData);
+        } catch (error) {
+          console.error("Error in handleLikeClick:", error.message);
+        }
+      };
 
     const filteredItems = items.filter(item =>
         item.name.toLowerCase().includes((searchTerm ?? '').toLowerCase())

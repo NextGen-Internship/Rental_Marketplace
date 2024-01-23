@@ -2,87 +2,89 @@ package com.devminds.rentify.config;
 
 import com.devminds.rentify.entity.User;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwt;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import jakarta.annotation.PostConstruct;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.codec.Hex;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.validation.ObjectError;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.yaml.snakeyaml.Yaml;
 
+import javax.crypto.spec.SecretKeySpec;
+import java.io.IOException;
+import java.io.InputStream;
 import java.security.Key;
-import java.util.*;
+import java.util.Base64;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.function.Function;
 
 @Service
-@RequiredArgsConstructor
 public class JwtService {
+    @Getter
+    private  Key signInKey;
 
-   private final  PasswordEncoder passwordEncoder;
+    @Value("${myapp.validation}")
+    private int TOKEN_VALIDITY_DURATION;
 
-    private static final String SECRET_KEY = "secret";
-    public String extractUsername(String token) {
-        return extractClaim(token , Claims::getSubject);
+    public JwtService(Key signInKey) {
+        this.signInKey = signInKey;
     }
-
-    public <T> T extractClaim(String token  , Function<Claims , T> claimsResolver){
+    public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
         final Claims claims = extractAllClaims(token);
+        System.out.println("tukaa li e problemaa");
         return claimsResolver.apply(claims);
     }
 
-    private Claims extractAllClaims(String token){
-        return Jwts.parserBuilder()
-                .setSigningKey(getSignInKey())
-                .build().parseClaimsJws(token)
-                .getBody();
+    public String generateToken(User userDetails) {
+        return generateToken(new HashMap<>(), userDetails);
     }
 
-    private Key getSignInKey() {
-
-        return Keys.secretKeyFor(SignatureAlgorithm.HS256);
-
-    }
-
-    public String generateToken(User user) {
-
-     var passwordEncoded  = passwordEncoder.encode(user.getPassword());
-
-        Map<String, Object> extraClaims = new HashMap<>();
-        extraClaims.put("email", user.getEmail());
-        extraClaims.put("firstName", user.getFirstName());
-        extraClaims.put("lastName", user.getLastName());
-        extraClaims.put("photoUrl" , user.getProfilePicture());
-
-
-        return generateToken(extraClaims, user);
-    }
-
-    public String generateToken(Map<String, Object> extraClaims, User user) {
+    public String generateToken(Map<String, Object> extraClaims, User userDetails) {
         return Jwts.builder()
                 .setClaims(extraClaims)
+                .setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 24)) // token will be valid for 24 hours and 1000 ms
-                .signWith(getSignInKey(), SignatureAlgorithm.HS256)
+                .setExpiration(new Date(System.currentTimeMillis() + TOKEN_VALIDITY_DURATION))
+                .signWith(signInKey, SignatureAlgorithm.HS256)
                 .compact();
+
+
+
     }
 
 
 
-   public boolean isTokenValid(String token , UserDetails userDetails){
-        String userEmail = extractUsername(token);
-
-        return (userEmail.equals(userDetails.getUsername())) && !isTokenExpired(token);
-   }
-
-    public boolean isTokenExpired(String token) {
-        return extractExpiration(token).before(new Date());
+    private Date extractExpiration(String token) {
+        return extractClaim(token, Claims::getExpiration);
     }
 
-    public Date extractExpiration(String token) {
-        return extractClaim(token , Claims::getExpiration);
+
+    public String extractUsername(String token) {
+        System.out.println("vzeee toykenaa/////" + token);
+        String email =  extractClaim(token, Claims::getSubject);
+
+        System.out.println("email///////"+ email);
+
+        return email;
     }
 
+    private Claims extractAllClaims(String token) {
+        return Jwts.parserBuilder().setSigningKey(signInKey).build().parseClaimsJws(token).getBody();
+    }
 
 }
