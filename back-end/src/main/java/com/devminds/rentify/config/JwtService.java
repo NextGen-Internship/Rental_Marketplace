@@ -18,6 +18,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.codec.Hex;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.yaml.snakeyaml.Yaml;
 
 import javax.crypto.spec.SecretKeySpec;
@@ -35,10 +36,10 @@ import java.util.function.Function;
 public class JwtService {
     private  Key signInKey;
 
-    private static final long TOKEN_VALIDITY_DURATION = 2000000L;
-
-    private static final String secretKey = "21974a72b5ada4edad7a26657647bec67855af08ad10183d67f5cc4b0e31bce3" ;
-
+    @Value("${myapp.validation}")
+    private int TOKEN_VALIDITY_DURATION;
+    @Value("${myapp.secretKey}")
+    private  String secretKey ;
 
 
     @PostConstruct
@@ -50,11 +51,6 @@ public class JwtService {
             e.printStackTrace();
         }
     }
-
-
-
-
-
 
     public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
         final Claims claims = extractAllClaims(token);
@@ -77,8 +73,6 @@ public class JwtService {
 
 
     }
-
-
 
 
     public boolean isTokenValid(String token, UserDetails userDetails) {
