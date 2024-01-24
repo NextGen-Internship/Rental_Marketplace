@@ -1,15 +1,14 @@
 package com.devminds.rentify.controller;
 
+import com.devminds.rentify.dto.CreateItemDto;
 import com.devminds.rentify.dto.ItemDto;
 import com.devminds.rentify.service.ItemService;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 
 @CrossOrigin
@@ -24,7 +23,7 @@ public class ItemController {
     }
 
     @PostMapping("/create")
-    public void createItem(@RequestBody CreateItemDto createItemDto) {
+    public void createItem(@ModelAttribute CreateItemDto createItemDto) throws IOException {
      this.itemService.saveItem(createItemDto);
     }
 

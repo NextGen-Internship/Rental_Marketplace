@@ -3,6 +3,7 @@ import "./Create-item.css";
 import CategoryModal from "./CategoryModal";
 import axios from "axios";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
+import { useNavigate } from "react-router-dom";
 
 function CreateItem() {
   const [title, setTitle] = useState("");
@@ -17,14 +18,17 @@ function CreateItem() {
     postCode: "",
     streetNumber: "",
   });
+  const navigate = useNavigate();
+
+  const jwt_token = localStorage.getItem('token');
 
   const handleChange = (event) => {
     const inputValue = event.target.value;
     setTitle(inputValue);
   };
 
-  const handleSelectCategory = (category) => {
-    setSelectedCategory(category);
+  const handleSelectCategory = (category2) => {
+    setSelectedCategory(category2);
   };
 
   const handlePictureClick = (index) => {
@@ -72,25 +76,38 @@ function CreateItem() {
 
   const handleAddItem = async () => {
     try {
+      const backendUrl = "http://localhost:8080/rentify/items/create";
+      const formData = new FormData();
 
-      const backendUrl = "http://localhost:8080/rentify/create";
-      const requestData = {
-        title,
-        description,
-        price,
-        deposit,
-        pictures,
-        category: selectedCategory,
-        address,
-      };
+      formData.append("name", title);
+      formData.append("description", description);
+      formData.append("price", price);
+      formData.append("deposit", deposit);
+      formData.append("category", selectedCategory);
+      formData.append("city", address.city);
+      formData.append("street", address.street);
+      formData.append("postCode", address.postCode);
+      formData.append("streetNumber", address.streetNumber);
 
-      const response = await axios.post(backendUrl, requestData, {});
-      console.log(response.data);
+      pictures.forEach((picture, index) => {
+        if (picture) {
+          formData.append(`pictures[${index}]`, picture);
+        }
+      });
+      
+      const response = await axios.post(backendUrl, formData, {
+        headers: {
+          Authorization: `Bearer ${jwt_token}`,
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+
       if (response.status === 200) {
         console.log("Item added successfully:", response.data);
       } else {
         console.error("Error adding item. Status:", response.status);
       }
+      navigate("/");
     } catch (error) {
       console.error("Error adding item:", error.message);
     }
@@ -230,10 +247,11 @@ function CreateItem() {
       </section>
 
       <button className="add-btn" onClick={handleAddItem}>
-        Add Item
+        <b>Add item</b>
       </button>
     </div>
   );
 }
 
 export default CreateItem;
+

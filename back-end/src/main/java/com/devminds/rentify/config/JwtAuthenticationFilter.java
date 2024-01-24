@@ -48,7 +48,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             Key signInKey = jwtService.getSignInKey();
             Claims claims = Jwts.parserBuilder().setSigningKey(signInKey).build().parseClaimsJws(jwt).getBody();
 
-            // Check if the token is expired
             Date expiration = claims.getExpiration();
             if (expiration != null && expiration.before(new Date())) {
                 filterChain.doFilter(request, response);

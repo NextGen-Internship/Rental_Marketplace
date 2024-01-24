@@ -100,13 +100,16 @@
 
   .remove-picture-btn {
     margin: 0;
-    background-color: #ddd;
-    color: black;
+    border: none;
+    display: flex;
+    background-color: #ffffff;
+    display: inline-block;
+    margin-left: 9em;
   }
   
   
   .remove-picture-btn:hover{
-    background-color: #ddd;
+    cursor: pointer;
   }
   
   .picture-box:hover {
@@ -148,6 +151,7 @@
     height: 3em;
     background-color: #f2f4f5;
     font-size: 1em;
+    margin: 0.5em;
   }
 
   .fields-container {
@@ -158,5 +162,17 @@
   .add-btn {
     width: 10em;
     margin-left: 2em;
+    background-color: #007bff;
+    padding: 1em;
+    color: #ffffff;
+    margin-bottom: 1em;
+    border: none;
+    border-radius: 4px;
+  }
+
+
+  .add-btn:hover {
+    cursor: pointer;
+    background-color: #0056b3;
   }
   

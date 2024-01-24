@@ -3,17 +3,18 @@ package com.devminds.rentify.dto;
 import com.devminds.rentify.entity.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import org.springframework.web.multipart.MultipartFile;
 
 
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
 @AllArgsConstructor
 public class CreateItemDto {
 
-    private int id;
+
 
     private String name;
 
@@ -21,16 +22,19 @@ public class CreateItemDto {
 
     private BigDecimal price;
 
-    private Date postedDate;
+    private LocalDateTime postedDate;
 
     private float deposit;
 
-    private Category category;
+    private String category;
 
     private User user;
 
-    private List<Picture> pictures;
+    private List<MultipartFile> pictures;
 
-    private Address address;
+    private String city;
+    private String street;
+    private String postCode;
+    private String streetNumber;
 
 }

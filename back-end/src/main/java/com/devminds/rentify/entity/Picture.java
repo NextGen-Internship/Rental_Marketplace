@@ -15,7 +15,7 @@ import lombok.Data;
 @Entity
 @Table(name = "picture")
 public class Picture {
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     private int id;
 

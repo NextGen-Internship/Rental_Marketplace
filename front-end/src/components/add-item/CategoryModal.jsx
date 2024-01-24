@@ -12,8 +12,8 @@ export default function CategoryModal({ onSelectCategory }) {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
-  const handleCategoryClick = (category) => {
-    onSelectCategory(category);
+  const handleCategoryClick = (category2) => {
+    onSelectCategory(category2);
     handleClose();
   };
 
@@ -37,15 +37,15 @@ export default function CategoryModal({ onSelectCategory }) {
       </Button>
       <Modal open={open} onClose={handleClose}>
         <Box sx={style}>
-          <h1>Choose Category</h1>
+          <h1>Select Category</h1>
           <ul style={style.ul}>
-            {categories.map((category) => (
+            {categories.map((category2) => (
               <li
-                key={category.id}
-                onClick={() => handleCategoryClick(category.name)}  
+                key={category2.id}
+                onClick={() => handleCategoryClick(category2.name)}  
                 style={style.li}
               >
-                {category.name}  
+                {category2.name}  
               </li>
             ))}
           </ul>
