@@ -69,7 +69,6 @@ public class User implements UserDetails {
     private Role role;
 
 
-
     @OneToMany
     private List<Payment> payments;
 
@@ -115,5 +114,12 @@ public class User implements UserDetails {
     private UserRole getUserRoleFromRole() {
         return role != null ? role.getRole() : UserRole.USER;
 
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", email='" + email + '\'' ;
     }
 }

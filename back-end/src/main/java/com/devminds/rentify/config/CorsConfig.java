@@ -15,7 +15,7 @@ public class CorsConfig implements WebMvcConfigurer {
         return new WebMvcConfigurer() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
-//
+
                 registry.addMapping("/rentify/**")
                         .allowedOrigins("http://localhost:3000")
                         .allowedMethods("*")
@@ -23,6 +23,17 @@ public class CorsConfig implements WebMvcConfigurer {
                         .allowCredentials(true);
 
 
+                registry.addMapping("/rentify/register")
+                        .allowedOrigins("http://localhost:3000")
+                        .allowedMethods("POST")
+                        .allowedHeaders("*")
+                        .allowCredentials(true);
+
+                registry.addMapping("/rentify/items/create")
+                        .allowedOrigins("http://localhost:3000")
+                        .allowedMethods("POST")
+                        .allowedHeaders("*")
+                        .allowCredentials(true);
 
 
             }

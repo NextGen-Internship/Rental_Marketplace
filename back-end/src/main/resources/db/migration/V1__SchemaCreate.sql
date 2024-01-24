@@ -36,13 +36,13 @@ CREATE TABLE IF NOT EXISTS item (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
     description VARCHAR(255) NOT NULL,
-    price DECIMAL(5,2) NOT NULL,
+    price DECIMAL(10,2) NOT NULL,
     category_id INT,
     FOREIGN KEY (category_id) REFERENCES item_category(id),
     user_id INT,
     FOREIGN KEY (user_id) REFERENCES user(id),
     posted_date DATETIME NOT NULL,
-    deposit FLOAT(5,2) NOT NULL,
+    deposit FLOAT(10,2) NOT NULL,
     address_id INT,
     FOREIGN KEY (address_id) REFERENCES address(id)
 );
