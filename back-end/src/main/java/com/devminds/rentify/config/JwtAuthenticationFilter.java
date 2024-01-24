@@ -44,39 +44,33 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         jwt = authHeader.substring(7);
 
-        System.out.println("tokenaa " + jwt);
-//        jwt = authHeader.split(" ")[1].trim();
-//        jwt = authHeader .substring("Bearer ".length());
+            Key signInKey = jwtService.getSignInKey();
+            Claims claims = Jwts.parserBuilder().setSigningKey(signInKey).build().parseClaimsJws(jwt).getBody();
 
+            Date expiration = claims.getExpiration();
+            if (expiration != null && expiration.before(new Date())) {
+                filterChain.doFilter(request, response);
+                return;
+            }
 
-        Key signInKey = jwtService.getSignInKey();
-        Claims claims = Jwts.parserBuilder().setSigningKey(signInKey).build().parseClaimsJws(jwt).getBody();
+            userEmail = claims.getSubject();
+            if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+                UserDetails userDetails = this.userDetailsService.loadUserByUsername(userEmail);
 
-        // Check if the token is expired
-        Date expiration = claims.getExpiration();
-        if (expiration != null && expiration.before(new Date())) {
-            filterChain.doFilter(request, response);
-            return;
-        }
+                UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
+                        userDetails,
+                        null,
+                        userDetails.getAuthorities()
+                );
 
-        userEmail = claims.getSubject();
-        if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            UserDetails userDetails = this.userDetailsService.loadUserByUsername(userEmail);
-
-            UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
-                    userDetails,
-                    null,
-                    userDetails.getAuthorities()
-            );
-
-            authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-            SecurityContextHolder.getContext().setAuthentication(authToken);
-        }
+                authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                SecurityContextHolder.getContext().setAuthentication(authToken);
+            }
 
 
         filterChain.doFilter(request, response);
     }
 
 
-
 }
+

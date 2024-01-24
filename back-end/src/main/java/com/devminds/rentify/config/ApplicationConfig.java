@@ -27,6 +27,7 @@ public class ApplicationConfig {
     @Value("${myapp.secretKey}")
     private  String secretKey ;
 
+
     @Bean
     public UserDetailsService userDetailsService() {
         return username -> repository.findByEmail(username)
@@ -58,3 +59,4 @@ public class ApplicationConfig {
         return  Keys.hmacShaKeyFor(keyBytes);
     }
 }
+

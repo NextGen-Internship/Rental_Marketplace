@@ -1,22 +1,18 @@
 package com.devminds.rentify.dto;
 
-import com.devminds.rentify.dto.AddressDto;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-
-import java.util.Collection;
-import java.util.List;
 
 @Data
 @Builder
 @AllArgsConstructor
+
 public class UserRegisterDto  {
+
     @NotEmpty(message = "firstName is required")
     private String firstName;
 

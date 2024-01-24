@@ -40,12 +40,22 @@ public class AuthConfig {
                                 .requestMatchers("/rentify/images").permitAll()
                                 .requestMatchers("/rentify/images/**").permitAll()
                                 .requestMatchers("/rentify/favorite/**").permitAll()
+                                .requestMatchers("/rentify/users").permitAll()
+                                .requestMatchers("/rentify/users/**").permitAll()
+                                .requestMatchers("/rentify/images").permitAll()
+                                .requestMatchers("/rentify/images/**").permitAll()
+                                .requestMatchers("/rentify/views").permitAll()
+                                .requestMatchers("/rentify/views/**").permitAll()
+                                .requestMatchers("/rentify/likes").permitAll()
+                                .requestMatchers("/rentify/likes/**").permitAll()
+
                                 .anyRequest().authenticated()
 
                 )
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+
 
         return http.build();
     }

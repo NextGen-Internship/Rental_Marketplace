@@ -2,8 +2,6 @@ package com.devminds.rentify.entity;
 
 
 import com.devminds.rentify.enums.UserRole;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.*;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -14,12 +12,13 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -33,7 +32,9 @@ public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private long id;
+
+    private Long id;
+
 
     @NotEmpty
     @Size(max = 30)
@@ -62,7 +63,9 @@ public class User implements UserDetails {
 
 
 
+
     @OneToMany(fetch = FetchType.LAZY)
+
     @JoinColumn(name = "id")
     private List<Address> addresses;
 
@@ -75,18 +78,22 @@ public class User implements UserDetails {
     @JoinColumn(name = "role_id")
     private Role role;
 
-//
-//    @OneToMany(fetch = FetchType.LAZY)
-//    private List<Payment> payments;
 
 
-//
-//    @OneToMany(fetch = FetchType.LAZY)
-//    private List<Rent> rents;
+    @OneToMany
+    private List<Payment> payments;
 
-//    @OneToMany(fetch = FetchType.LAZY)
-//    private List<History> histories;
-//
+
+    @OneToMany
+    private List<Rent> rents;
+
+    @OneToMany(mappedBy = "user")
+    private List<History> histories = new ArrayList<>();
+
+
+    @OneToMany(fetch = FetchType.LAZY)
+    private List<History> histories;
+
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -95,7 +102,7 @@ public class User implements UserDetails {
 
     @Override
     public String getUsername() {
-        return email;
+        return this.email;
     }
 
     @Override

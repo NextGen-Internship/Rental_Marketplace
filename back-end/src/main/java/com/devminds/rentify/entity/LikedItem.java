@@ -9,7 +9,8 @@ import lombok.Data;
 public class LikedItem {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
-    private long id;
+    private Long id;
+
 
     @ManyToOne
     @JoinColumn(name = "item_id", nullable = false)

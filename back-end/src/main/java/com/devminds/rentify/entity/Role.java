@@ -19,6 +19,7 @@ import lombok.Data;
 @Table(name = "user_role")
 
 public class Role {
+
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "id")
@@ -26,8 +27,7 @@ public class Role {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "role_name")
-    private UserRole role ;
-
+    private UserRole role;
 
 
     @NotEmpty

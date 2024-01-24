@@ -3,8 +3,10 @@ package com.devminds.rentify.auth;
 import com.devminds.rentify.dto.LoginDto;
 import com.devminds.rentify.dto.UserRegisterDto;
 
-public interface AuthService {
-    AuthenticationRespone register(UserRegisterDto userRegisterDto);
+import java.io.IOException;
 
-    AuthenticationRespone login(LoginDto loginDto);
+public interface AuthService {
+    AuthenticationRespone register(UserRegisterDto userRegisterDto) throws IOException;
+
+    AuthenticationRespone login(LoginDto loginDto) throws IOException;
 }

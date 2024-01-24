@@ -1,9 +1,13 @@
 package com.devminds.rentify.entity;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
-import jakarta.validation.valueextraction.UnwrapByDefault;
 import lombok.Data;
 
 
@@ -13,7 +17,6 @@ import lombok.Data;
 public class Address {
 
     @Id
-
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 

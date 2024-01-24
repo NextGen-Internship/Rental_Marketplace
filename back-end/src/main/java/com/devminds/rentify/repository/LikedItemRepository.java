@@ -1,16 +1,21 @@
 package com.devminds.rentify.repository;
 
+
 import com.devminds.rentify.entity.Item;
 import com.devminds.rentify.entity.LikedItem;
 import com.devminds.rentify.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import com.devminds.rentify.entity.LikedItem;
+import org.springframework.data.jpa.repository.JpaRepository;
+
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 @Repository
+
 public interface LikedItemRepository extends JpaRepository<LikedItem , Long> {
 
     List<LikedItem> findByItem(Item item);
@@ -23,4 +28,9 @@ public interface LikedItemRepository extends JpaRepository<LikedItem , Long> {
 
     @Query("SELECT l FROM LikedItem l WHERE l.user = :user AND l.item = :item")
     LikedItem findByUserAndItem(@Param("user") User user, @Param("item") Item item);
+    
+    List<LikedItem> getAllLikesByUserId(Long id);
+
+    List<LikedItem> getAllLikesByItemId(Long id);
+
 }

@@ -54,8 +54,9 @@ public class JwtService {
         return generateToken(new HashMap<>(), userDetails);
     }
 
+
     public String generateToken(Map<String, Object> extraClaims, User userDetails) {
-        return Jwts.builder()
+      return Jwts.builder()
                 .setClaims(extraClaims)
                 .setId(String.valueOf(userDetails.getId()))
                 .setSubject(userDetails.getUsername())
@@ -63,6 +64,7 @@ public class JwtService {
                 .setExpiration(new Date(System.currentTimeMillis() + TOKEN_VALIDITY_DURATION))
                 .signWith(signInKey, SignatureAlgorithm.HS256)
                 .compact();
+
 
     }
 
@@ -74,16 +76,14 @@ public class JwtService {
 
 
     public String extractUsername(String token) {
-        System.out.println("vzeee toykenaa/////" + token);
-        String email =  extractClaim(token, Claims::getSubject);
 
-        System.out.println("email///////"+ email);
 
-        return email;
+            return extractClaim(token, Claims::getSubject);
+
     }
 
     private Claims extractAllClaims(String token) {
-        return Jwts.parserBuilder().setSigningKey(signInKey).build().parseClaimsJws(token).getBody();
+            return Jwts.parserBuilder().setSigningKey(signInKey).build().parseClaimsJws(token).getBody();
     }
 
 }
