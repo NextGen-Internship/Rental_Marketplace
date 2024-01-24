@@ -73,9 +73,9 @@ public class User implements UserDetails {
     @JoinColumn(name = "role_id")
     private Role role;
 
-//
-//    @OneToMany
-//    private List<Payment> payments;
+
+    @OneToMany
+    private List<Payment> payments;
 
 
     @OneToMany
@@ -119,5 +119,12 @@ public class User implements UserDetails {
     private UserRole getUserRoleFromRole() {
         return role != null ? role.getRole() : UserRole.USER;
 
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", email='" + email + '\'' ;
     }
 }

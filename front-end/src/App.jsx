@@ -1,12 +1,13 @@
-import './App.css';
-import Navbar from './components/navbar/Navbar';
-import Home from './components/home/Home';
-import NotFound from './components/not-found/NotFound';
-import Footer from './components/footer/Footer';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import CategoryDetails from './components/categories/CategoryDetails';
-import ItemDetails from './components/items/ItemDetails';
+import "./App.css";
+import Navbar from "./components/navbar/Navbar";
+import Home from "./components/home/Home";
+import NotFound from "./components/not-found/NotFound";
+import Footer from "./components/footer/Footer";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import CategoryDetails from "./components/categories/CategoryDetails";
+import ItemDetails from "./components/items/ItemDetails";
 import Login from "./components/login/Login";
+import CreateItem from "./components/add-item/Create-item";
 import Register from "./components/login/Register";
 
 function App() {
@@ -24,6 +25,7 @@ function App() {
           <Route exact path="/register" element={<Register />} />
           <Route path="*" element={<NotFound />} />
           <Route path="/notfound" element={<NotFound />} />
+          <Route exact path="/items/create" element={<CreateItem />} />
         </Routes>
 
         <Footer />

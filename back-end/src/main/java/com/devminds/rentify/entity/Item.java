@@ -9,19 +9,20 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
 @Entity
 @Table(name = "item")
 public class Item {
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     private Long id;
 
@@ -34,18 +35,18 @@ public class Item {
     private String description;
 
 
-    @NotEmpty
+    @NotNull
     @Positive
     @Column(name = "price")
     private BigDecimal price;
 
 
-    @NotEmpty
+    @NotNull
     @Column(name = "posted_date")
-    private Date postedDate;
+    private LocalDateTime postedDate;
 
     @Positive
-    @NotEmpty
+    @NotNull
     @Column(name = "deposit")
     private float deposit;
 
@@ -58,18 +59,18 @@ public class Item {
     @ManyToOne
     private Address address;
 
-//    @OneToMany
-//    private List<History> histories;
-//
-//    @OneToMany
-//    private List<Picture> pictures;
-//
-//    @OneToMany
-//    private List<LikedItem> likedItems;
-//
-//    @OneToMany
-//    private List<Rent> rents;
-//
-//    @OneToMany
-//    private List<Review> reviews;
+    @OneToMany
+    private List<History> histories;
+
+    @OneToMany
+    private List<Picture> pictures;
+
+    @OneToMany
+    private List<LikedItem> likedItems;
+
+    @OneToMany
+    private List<Rent> rents;
+
+    @OneToMany
+    private List<Review> reviews;
 }

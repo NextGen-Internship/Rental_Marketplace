@@ -47,7 +47,7 @@ const Navbar = () => {
       <Link to="/"> <img src={logo} width={"200px"} alt="Logo" /> </Link>
       <div className="links">
         <Link to="/">Home</Link>
-        <Link to="/create">Add Item</Link>
+        <Link to="/items/create">Add Item</Link>
         {isLoggedIn ? (
           <>
             <Link to="/likes"> <FavoriteBorderIcon /> </Link>
