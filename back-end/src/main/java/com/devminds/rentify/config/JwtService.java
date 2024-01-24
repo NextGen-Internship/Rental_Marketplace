@@ -52,12 +52,6 @@ public class JwtService {
     public String generateToken(User userDetails) {
         return generateToken(new HashMap<>(), userDetails);
     }
-<<<<<<< Updated upstream
-
-
-=======
-    
->>>>>>> Stashed changes
     public String generateToken(Map<String, Object> extraClaims, User userDetails) {
       return Jwts.builder()
                 .setClaims(extraClaims)
@@ -79,16 +73,8 @@ public class JwtService {
 
 
     public String extractUsername(String token) {
-<<<<<<< Updated upstream
-
 
             return extractClaim(token, Claims::getSubject);
-
-=======
-        String email =  extractClaim(token, Claims::getSubject);
-
-        return email;
->>>>>>> Stashed changes
     }
 
     private Claims extractAllClaims(String token) {

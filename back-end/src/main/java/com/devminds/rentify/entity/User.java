@@ -2,16 +2,7 @@ package com.devminds.rentify.entity;
 
 
 import com.devminds.rentify.enums.UserRole;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
@@ -65,13 +56,12 @@ public class User implements UserDetails {
 
 
     @OneToMany(fetch = FetchType.LAZY)
-
     @JoinColumn(name = "id")
     private List<Address> addresses;
 
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
-    @JsonIgnore
+
     private List<Item> items = new ArrayList<>();
 
     @ManyToOne
@@ -89,10 +79,6 @@ public class User implements UserDetails {
 
     @OneToMany(mappedBy = "user")
     private List<History> histories = new ArrayList<>();
-
-
-    @OneToMany(fetch = FetchType.LAZY)
-    private List<History> histories;
 
 
     @Override
