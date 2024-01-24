@@ -20,9 +20,7 @@ public class LikedItemService {
     public void saveLike(User user, Item item) {
         LikedItem existingLike = likedItemRepository.findByUserAndItem(user, item);
 
-        if (existingLike != null) {
-            likedItemRepository.delete(existingLike);
-        } else {
+        if (existingLike == null) {
             LikedItem likedItem = new LikedItem();
             likedItem.setUser(user);
             likedItem.setItem(item);
@@ -51,7 +49,10 @@ public class LikedItemService {
     }
 
     public void unlikeItem(User user, Item item) {
-        likedItemRepository.deleteByUserAndItem(user, item);
+        LikedItem likedItemToDelete = likedItemRepository.findByUserAndItem(user,item);
+        if (likedItemToDelete !=null) {
+            likedItemRepository.delete(likedItemToDelete);
+        }
     }
 
 }

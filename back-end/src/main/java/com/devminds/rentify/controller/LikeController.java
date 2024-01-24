@@ -25,57 +25,28 @@ public class LikeController {
     private final JwtService jwtService;
     private final UserService userService;
     private final ItemService itemService;
-
-
-//              const response = await fetch("http://localhost:8080/rentify/favorite/liked", {
     @PostMapping("/liked")
-    public ResponseEntity<String> likeItem(@RequestHeader("Authorization") String token, @RequestBody LikeDto likeDto) {
+    public ResponseEntity<String> likeItem(@RequestBody LikeDto likeDto) {
         try {
 
-            System.out.println("Received Token: " + token);
-
-//            String cleanedToken = token.trim()
-
-            System.out.println("chistiqqtt tokeeenn: "+ token);
-            System.out.println("predivzimane na imeila");
-            String email = jwtService.extractUsername(token);
-            System.out.println(email + "/////////tova e imeilaa");
-            Optional<User> userOptional = userService.findByEmail(email);
+            Optional<User> userOptional = userService.findById(likeDto.getUserId());
             User user = userOptional.orElse(null);
 
+            Item  item = itemService.findById(likeDto.getItemId());
+            if (likeDto.isLiked()) {
+                likeService.saveLike(user, item);
+            } else {
 
-            System.out.println("Useerr vzeet");
-
-//            Item  item = itemService.findById(likeDto.getItemId());
-
-            try {
-                // ...
-                Item item = itemService.findById(likeDto.getItemId());
-
-                if (likeDto.isUnlike()) {
-                    likeService.unlikeItem(user, item);
-                } else {
-                    likeService.saveLike(user, item);
-                }
-                // ...
-            } catch (ItemNotFoundException e) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Item not found");
-            } catch (UserNotFoundException e) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not authenticated");
+                likeService.unlikeItem(user, item);
             }
-
-
-//            likeService.saveLike(user , item);
 
             return ResponseEntity.ok("Like recorded successfully");
         } catch (Exception e) {
             e.printStackTrace();
-//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error recording like");
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid or expired token");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error recording like");
 
         }
     }
-
 
 
 }

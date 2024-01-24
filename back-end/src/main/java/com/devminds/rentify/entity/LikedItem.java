@@ -7,7 +7,7 @@ import lombok.Data;
 @Entity
 @Table(name = "liked_item")
 public class LikedItem {
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     private long id;
 

@@ -3,16 +3,16 @@ import { Link, useParams } from 'react-router-dom';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import './ItemsList.css';
 import { fetchData } from '../fetchData';
-
+import { jwtDecode } from "jwt-decode";
 
 const endpoint = 'items';
 
+
+
 const ItemsList = ({ searchTerm }) => {
     const endpointSuffix = useParams();
-
-    const [likedItems, setLikedItems] = useState(new Set());
     const [items, setItems] = useState([]);
-    const token = localStorage.getItem("token").trim();
+
 
     useEffect(() => {
         const fetchItems = async () => {
@@ -27,9 +27,14 @@ const ItemsList = ({ searchTerm }) => {
     
         fetchItems();
       }, []);
-
+      const [likedItems, setLikedItems] = useState(new Set());
    
-      const handleLikeClick = async (itemId) => {
+      const handleLikeClick = async (itemId) => { 
+
+
+        const token = localStorage.getItem("token");
+        const decoded = jwtDecode(token);
+        const userId = decoded.jti;
         console.log("handleLikeClick called for item:", itemId);
       
         const updatedLikedItems = new Set(likedItems);
@@ -38,42 +43,33 @@ const ItemsList = ({ searchTerm }) => {
         } else {
           updatedLikedItems.add(itemId);
         }
+
       
-      
-        console.log("Token:", token);
-      
-        const isUnlike = !likedItems.has(itemId);
+        const isLiked = !likedItems.has(itemId);
         setLikedItems(updatedLikedItems);
         const requestBody = {
           itemId: itemId,
-          isUnlike: isUnlike,
+          userId: parseInt(userId, 10),
+          isLiked: isLiked
       };
-
-      // console.log("Triimmeed tokeey" + trimmedToken)
-      
-      // const urlEncodedToken = encodeURIComponent(trimmedToken);
-        const headers = {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}`
-        };
-        console.log("Token:", token);
-      
+    
         try {
           const response = await fetch("http://localhost:8080/rentify/favorite/liked", {
             method: "POST",
-            headers: headers,
-            body: JSON.stringify(requestBody),
-          });
-      
-          console.log("Like response:", response);
-      
+            headers: {
+              'Content-Type': 'application/json'
+          },
+            body: JSON.stringify(requestBody)
+          })
+
+          console.log("isLike")
+          console.log(JSON.stringify(requestBody));
+          
           if (!response.ok) {
-            console.log("hvurlq li wee")
             throw new Error(`HTTP error! Status: ${response.status}`);
           } 
       
-          const responseData = await response.json();
-          console.log("Like response data:", responseData);
+  
         } catch (error) {
           console.error("Error in handleLikeClick:", error.message);
         }

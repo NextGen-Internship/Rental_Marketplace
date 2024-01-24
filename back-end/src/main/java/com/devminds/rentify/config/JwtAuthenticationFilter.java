@@ -43,6 +43,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
 
         jwt = authHeader.substring(7);
+
+        System.out.println("tokenaa " + jwt);
 //        jwt = authHeader.split(" ")[1].trim();
 //        jwt = authHeader .substring("Bearer ".length());
 
