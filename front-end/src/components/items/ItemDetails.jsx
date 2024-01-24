@@ -10,6 +10,7 @@ const ItemDetails = () => {
   const [item, setItem] = useState(null);
   const { id } = useParams();
   const navigate = useNavigate();
+  
 
   useEffect(() => {
     const fetchItem = async () => {
@@ -45,25 +46,22 @@ const ItemDetails = () => {
           
           
           <div className="price-deposit-box">
-            <div className="price-deposit">
               <h3>Price</h3>
               <p>{"$" + item.price}</p>
               <h3>Deposit</h3>
               <p>{"$" + item.deposit}</p>
-            </div>
-
-            <div className="item-buttons">
-              <button className="rent-button">Rent</button>
-              <button className="message">Message</button>
-            </div>
+            
+            <button className="rent-button">Rent</button>
           </div>
 
-          {/* todo edin flex box- podredi v 1 red s koloni:
-          price/ deposit, rent
-          user name + click on profile + message
-          category, posted date 
-          
-          when click on profile -> load a page with all items of this user*/}
+          <div className="user-details">
+            <h3>Posted on</h3>
+            <p>{ new Date(item.postedDate).toLocaleString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' }) }</p>
+            <h3>Posted by</h3>
+            <p>{item.user.firstName + " " + item.user.lastName}</p>
+            <button className="message-button">Message</button>
+          </div>
+
         </div>
       )
       }

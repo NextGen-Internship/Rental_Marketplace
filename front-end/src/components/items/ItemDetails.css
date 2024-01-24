@@ -9,11 +9,17 @@
     align-items: center;
 }
 
-.price-deposit-box {
+.item-details-content {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.price-deposit-box, .user-details {
     padding: 30px; /* Adjust padding for height and width */
     border: 1px solid #0056b3;
     border-radius: 8px;
-    margin: auto;
+    width: 48%; /* Adjust the width as needed */
     margin-bottom: 20px; /* Add margin at the bottom */
 }
 
@@ -26,7 +32,7 @@
     margin-bottom: 20px; 
 }
 
-.rent-button {
+.rent-button, .message-button {
     margin-top: 20px;
     padding: 15px 20px;
     font-size: 16px;
@@ -37,7 +43,7 @@
     cursor: pointer;
 }
 
-.rent-button:hover {
+.rent-button:hover, .message-button:hover {
     background-color: #0056b3;
 }
 
@@ -45,12 +51,3 @@
     display: flex;
     justify-content: center;
 }
-
-/* .item-details-content .item-buttons {
-    display: inline-block;
-    margin-left: 30px;
-}
-
-.price-deposit {
-    display: inline-block;
-} */
