@@ -27,7 +27,9 @@ const ItemsList = ({ searchTerm }) => {
     
         fetchItems();
       }, []);
-      const [likedItems, setLikedItems] = useState(new Set());
+      const existingLikedItems = JSON.parse(localStorage.getItem("likedItems")) || [];
+
+      const [likedItems, setLikedItems] = useState(new Set(existingLikedItems));
    
       const handleLikeClick = async (itemId) => { 
 
@@ -70,6 +72,34 @@ const ItemsList = ({ searchTerm }) => {
           } 
       
   
+const existingLikedItems = JSON.parse(localStorage.getItem("likedItems")) || [];
+
+
+
+           if(existingLikedItems.length>0 && !existingLikedItems.includes(itemId)){
+            
+            existingLikedItems.push(itemId);
+
+           localStorage.setItem("likedItems", JSON.stringify(existingLikedItems));
+          }
+           else if(existingLikedItems.includes(itemId)){
+          
+            const indexToRemove = existingLikedItems.indexOf(itemId);
+            
+
+            if (indexToRemove !== -1) {
+              existingLikedItems.splice(indexToRemove, 1);
+            }
+             localStorage.setItem("likedItems", JSON.stringify(existingLikedItems));
+
+           }
+           else {
+            localStorage.setItem("likedItems", JSON.stringify(Array.from(updatedLikedItems)));
+          }
+
+
+
+          
         } catch (error) {
           console.error("Error in handleLikeClick:", error.message);
         }
