@@ -62,6 +62,7 @@ function Login() {
       );
       navigate("/");
     } catch (error) {
+      console.log("Error during Google login");
     }
   };
 

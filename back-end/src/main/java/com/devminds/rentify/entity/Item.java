@@ -1,5 +1,6 @@
 package com.devminds.rentify.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -53,8 +54,11 @@ public class Item {
     @ManyToOne
     private Category category;
 
+
     @ManyToOne
+    @JsonIgnore
     private User user;
+
 
     @ManyToOne
     private Address address;

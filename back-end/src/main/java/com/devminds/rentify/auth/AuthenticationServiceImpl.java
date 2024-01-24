@@ -23,15 +23,12 @@ import java.io.IOException;
 
 public class AuthenticationServiceImpl implements AuthService {
 
-
     private final UserService userService;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
     private final UserMapper userMapper;
     private final RoleRepository roleRepository;
-
-
     @Override
     public AuthenticationRespone register(UserRegisterDto userRegisterDto)  {
 

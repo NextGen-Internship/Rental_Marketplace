@@ -18,7 +18,7 @@ import lombok.Data;
 public class Review {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Id
-    private int id;
+    private long id;
 
     @NotEmpty
     @Positive

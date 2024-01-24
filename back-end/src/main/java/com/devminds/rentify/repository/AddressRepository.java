@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface AddressRepository extends JpaRepository<Address , Integer> {
+public interface AddressRepository extends JpaRepository<Address , Long> {
     List<Address> findByCity(String city);
     List<Address> findByPostCode(String postalCode);
 

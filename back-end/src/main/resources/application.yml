@@ -36,6 +36,7 @@ myapp:
  secretKey: ${SECRET_KEY_JWT}
  validation: ${VALIDATION_JWT}
 
+
 cloud:
   aws:
     credentials:
@@ -49,8 +50,4 @@ cloud:
 application:
   bucket:
     name: ${S3_BUCKET_NAME}
-
-
-
-
 
