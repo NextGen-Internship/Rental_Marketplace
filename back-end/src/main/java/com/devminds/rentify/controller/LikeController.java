@@ -14,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -49,10 +50,10 @@ public class LikeController {
         }
     }
 
-    @GetMapping("/liked/{itemId}")
-    public ResponseEntity<Map<String, Boolean>> getLikedStatus(@PathVariable Long itemId) {
-        boolean isLiked = likeService.getLikedStatus(itemId);
-        return ResponseEntity.ok(Map.of("isLiked", isLiked));
+    @GetMapping("/userFavorite/{userId}")
+    public ResponseEntity<List<Long>> getLikedItemsByUserId(@PathVariable Long userId) {
+        List<Long> likedItems = likeService.getLikedItemsByUserId(userId);
+        return ResponseEntity.ok(likedItems);
     }
 
 

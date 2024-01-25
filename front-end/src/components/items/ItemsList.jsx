@@ -12,24 +12,62 @@ const endpoint = 'items';
 const ItemsList = ({ searchTerm }) => {
     const endpointSuffix = useParams();
     const [items, setItems] = useState([]);
-
-
-    useEffect(() => {
-        const fetchItems = async () => {
-          try {
-
-            const result = await fetchData(endpoint + (Object.keys(endpointSuffix).length === 0 ?  '' : '/category/' + endpointSuffix.id));
-            setItems(result);
-          } catch (error) {
-            console.log(error);
-          }
-        };
     
-        fetchItems();
-      }, []);
-      const existingLikedItems = JSON.parse(localStorage.getItem("likedItems")) || [];
+        useEffect(() => {
 
-      const [likedItems, setLikedItems] = useState(new Set(existingLikedItems));
+
+          const fetchItems = async () => {
+            try {
+  
+              const result = await fetchData(endpoint + (Object.keys(endpointSuffix).length === 0 ?  '' : '/category/' + endpointSuffix.id));
+              setItems(result);
+            } catch (error) {
+              console.log(error);
+            }
+          }
+
+
+
+          const fetchLikedItemsFromDB = async () => {
+              try {
+                  const token = localStorage.getItem("token");
+                
+
+                  if(token){ 
+
+                    console.log("vlizaa")
+                    const decoded = jwtDecode(token);
+                    const userId = decoded.jti;
+                    console.log("aidiii  ////" + userId);
+
+                    // debugger;
+                  const response = await fetch(`http://localhost:8080/rentify/userFavorite/${userId}`, {
+                      method: "GET"
+                  });
+  
+                  console.log(response);
+                  if (response.ok) {
+                      const likedItemsFromDB = await response.json();
+                      setLikedItems(new Set(likedItemsFromDB.map(item => item.itemId)));
+                  } else {
+                      throw new Error(`HTTP error! Status: ${response.status}`);
+                  }
+                }
+              } catch (error) {
+                  console.error("Error fetching liked items:", error.message);
+              }
+          };
+  
+          fetchLikedItemsFromDB();
+          fetchItems();
+
+      }, []); // Run only once when the com
+
+
+      
+      // const existingLikedItems = JSON.parse(localStorage.getItem("likedItems")) || [];
+
+      const [likedItems, setLikedItems] = useState(new Set());
    
       const handleLikeClick = async (itemId) => { 
 
@@ -53,7 +91,7 @@ const ItemsList = ({ searchTerm }) => {
           itemId: itemId,
           userId: parseInt(userId, 10),
           isLiked: isLiked
-      };
+         };
     
         try {
           const response = await fetch("http://localhost:8080/rentify/favorite/liked", {
@@ -70,44 +108,19 @@ const ItemsList = ({ searchTerm }) => {
           if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
           } 
-      
-  
-const existingLikedItems = JSON.parse(localStorage.getItem("likedItems")) || [];
-
-
-
-           if(existingLikedItems.length>0 && !existingLikedItems.includes(itemId)){
-            
-            existingLikedItems.push(itemId);
-
-           localStorage.setItem("likedItems", JSON.stringify(existingLikedItems));
-          }
-           else if(existingLikedItems.includes(itemId)){
-          
-            const indexToRemove = existingLikedItems.indexOf(itemId);
-            
-
-            if (indexToRemove !== -1) {
-              existingLikedItems.splice(indexToRemove, 1);
-            }
-             localStorage.setItem("likedItems", JSON.stringify(existingLikedItems));
-
-           }
-           else {
-            localStorage.setItem("likedItems", JSON.stringify(Array.from(updatedLikedItems)));
-          }
-
-
-
-          
         } catch (error) {
           console.error("Error in handleLikeClick:", error.message);
         }
       };
-
+    
+  
     const filteredItems = items.filter(item =>
         item.name.toLowerCase().includes((searchTerm ?? '').toLowerCase())
     );
+    
+      
+    
+    
 
     return (
         <div className="items-list">
@@ -128,7 +141,9 @@ const existingLikedItems = JSON.parse(localStorage.getItem("likedItems")) || [];
                     </Link>
                 </div>
             ))}
+  
         </div>
+     
     );
 };
 

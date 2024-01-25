@@ -56,10 +56,9 @@ public class LikedItemService {
         }
     }
 
-    public boolean getLikedStatus(int userID){
-        try{
-
-        }catch ()
+    public List<Long> getLikedItemsByUserId(Long userId) {
+        List<LikedItem> likedItems = likedItemRepository.findByUserId(userId);
+        return likedItems.stream().map(LikedItem::getItemId).collect(Collectors.toList());
     }
 
 }
