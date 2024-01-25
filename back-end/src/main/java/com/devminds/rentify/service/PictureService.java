@@ -58,11 +58,15 @@ public class PictureService {
                 .values()
                 .stream()
                 .filter(Objects::nonNull)
-                .sorted(Comparator.comparing(p -> p.getItem().getId()))
                 .collect(Collectors.toList());
     }
 
     private PictureDto mapPictureToPictureDto(Picture picture) {
-        return modelMapper.map(picture, PictureDto.class);
+        PictureDto pictureDto = new PictureDto();
+        pictureDto.setId(picture.getId());
+        pictureDto.setUrl(picture.getUrl());
+        pictureDto.setItemId(picture.getItem().getId());
+
+        return pictureDto;
     }
 }

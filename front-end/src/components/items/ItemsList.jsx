@@ -44,10 +44,9 @@ const ItemsList = ({ searchTerm }) => {
     fetchPictures();
   }, []);
 
-  // Create a mapping between item IDs and their respective pictures
   const itemPicturesMap = {};
   pictures.forEach((picture) => {
-    itemPicturesMap[picture.item.id] = picture.url;
+    itemPicturesMap[picture.itemId] = picture.url;
   });
 
   const handleLikeClick = (itemId) => {
@@ -82,7 +81,12 @@ const ItemsList = ({ searchTerm }) => {
                   <h3 className="card-title">{item.name}</h3>
                   <p className="card-text">{"$" + item.price}</p>
                   <p className="card-text">{item.address}</p>
+                  
                 </div>
+                
+
+              </div>
+            </Link>
                 <button
                   className={`like-button ${
                     likedItems.has(item.id) ? "clicked" : ""
@@ -92,10 +96,8 @@ const ItemsList = ({ searchTerm }) => {
                     handleLikeClick(item.id);
                   }}
                 >
-                  <FavoriteIcon />
+                 <FavoriteIcon />
                 </button>
-              </div>
-            </Link>
           </div>
         ))}
     </div>

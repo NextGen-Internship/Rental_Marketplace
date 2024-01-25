@@ -6,5 +6,5 @@ import lombok.Data;
 public class PictureDto {
     private Long id;
     private String url;
-    private PlainItemDto item;
+    private Long itemId;
 }
