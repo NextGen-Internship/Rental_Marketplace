@@ -56,6 +56,12 @@ public class LikedItemService {
         }
     }
 
+    public boolean getLikedStatus(int userID){
+        try{
+
+        }catch ()
+    }
+
 }
 
 

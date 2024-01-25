@@ -9,7 +9,7 @@ import ItemDetails from "./components/items/ItemDetails";
 import Login from "./components/login/Login";
 import CreateItem from "./components/add-item/Create-item";
 import Register from "./components/login/Register";
-import FavoriteItemsList from "./components/items/FavoriteItemsList"
+// import FavoriteItemsList from "./components/items/FavoriteItemsList"
 
 function App() {
 
@@ -27,7 +27,7 @@ function App() {
           <Route path="*" element={<NotFound />} />
           <Route path="/notfound" element={<NotFound />} />
           <Route exact path="/items/create" element={<CreateItem />} />
-          <Route  exact path="/likes" element={<FavoriteItemsList />} />
+          {/* <Route  exact path="/likes" element={<FavoriteItemsList />} /> */}
 
         </Routes>
 
