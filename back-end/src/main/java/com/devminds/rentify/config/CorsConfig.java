@@ -29,13 +29,6 @@ public class CorsConfig implements WebMvcConfigurer {
                         .allowedHeaders("*")
                         .allowCredentials(true);
 
-                registry.addMapping("/rentify/items/create")
-                        .allowedOrigins("http://localhost:3000")
-                        .allowedMethods("POST")
-                        .allowedHeaders("*")
-                        .allowCredentials(true);
-
-
             }
         };
     }

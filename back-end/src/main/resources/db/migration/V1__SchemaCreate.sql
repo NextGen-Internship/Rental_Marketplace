@@ -16,14 +16,14 @@ CREATE TABLE IF NOT EXISTS user (
     id INT AUTO_INCREMENT PRIMARY KEY,
     first_name VARCHAR(50) NOT NULL,
     last_name VARCHAR(50) NOT NULL,
-    password VARCHAR(255) NOT NULL,
+    password VARCHAR(255),
     email VARCHAR(100) UNIQUE NOT NULL,
     address_id INT,
     FOREIGN KEY (address_id) REFERENCES address(id),
     profile_picture VARCHAR(512),
     role_id INT,
     FOREIGN KEY (role_id) REFERENCES user_role(id),
-    phone VARCHAR(10) NOT NULL UNIQUE
+    phone VARCHAR(10)
 );
 
 CREATE TABLE IF NOT EXISTS item_category (

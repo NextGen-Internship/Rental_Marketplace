@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.IOException;
+import java.security.GeneralSecurityException;
 import java.util.List;
 
 @CrossOrigin(origins = "http://localhost:3000")
@@ -25,9 +27,15 @@ public class UserController {
         this.userService = userService;
     }
 
+    private static String INVALID_TOKEN_MESSAGE = "Invalid token";
 
     @PostMapping("/google-login")
-    public void handleGoogleLogin(@RequestHeader("Authorization") String googleCredential) {
+    public ResponseEntity<String> handleGoogleLogin(@RequestHeader("Authorization") String googleCredential) throws GeneralSecurityException, IOException {
+        String token = this.userService.mapGoogleTokenToOurToken(googleCredential);
+        if(token == null){
+            return new ResponseEntity<>(INVALID_TOKEN_MESSAGE,HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>(token,HttpStatus.OK);
     }
 
     @GetMapping("/users")
