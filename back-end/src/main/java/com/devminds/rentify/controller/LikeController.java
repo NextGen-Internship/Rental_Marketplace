@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/rentify/favorite")
@@ -28,6 +29,7 @@ public class LikeController {
     private final UserService userService;
     private final ItemService itemService;
     @PostMapping("/liked")
+    @CrossOrigin(origins = "http://localhost:3000")
     public ResponseEntity<String> likeItem(@RequestBody LikeDto likeDto) {
         try {
 
@@ -51,8 +53,8 @@ public class LikeController {
     }
 
     @GetMapping("/userFavorite/{userId}")
-    public ResponseEntity<List<Long>> getLikedItemsByUserId(@PathVariable Long userId) {
-        List<Long> likedItems = likeService.getLikedItemsByUserId(userId);
+    public ResponseEntity<Set<Long>> getLikedItemsByUserId(@PathVariable Long userId) {
+        Set<Long> likedItems = likeService.getLikedItemsByUserId(userId);
         return ResponseEntity.ok(likedItems);
     }
 

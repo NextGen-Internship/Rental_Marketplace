@@ -22,10 +22,9 @@ const ItemsList = ({ searchTerm }) => {
               const result = await fetchData(endpoint + (Object.keys(endpointSuffix).length === 0 ?  '' : '/category/' + endpointSuffix.id));
               setItems(result);
             } catch (error) {
-              console.log(error);
+              console.log("fetchdata  "+error);
             }
           }
-
 
 
           const fetchLikedItemsFromDB = async () => {
@@ -40,16 +39,26 @@ const ItemsList = ({ searchTerm }) => {
                     const userId = decoded.jti;
                     console.log("aidiii  ////" + userId);
 
-                    // debugger;
+                
                   const response = await fetch(`http://localhost:8080/rentify/userFavorite/${userId}`, {
-                      method: "GET"
+                      method: "GET",
+                    //   headers: {
+                    //     'Content-Type': 'application/json'
+                    // }
                   });
+
+                 
   
-                  console.log(response);
+                  console.log("responsee")
+                  console.log( response);
                   if (response.ok) {
                       const likedItemsFromDB = await response.json();
+
+                      if(likedItemsFromDB > 0){  
                       setLikedItems(new Set(likedItemsFromDB.map(item => item.itemId)));
+                      }
                   } else {
+                    console.log("hvurlqqsh li weeeeee")
                       throw new Error(`HTTP error! Status: ${response.status}`);
                   }
                 }
@@ -58,10 +67,11 @@ const ItemsList = ({ searchTerm }) => {
               }
           };
   
-          fetchLikedItemsFromDB();
-          fetchItems();
-
-      }, []); // Run only once when the com
+        
+        fetchLikedItemsFromDB();
+       fetchItems();
+          
+      }, []);
 
 
       

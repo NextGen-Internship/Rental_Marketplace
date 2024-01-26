@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -56,9 +57,9 @@ public class LikedItemService {
         }
     }
 
-    public List<Long> getLikedItemsByUserId(Long userId) {
-        List<LikedItem> likedItems = likedItemRepository.findByUserId(userId);
-        return likedItems.stream().map(LikedItem::getItemId).collect(Collectors.toList());
+    public Set<Long> getLikedItemsByUserId(Long userId) {
+        Set<LikedItem> likedItems = likedItemRepository.findByUserId(userId);
+        return likedItems.stream().map(LikedItem::getItemId).collect(Collectors.toSet());
     }
 
 }
