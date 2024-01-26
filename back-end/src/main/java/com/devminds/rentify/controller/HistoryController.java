@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-@CrossOrigin
 @RestController
 @RequestMapping("/rentify/views")
 public class HistoryController {
