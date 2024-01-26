@@ -2,16 +2,7 @@ package com.devminds.rentify.entity;
 
 
 import com.devminds.rentify.enums.UserRole;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
@@ -32,7 +23,9 @@ public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
+
     private Long id;
+
 
     @NotEmpty
     @Size(max = 30)
@@ -60,13 +53,15 @@ public class User implements UserDetails {
     private String profilePicture;
 
 
-    @OneToMany(cascade = CascadeType.ALL)
+
+
+    @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "id")
     private List<Address> addresses;
 
 
-    @OneToMany
-    @JoinColumn(name = "id")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+
     private List<Item> items = new ArrayList<>();
 
     @ManyToOne
@@ -92,7 +87,7 @@ public class User implements UserDetails {
 
     @Override
     public String getUsername() {
-        return email;
+        return this.email;
     }
 
     @Override
@@ -119,5 +114,12 @@ public class User implements UserDetails {
     private UserRole getUserRoleFromRole() {
         return role != null ? role.getRole() : UserRole.USER;
 
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", email='" + email + '\'' ;
     }
 }

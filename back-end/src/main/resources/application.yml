@@ -31,6 +31,12 @@ spring:
       max-file-size: 5MB
       max-request-size: 10MB
 
+
+myapp:
+ secretKey: ${SECRET_KEY_JWT}
+ validation: ${VALIDATION_JWT}
+
+
 cloud:
   aws:
     credentials:

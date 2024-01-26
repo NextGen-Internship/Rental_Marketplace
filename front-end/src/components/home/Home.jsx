@@ -12,7 +12,7 @@ const Home = () => {
     };
 
     return (
-        <div>
+        <div className='home'>
             <CategoriesList />
 
             <div className="search-container">

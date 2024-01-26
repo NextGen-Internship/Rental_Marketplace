@@ -20,11 +20,10 @@ import lombok.Data;
 
 public class Role {
 
-
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "id")
-    private int id;
+    private long id;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "role_name")
@@ -39,7 +38,6 @@ public class Role {
 
     public Role() {
         this.role = UserRole.USER;
-        this.description = "Some default description";
 
     }
 }

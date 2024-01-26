@@ -19,7 +19,7 @@ import java.util.Date;
 public class Rent {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Id
-    private int id;
+    private long id;
 
     @ManyToOne
     private Item item;

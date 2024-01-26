@@ -4,11 +4,16 @@ import com.devminds.rentify.dto.LoginDto;
 import com.devminds.rentify.dto.UserRegisterDto;
 import com.devminds.rentify.exception.DuplicateEntityException;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.io.IOException;
 
 @RestController
 @RequestMapping("/rentify")
@@ -29,12 +34,17 @@ public class AuthController {
                     .errorMessage(e.getMessage())
                     .build();
             return ResponseEntity.badRequest().body(errorResponse);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 
 
     @PostMapping("/login")
+
     public ResponseEntity<AuthenticationRespone> login(@RequestBody LoginDto request) {
+
         return ResponseEntity.ok(authService.login(request));
     }
+
 }

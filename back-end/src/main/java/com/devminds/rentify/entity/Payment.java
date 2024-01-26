@@ -25,7 +25,7 @@ import java.util.Date;
 public class Payment {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Id
-    private int id;
+    private long id;
 
     @NotEmpty
     @Positive

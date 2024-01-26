@@ -104,7 +104,6 @@ function Register() {
           formValues
           
         ).then((response) => {
-          localStorage.setItem("register_token", response.data.token);
           navigate("/login");
         });  
       } catch (error) {

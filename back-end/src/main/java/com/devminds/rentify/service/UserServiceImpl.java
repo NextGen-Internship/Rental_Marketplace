@@ -40,6 +40,11 @@ public class UserServiceImpl implements UserService {
         return userRepository.findByEmail(email);
     }
 
+    @Override
+    public Optional<User> findById(long id) {
+
+        return userRepository.findById(id);
+    }
     private void checkIfIsDuplicateByPhoneNumber(User user) {
         userRepository.findByPhone(user.getPhoneNumber())
                 .ifPresent(existingUser -> {

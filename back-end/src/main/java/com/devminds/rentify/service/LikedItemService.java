@@ -1,47 +1,63 @@
 package com.devminds.rentify.service;
 
-import com.devminds.rentify.dto.LikedItemDto;
+
+import com.devminds.rentify.entity.Item;
 import com.devminds.rentify.entity.LikedItem;
+import com.devminds.rentify.entity.User;
 import com.devminds.rentify.repository.LikedItemRepository;
-import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class LikedItemService {
-    private final LikedItemRepository likedItemRepository;
-    private final ModelMapper modelMapper;
 
-    @Autowired
-    public LikedItemService(LikedItemRepository likedItemRepository, ModelMapper modelMapper) {
-        this.likedItemRepository = likedItemRepository;
-        this.modelMapper = modelMapper;
+  private final  LikedItemRepository likedItemRepository;
+
+    public void saveLike(User user, Item item) {
+        LikedItem existingLike = likedItemRepository.findByUserAndItem(user, item);
+
+        if (existingLike == null) {
+            LikedItem likedItem = new LikedItem();
+            likedItem.setUser(user);
+            likedItem.setItem(item);
+            likedItemRepository.save(likedItem);
+        }
     }
 
-    public List<LikedItemDto> getAllLikes() {
-        return likedItemRepository.findAll()
-                .stream()
-                .map(this::mapLikedItemToLikedItemDto)
-                .toList();
+
+
+    public List<Item> getLikedItemsByUser(User user) {
+        List<LikedItem> likedItems = likedItemRepository.findByUser(user);
+        return likedItems.stream()
+                .map(LikedItem::getItem)
+                .collect(Collectors.toList());
     }
 
-    public List<LikedItemDto> getAllLikesByUserId(Long id) {
-        return likedItemRepository.getAllLikesByUserId(id)
-                .stream()
-                .map(this::mapLikedItemToLikedItemDto)
-                .toList();
+    public List<User> getUsersWhoLikedItem(Item item) {
+        List<LikedItem> likedItems = likedItemRepository.findByItem(item);
+        return likedItems.stream()
+                .map(LikedItem::getUser)
+                .collect(Collectors.toList());
     }
 
-    public List<LikedItemDto> getAllLikesByItemId(Long id) {
-        return likedItemRepository.getAllLikesByItemId(id)
-                .stream()
-                .map(this::mapLikedItemToLikedItemDto)
-                .toList();
+    public boolean hasUserLikedItem(User user, Item item) {
+        return likedItemRepository.existsByUserAndItem(user, item);
     }
 
-    private LikedItemDto mapLikedItemToLikedItemDto(LikedItem likedItem) {
-        return modelMapper.map(likedItem, LikedItemDto.class);
+    public void unlikeItem(User user, Item item) {
+        LikedItem likedItemToDelete = likedItemRepository.findByUserAndItem(user,item);
+        if (likedItemToDelete !=null) {
+            likedItemRepository.delete(likedItemToDelete);
+        }
     }
+
 }
+
+
+
+

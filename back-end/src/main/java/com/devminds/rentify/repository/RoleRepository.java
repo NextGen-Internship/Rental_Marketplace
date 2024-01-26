@@ -9,9 +9,9 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface RoleRepository extends JpaRepository<Role, Integer> {
+public interface RoleRepository extends JpaRepository<Role, Long> {
 
     @Query("SELECT u FROM Role u WHERE u.id = 2")
-    Optional<Role> findUserRole();
+    Role findUserRole();
 
 }
