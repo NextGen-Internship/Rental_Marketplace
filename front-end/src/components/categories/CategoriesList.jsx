@@ -46,7 +46,7 @@ const CategoriesList = () => {
 
   return (
     <div className="category-container">
-      <h2>All Categories</h2>
+      <h2 style={{"padding-bottom" : "30px"}}>All Categories</h2>
       <div className="category-list">
         {categories && categories.map((category, index) => (
           <div key={index} className="category-item" >

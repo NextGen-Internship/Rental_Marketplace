@@ -2,23 +2,26 @@ package com.devminds.rentify.service;
 
 import com.devminds.rentify.dto.HistoryDto;
 import com.devminds.rentify.entity.History;
+import com.devminds.rentify.exception.EmailNotFoundException;
 import com.devminds.rentify.repository.HistoryRepository;
+import com.devminds.rentify.repository.UserRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 public class HistoryService {
+    private static final String EMAIL_NOT_FOUND_MESSAGE = "Email %s was not found.";
     private final HistoryRepository historyRepository;
+    private final UserRepository userRepository;
     private final ModelMapper modelMapper;
 
     @Autowired
-    public HistoryService(HistoryRepository historyRepository, ModelMapper modelMapper) {
+    public HistoryService(HistoryRepository historyRepository, UserRepository userRepository, ModelMapper modelMapper) {
         this.historyRepository = historyRepository;
+        this.userRepository = userRepository;
         this.modelMapper = modelMapper;
     }
 
@@ -34,6 +37,16 @@ public class HistoryService {
                 .toList();
     }
 
+    public List<HistoryDto> getAllViewsByUserEmail(String email) {
+        if (userRepository.findByEmail(email).isEmpty()) {
+            throw new EmailNotFoundException(String.format(EMAIL_NOT_FOUND_MESSAGE, email));
+        }
+
+        return historyRepository.findByUserEmail(email)
+                .stream().map(this::mapHistoryToHistoryDto)
+                .toList();
+    }
+
     public List<HistoryDto> getAllViewsByItemId(Long id) {
         return historyRepository.findByItemId(id)
                 .stream().map(this::mapHistoryToHistoryDto)
@@ -41,9 +54,8 @@ public class HistoryService {
     }
 
     public HistoryDto addView(HistoryDto historyDto) {
-//        History history = mapHistoryDtoToHistory(historyDto);
-//        History historyRepository.save(history);
-        return null;
+        History history = mapHistoryDtoToHistory(historyDto);
+        return mapHistoryToHistoryDto(historyRepository.save(history));
     }
 
     private HistoryDto mapHistoryToHistoryDto(History history) {
@@ -53,4 +65,5 @@ public class HistoryService {
     private History mapHistoryDtoToHistory(HistoryDto historyDto) {
         return modelMapper.map(historyDto, History.class);
     }
+
 }

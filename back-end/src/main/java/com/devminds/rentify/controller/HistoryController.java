@@ -35,6 +35,11 @@ public class HistoryController {
         return new ResponseEntity<>(historyService.getAllViewsByUserId(id), HttpStatus.OK);
     }
 
+    @GetMapping("/user-email/{email}")
+    public ResponseEntity<List<HistoryDto>> getAllViewsByUserEmail(@PathVariable String email) {
+        return new ResponseEntity<>(historyService.getAllViewsByUserEmail(email), HttpStatus.OK);
+    }
+
     @GetMapping("/items/{id}")
     public ResponseEntity<List<HistoryDto>> getAllViewsByItemId(@PathVariable Long id) {
         return new ResponseEntity<>(historyService.getAllViewsByItemId(id), HttpStatus.OK);

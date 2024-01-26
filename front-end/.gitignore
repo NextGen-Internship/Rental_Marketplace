@@ -5,12 +5,8 @@
 /.pnp
 .pnp.js
 
-#images
-*.jpg
-*.png
-*.img
-*.ico
-#*.svg
+# VS_CODE
+.vscode
 
 # testing
 /coverage

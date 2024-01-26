@@ -9,6 +9,7 @@ import ItemDetails from "./components/items/ItemDetails";
 import Login from "./components/login/Login";
 import CreateItem from "./components/add-item/Create-item";
 import Register from "./components/login/Register";
+import Views from "./components/views/Views";
 
 function App() {
 
@@ -18,14 +19,15 @@ function App() {
         <Navbar />
 
         <Routes>
-          <Route exact path="/" element={<Home />} />
+          <Route path="/" element={<Home />} />
           <Route path="/items/category/:id" element={<CategoryDetails />} />
           <Route path="items/:id" element={<ItemDetails />} />
-          <Route exact path="/login" element={<Login />} />
-          <Route exact path="/register" element={<Register />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
           <Route path="*" element={<NotFound />} />
           <Route path="/notfound" element={<NotFound />} />
-          <Route exact path="/items/create" element={<CreateItem />} />
+          <Route path="/items/create" element={<CreateItem />} />
+          <Route path="/views" element={<Views />} />
         </Routes>
 
         <Footer />

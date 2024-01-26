@@ -1,5 +1,6 @@
 .category-container {
     text-align: center;
+    padding: 20px;
 }
 
 .category-list {
@@ -27,7 +28,7 @@
 }
 
 .category-icon svg {
-    background-color: orange;
+    background-color: rgb(219, 231, 249);
     width: 80px; 
     height: 80px;
     border-radius: 50%;

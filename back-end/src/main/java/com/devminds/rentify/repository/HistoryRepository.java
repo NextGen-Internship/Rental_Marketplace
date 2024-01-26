@@ -11,4 +11,6 @@ public interface HistoryRepository extends JpaRepository<History, Long> {
     List<History> findByUserId(Long id);
 
     List<History> findByItemId(Long id);
+
+    List<History> findByUserEmail(String email);
 }
