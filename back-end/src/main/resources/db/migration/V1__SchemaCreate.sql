@@ -35,7 +35,7 @@ CREATE TABLE IF NOT EXISTS item_category (
 CREATE TABLE IF NOT EXISTS item (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
-    description VARCHAR(255) NOT NULL,
+    description VARCHAR(1024) NOT NULL,
     price DECIMAL(10,2) NOT NULL,
     category_id INT,
     FOREIGN KEY (category_id) REFERENCES item_category(id),

@@ -15,6 +15,8 @@
     border: 2px solid orange;
     border-radius: 8px;
     overflow: hidden;
+    display: flex;
+    flex-direction: column;
 }
 
 .items-list-item:hover {
@@ -27,27 +29,15 @@
     display: block;
 }
 
-.items-list-item h2 {
-    font-size: 18px;
-    color: #333;
-}
-
-.items-list-item h5 {
-    font-size: 16px; 
-    color: #888;
-    margin-top: 10px;
-}
-
-.items-list-item p {
-    font-size: 16px; 
-    color: #888;
-    margin-top: 10px; 
+.items-list-item .card {
+    flex: 1; 
 }
 
 .items-list-item .like-button {
     position: absolute;
-    top: 15px;
-    right: 15px;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
     border: none;
     background: none;
     cursor: pointer;

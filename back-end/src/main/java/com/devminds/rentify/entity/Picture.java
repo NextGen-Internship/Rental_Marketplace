@@ -17,7 +17,7 @@ import lombok.Data;
 public class Picture {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
-    private long id;
+    private Long id;
 
     @NotEmpty
     @Size(max = 512)
