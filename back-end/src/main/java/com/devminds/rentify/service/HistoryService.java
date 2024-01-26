@@ -5,6 +5,8 @@ import com.devminds.rentify.entity.History;
 import com.devminds.rentify.repository.HistoryRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -36,6 +38,12 @@ public class HistoryService {
         return historyRepository.findByItemId(id)
                 .stream().map(this::mapHistoryToHistoryDto)
                 .toList();
+    }
+
+    public HistoryDto addView(HistoryDto historyDto) {
+//        History history = mapHistoryDtoToHistory(historyDto);
+//        History historyRepository.save(history);
+        return null;
     }
 
     private HistoryDto mapHistoryToHistoryDto(History history) {
