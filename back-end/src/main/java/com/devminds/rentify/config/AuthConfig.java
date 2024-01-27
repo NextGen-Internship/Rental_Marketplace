@@ -40,7 +40,7 @@ public class AuthConfig {
                                 .requestMatchers("/rentify/images").permitAll()
                                 .requestMatchers("/rentify/images/**").permitAll()
                                 .requestMatchers("/rentify/favorite/**").permitAll()
-                                .requestMatchers("/rentify/favorite/userFavorite/*").permitAll()
+                                .requestMatchers("/rentify/favorite/userFavorite/**").permitAll()
                                 .requestMatchers("/rentify/users").permitAll()
                                 .requestMatchers("/rentify/users/**").permitAll()
                                 .requestMatchers("/rentify/images").permitAll()

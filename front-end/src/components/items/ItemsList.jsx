@@ -12,6 +12,8 @@ const endpoint = 'items';
 const ItemsList = ({ searchTerm }) => {
     const endpointSuffix = useParams();
     const [items, setItems] = useState([]);
+    const [likedItems, setLikedItems] = useState(new Set());
+
     
         useEffect(() => {
 
@@ -34,31 +36,30 @@ const ItemsList = ({ searchTerm }) => {
 
                   if(token){ 
 
-                    console.log("vlizaa")
                     const decoded = jwtDecode(token);
                     const userId = decoded.jti;
-                    console.log("aidiii  ////" + userId);
+                    
 
-                
-                  const response = await fetch(`http://localhost:8080/rentify/userFavorite/${userId}`, {
+
+                  const response = await fetch(`http://localhost:8080/rentify/favorite/userFavorite/${userId}`, {
                       method: "GET",
-                    //   headers: {
-                    //     'Content-Type': 'application/json'
-                    // }
                   });
 
                  
   
-                  console.log("responsee")
+            
                   console.log( response);
                   if (response.ok) {
-                      const likedItemsFromDB = await response.json();
-
-                      if(likedItemsFromDB > 0){  
-                      setLikedItems(new Set(likedItemsFromDB.map(item => item.itemId)));
-                      }
+                      
+                    
+                    const likedItemsFromDB = await response.json();
+                    const likedItemsSet = new Set(likedItemsFromDB);
+                    setLikedItems(likedItemsSet);
+                    
+                  
+                      
                   } else {
-                    console.log("hvurlqqsh li weeeeee")
+                  
                       throw new Error(`HTTP error! Status: ${response.status}`);
                   }
                 }
@@ -66,20 +67,17 @@ const ItemsList = ({ searchTerm }) => {
                   console.error("Error fetching liked items:", error.message);
               }
           };
-  
-        
+
+      
+
         fetchLikedItemsFromDB();
        fetchItems();
           
       }, []);
 
 
-      
-      // const existingLikedItems = JSON.parse(localStorage.getItem("likedItems")) || [];
-
-      const [likedItems, setLikedItems] = useState(new Set());
-   
       const handleLikeClick = async (itemId) => { 
+        
 
 
         const token = localStorage.getItem("token");
@@ -122,11 +120,10 @@ const ItemsList = ({ searchTerm }) => {
           console.error("Error in handleLikeClick:", error.message);
         }
       };
-    
   
-    const filteredItems = items.filter(item =>
-        item.name.toLowerCase().includes((searchTerm ?? '').toLowerCase())
-    );
+    const filteredItems = items.filter((item) =>
+    item.name.toLowerCase().includes((searchTerm ?? "").toLowerCase())
+);
     
       
     
