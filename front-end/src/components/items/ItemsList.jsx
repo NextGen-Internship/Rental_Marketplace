@@ -48,7 +48,7 @@ const ItemsList = ({ searchTerm }) => {
                  
   
             
-                  console.log( response);
+                
                   if (response.ok) {
                       
                     
@@ -59,7 +59,7 @@ const ItemsList = ({ searchTerm }) => {
                   
                       
                   } else {
-                    // console.log("hvurlqqsh li weeeeee")
+                   
                       throw new Error(`HTTP error! Status: ${response.status}`);
                   }
                 }
