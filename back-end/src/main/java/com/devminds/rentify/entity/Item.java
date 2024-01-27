@@ -1,14 +1,7 @@
 package com.devminds.rentify.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
@@ -23,6 +16,7 @@ import java.util.List;
 @Entity
 @Table(name = "item")
 public class Item {
+
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     private Long id;
@@ -62,14 +56,14 @@ public class Item {
 
     @ManyToOne
     private Address address;
+//
+//    @OneToMany
+//    private List<History> histories;
 
-    @OneToMany
-    private List<History> histories;
-
-    @OneToMany
+    @OneToMany(fetch = FetchType.LAZY , mappedBy = "item")
     private List<Picture> pictures;
 
-    @OneToMany
+    @OneToMany(fetch = FetchType.LAZY , mappedBy = "item")
     private List<LikedItem> likedItems;
 
     @OneToMany

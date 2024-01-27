@@ -59,7 +59,7 @@ const ItemsList = ({ searchTerm }) => {
                   
                       
                   } else {
-                  
+                    // console.log("hvurlqqsh li weeeeee")
                       throw new Error(`HTTP error! Status: ${response.status}`);
                   }
                 }
@@ -83,7 +83,6 @@ const ItemsList = ({ searchTerm }) => {
         const token = localStorage.getItem("token");
         const decoded = jwtDecode(token);
         const userId = decoded.jti;
-        console.log("handleLikeClick called for item:", itemId);
       
         const updatedLikedItems = new Set(likedItems);
         if (likedItems.has(itemId)) {

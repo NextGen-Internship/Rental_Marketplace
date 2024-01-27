@@ -4,8 +4,6 @@ import com.devminds.rentify.config.JwtService;
 import com.devminds.rentify.dto.LikeDto;
 import com.devminds.rentify.entity.Item;
 import com.devminds.rentify.entity.User;
-import com.devminds.rentify.exception.ItemNotFoundException;
-import com.devminds.rentify.exception.UserNotFoundException;
 import com.devminds.rentify.service.ItemService;
 import com.devminds.rentify.service.LikedItemService;
 import com.devminds.rentify.service.UserService;
@@ -13,9 +11,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
@@ -28,8 +23,10 @@ public class LikeController {
     private final JwtService jwtService;
     private final UserService userService;
     private final ItemService itemService;
+
+
+    private final ItemService itemRepository;
     @PostMapping("/liked")
-    @CrossOrigin(origins = "http://localhost:3000")
     public ResponseEntity<String> likeItem(@RequestBody LikeDto likeDto) {
         try {
 
