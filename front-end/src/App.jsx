@@ -9,6 +9,8 @@ import ItemDetails from "./components/items/ItemDetails";
 import Login from "./components/login/Login";
 import CreateItem from "./components/add-item/Create-item";
 import Register from "./components/login/Register";
+import FilterComponent from "./components/filter/FilterComponent";
+
 
 function App() {
 
@@ -26,6 +28,9 @@ function App() {
           <Route path="*" element={<NotFound />} />
           <Route path="/notfound" element={<NotFound />} />
           <Route exact path="/items/create" element={<CreateItem />} />
+
+          <Route path="/filter" element={<FilterComponent />} />
+
         </Routes>
 
         <Footer />

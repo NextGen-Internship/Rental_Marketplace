@@ -8,8 +8,10 @@ import com.devminds.rentify.repository.AddressRepository;
 import com.devminds.rentify.repository.CategoryRepository;
 import com.devminds.rentify.repository.ItemRepository;
 import com.devminds.rentify.repository.PictureRepository;
+import jakarta.persistence.criteria.Predicate;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -109,4 +111,41 @@ public class ItemService {
     private Item mapItemDtoToItem(ItemDto itemDto) {
         return modelMapper.map(itemDto, Item.class);
     }
+
+
+
+    public List<Item> getFilteredItems(String categoryName, Float priceFrom, Float priceTo, String cityName) {
+        Specification<Item> spec = (root, query, cb) -> {
+            List<Predicate> predicates = new ArrayList<>();
+
+            if (categoryName != null && !categoryName.isEmpty()) {
+                Category category = categoryRepository.findByName(categoryName)
+                        .orElseThrow(() -> new RuntimeException("Category not found for name: " + categoryName));
+
+                predicates.add(cb.equal(root.get("category"), category));
+            }
+
+            if (priceFrom != null && priceTo != null) {
+                predicates.add(cb.between(root.get("price"), priceFrom, priceTo));
+            }
+
+            if (cityName != null && !cityName.isEmpty()) {
+                List<Address> addresses = addressRepository.findByCity(cityName);
+
+
+                    Address address = addresses.get(0);
+                    // Now you can use the 'address' object
+                    // ...
+
+
+                predicates.add(cb.equal(root.get("address"), address));
+            }
+
+            return cb.and(predicates.toArray(new Predicate[0]));
+        };
+
+        return itemRepository.findAll(spec);
+    }
+
+
 }
