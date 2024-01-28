@@ -12,14 +12,14 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class HistoryService {
+public class ViewsService {
     private static final String EMAIL_NOT_FOUND_MESSAGE = "Email %s was not found.";
     private final HistoryRepository historyRepository;
     private final UserRepository userRepository;
     private final ModelMapper modelMapper;
 
     @Autowired
-    public HistoryService(HistoryRepository historyRepository, UserRepository userRepository, ModelMapper modelMapper) {
+    public ViewsService(HistoryRepository historyRepository, UserRepository userRepository, ModelMapper modelMapper) {
         this.historyRepository = historyRepository;
         this.userRepository = userRepository;
         this.modelMapper = modelMapper;

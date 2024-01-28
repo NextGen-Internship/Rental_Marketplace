@@ -33,15 +33,6 @@ const ItemDetails = () => {
       }
     };
 
-    const addView = async () => {
-      try {
-        // todo add view, but not sure if it has to be here
-        // maybe in another useEffect
-      } catch (error) {
-        console.log(error);
-      }
-    }
-
     if (!item) {
       fetchItem();
     }
