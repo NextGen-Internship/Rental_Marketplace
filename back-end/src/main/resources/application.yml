@@ -52,3 +52,6 @@ application:
     name: ${S3_BUCKET_NAME}
 
 google-client-key: ${GOOGLE_CLIENT_ID}
+
+stripe-publishable-key: ${STRIPE_PUBLISHABLE_KEY}
+stripe-secret-key: ${STRIPE_SECRET_KEY}
