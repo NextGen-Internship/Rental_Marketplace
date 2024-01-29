@@ -5,7 +5,9 @@
 /.pnp
 .pnp.js
 
-# images 
+.env.local
+
+#images
 *.jpg
 *.png
 *.img
