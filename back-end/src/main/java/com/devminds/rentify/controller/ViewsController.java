@@ -2,7 +2,7 @@ package com.devminds.rentify.controller;
 
 import com.devminds.rentify.dto.HistoryDto;
 import com.devminds.rentify.service.ViewsService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,15 +14,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("/rentify/views")
 public class ViewsController {
     private final ViewsService viewsService;
-
-    @Autowired
-    public ViewsController(ViewsService viewsService) {
-        this.viewsService = viewsService;
-    }
 
     @GetMapping
     public ResponseEntity<List<HistoryDto>> getAllViews() {
