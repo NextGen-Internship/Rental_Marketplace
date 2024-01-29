@@ -6,7 +6,7 @@ import { jwtDecode } from 'jwt-decode';
 const LikedItemsPage = () => {
   const [likedItems, setLikedItems] = useState([]);
 
-  
+
 
   useEffect(() => {
     const fetchLikedItemsFromDB = async () => {
@@ -17,12 +17,13 @@ const LikedItemsPage = () => {
           const decoded = jwtDecode(token);
           const userId = decoded.jti;
 
-          const response = await fetch(`http://localhost:8080/rentify/favorite/userFavorite/${userId}`, {
+          const response = await fetch(`http://localhost:8080/rentify/favourites/userFavourites/${userId}`, {
             method: 'GET',
           });
 
           if (response.ok) {
             const likedItemsIds = await response.json();
+        
             const detailedLikedItems = await Promise.all(likedItemsIds.map(async (itemId) => {
               const itemResponse = await fetch(`http://localhost:8080/rentify/items/${itemId}`, {
                 method: 'GET',
@@ -42,9 +43,13 @@ const LikedItemsPage = () => {
       }
     };
 
+    
+
     fetchLikedItemsFromDB();
   }, []);
-  
+
+
+
   const handleLikeClick = async (itemId) => {
     const token = localStorage.getItem("token");
     const decoded = jwtDecode(token);
@@ -74,7 +79,7 @@ const LikedItemsPage = () => {
       isLiked: isLiked
     };
     try {
-        const response = await fetch("http://localhost:8080/rentify/favorite/liked", {
+        const response = await fetch("http://localhost:8080/rentify/favourites/liked", {
           method: "POST",
           headers: {
             'Content-Type': 'application/json'
