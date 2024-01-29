@@ -4,7 +4,7 @@ DELIMITER //
 
 CREATE PROCEDURE delete_views()
 BEGIN
-    DELETE FROM history;
+    DELETE FROM history WHERE date < DATE_SUB(NOW(), INTERVAL 7 DAY);
 END //
 
 DELIMITER ;
