@@ -66,6 +66,10 @@ public class ItemService {
         itemToSave.setPostedDate(LocalDateTime.now());
         itemToSave.setCategory(categoryToSave);
 
+        if (!pictureUrls.isEmpty()) {
+            itemToSave.setThumbnail(pictureUrls.get(0).toString());
+        }
+
         itemToSave.setPictures(new ArrayList<>());
         Item savedItem = this.itemRepository.save(itemToSave);
         List<Picture> picturesToAdd = new ArrayList<>();

@@ -12,11 +12,9 @@
     margin: 15px; 
     list-style: none;
     transition: transform 0.3s ease-in-out;
-    border: 2px solid rgb(74, 133, 221);
+    border: 2px solid rgb(219, 231, 249);
     border-radius: 8px;
     overflow: hidden;
-    display: flex;
-    flex-direction: column;
 }
 
 .items-list-item:hover {
@@ -29,15 +27,27 @@
     display: block;
 }
 
-.items-list-item .card {
-    flex: 1; 
+.items-list-item h2 {
+    font-size: 18px;
+    color: #333;
+}
+
+.items-list-item h5 {
+    font-size: 16px; 
+    color: #888;
+    margin-top: 10px;
+}
+
+.items-list-item p {
+    font-size: 16px; 
+    color: #888;
+    margin-top: 10px; 
 }
 
 .items-list-item .like-button {
     position: absolute;
-    bottom: 0;
-    left: 50%;
-    transform: translateX(-50%);
+    top: 15px;
+    right: 15px;
     border: none;
     background: none;
     cursor: pointer;

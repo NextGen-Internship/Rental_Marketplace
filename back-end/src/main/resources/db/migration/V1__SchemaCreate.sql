@@ -38,6 +38,7 @@ CREATE TABLE IF NOT EXISTS item (
     description VARCHAR(1024) NOT NULL,
     price DECIMAL(10,2) NOT NULL,
     category_id INT,
+    thumbnail VARCHAR(512),
     FOREIGN KEY (category_id) REFERENCES item_category(id),
     user_id INT,
     FOREIGN KEY (user_id) REFERENCES user(id),

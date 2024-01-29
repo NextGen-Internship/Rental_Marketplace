@@ -10,7 +10,7 @@
 
 .navbar h1 {
     font-size: 24px;
-    color: orange;
+    color: rgb(219, 231, 249);
 }
 
 .navbar .links {
@@ -25,7 +25,7 @@
 }
 
 .navbar a:hover {
-    color: orange;
+    color: rgb(29, 54, 91);
 }
 
 .profile-picture {

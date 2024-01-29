@@ -4,13 +4,27 @@
 /node_modules
 /.pnp
 .pnp.js
+
 .env.local
+
 #images
 *.jpg
 *.png
 *.img
 *.ico
-#*.svg
+*.svg
+*.avif
+
+# Allow images in src/assets directory
+!src/assets/*.jpg
+!src/assets/*.png
+!src/assets/*.img
+!src/assets/*.ico
+!src/assets/*.svg
+!src/assets/*.avif
+
+# VS_CODE
+.vscode
 
 # testing
 /coverage
