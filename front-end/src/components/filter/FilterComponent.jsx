@@ -1,5 +1,9 @@
 import { AssistWalkerOutlined } from '@mui/icons-material';
 import React, { useState, useEffect } from 'react';
+import "./Filter.css"
+
+//import "./Navbar.css";
+
 
 const FilterComponent = () => {
   const [categories, setCategories] = useState([]);
@@ -108,33 +112,33 @@ const FilterComponent = () => {
   };
 
   return (
-    <div>
-      <label>Category:</label>
-      <select value={selectedCategory} onChange={(e) => setSelectedCategory(e.target.value)}>
-        <option value="">All</option>
-        {categories.map(category => (
-          <option key={category.id} value={category.name}>
-            {category.name}
-          </option>
-        ))}
-      </select>
+    <div className="filter-container">
+    <label className="filter-label">Category:</label>
+    <select className="filter-select" value={selectedCategory} onChange={(e) => setSelectedCategory(e.target.value)}>
+      <option value="">All</option>
+      {categories.map(category => (
+        <option key={category.id} value={category.name}>
+          {category.name}
+        </option>
+      ))}
+    </select>
 
-      <label>Price Range:</label>
-      <input type="number" placeholder="From" value={priceFrom} onChange={(e) => setPriceFrom(e.target.value)} />
-      <input type="number" placeholder="To" value={priceTo} onChange={(e) => setPriceTo(e.target.value)} />
+    <label className="filter-label">Price Range:</label>
+    <input className="filter-input" type="number" placeholder="From" value={priceFrom} onChange={(e) => setPriceFrom(e.target.value)} />
+    <input className="filter-input" type="number" placeholder="To" value={priceTo} onChange={(e) => setPriceTo(e.target.value)} />
 
-      <label>City:</label>
-      <select value={selectedAddress} onChange={(e) => setSelectedAddress(e.target.value)}>
-        <option value="">All</option>
-        {addresses.map(address => (
-          <option key={address.id} value={address.name}>
-            {address.city}
-          </option>
-        ))}
-      </select>
+    <label className="filter-label">City:</label>
+    <select className="filter-select" value={selectedAddress} onChange={(e) => setSelectedAddress(e.target.value)}>
+      <option value="">All</option>
+      {addresses.map(address => (
+        <option key={address.id} value={address.name}>
+          {address.city}
+        </option>
+      ))}
+    </select>
 
-      <button onClick={applyFilters}>Search</button>
-    </div>
+    <button className="filter-button" onClick={applyFilters}>Search</button>
+  </div>
   );
 };
 
