@@ -4,6 +4,7 @@ import logo from '../../assets/rentify-logo.svg';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import LogoutIcon from '@mui/icons-material/Logout';
 import PersonIcon from '@mui/icons-material/Person';
+import VisibilityIcon from '@mui/icons-material/Visibility';
 import "./Navbar.css";
 import { jwtDecode } from "jwt-decode";
 
@@ -51,6 +52,7 @@ const Navbar = () => {
         {isLoggedIn ? (
           <>
             <Link to="/likes"> <FavoriteBorderIcon /> </Link>
+            <Link to="/views"><VisibilityIcon /> </Link>
             {userProfile.picture ? (
               <Link to="/settings">  <img
                 src={userProfile.picture}
@@ -61,6 +63,7 @@ const Navbar = () => {
               <Link to="/settings"> <PersonIcon /> </Link>
             )}
             <Link to="/" onClick={handleLogout}> <LogoutIcon /> </Link>
+        
           </>
         ) : (
           <>
