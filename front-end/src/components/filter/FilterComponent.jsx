@@ -13,6 +13,8 @@ const FilterComponent = () => {
   const [priceTo, setPriceTo] = useState('');
   const [selectedAddress, setSelectedAddress] = useState('');
 
+
+
   useEffect(() => {
 
 
@@ -61,36 +63,33 @@ const FilterComponent = () => {
   }, []);
 
   const applyFilters = async () => {
-    // Make a request to fetch filtered items based on selected filters
-    // Use selectedCategory, priceFrom, priceTo, selectedAddress to construct your request
-    // Update the state or perform other actions based on the filtered items
+
 
 
     try {
-      // Construct the filter parameters based on user input
+      
       const filters = {
         category: selectedCategory,
         priceFrom: parseFloat(priceFrom),
         priceTo: parseFloat(priceTo),
-        address: selectedAddress,
+        address: selectedAddress 
       };
 
+      
       console.log(selectedCategory);
       console.log(priceFrom);
       console.log(priceTo)
       console.log(selectedAddress);
       
-  ;
 
-      
 
   
-      // You can now use the 'filters' object to construct your API request
-      // For example:
-      // const apiUrl = `http://localhost:8080/rentify/items/filter?category=${filters.category}&priceFrom=${filters.priceFrom}&priceTo=${filters.priceTo}&address=${filters.address}`;
+
+    
       // const apiUrl = `http://localhost:8080/rentify/items/filter?category=${filters.category}&priceFrom=${filters.priceFrom}&priceTo=${filters.priceTo}&address=${filters.address}`;
       // const apiUrl = `http://localhost:8080/rentify/items/filter?category=${filters.category}&priceFrom=${Number(filters.priceFrom) || ''}&priceTo=${Number(filters.priceTo) || ''}&address=${filters.address}`;
-      const apiUrl = `http://localhost:8080/rentify/items/filter?category=${filters.category}&priceFrom=${Number(filters.priceFrom) || ''}&priceTo=${Number(filters.priceTo) || ''}&address=${filters.address}`;
+
+      const apiUrl = `http://localhost:8080/rentify/items/filter?category=${filters.category}&priceFrom=${filters.priceFrom || ''}&priceTo=${filters.priceTo || ''}&address=${filters.address}`;
 
 
 
@@ -101,7 +100,6 @@ const FilterComponent = () => {
       }
   
       const filteredItems = await response.json();
-      // Update the state or perform other actions based on the filtered 4
       setFilteredItems(filteredItems);
       console.log('Filtered Items:', filteredItems);
     } catch (error) {
@@ -129,7 +127,7 @@ const FilterComponent = () => {
       <select value={selectedAddress} onChange={(e) => setSelectedAddress(e.target.value)}>
         <option value="">All</option>
         {addresses.map(address => (
-          <option key={address.id} value={address.city}>
+          <option key={address.id} value={address.name}>
             {address.city}
           </option>
         ))}

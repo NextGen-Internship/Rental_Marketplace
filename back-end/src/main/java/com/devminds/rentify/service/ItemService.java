@@ -23,6 +23,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static java.util.Arrays.stream;
+
 @Service
 public class ItemService {
     private static final String ITEM_NOT_FOUND_MESSAGE = "Item with %d id not found.";
@@ -114,37 +116,56 @@ public class ItemService {
 
 
 
-    public List<Item> getFilteredItems(String categoryName, Float priceFrom, Float priceTo, String cityName) {
+    public List<ItemDto> getFilteredItems(String categoryName, Float priceFrom, Float priceTo, String cityName) {
         Specification<Item> spec = (root, query, cb) -> {
             List<Predicate> predicates = new ArrayList<>();
 
-            if (categoryName != null && !categoryName.isEmpty()) {
-                Category category = categoryRepository.findByName(categoryName)
-                        .orElseThrow(() -> new RuntimeException("Category not found for name: " + categoryName));
+            if (categoryName == null && priceFrom == null && priceTo == null && cityName == null) {
 
-                predicates.add(cb.equal(root.get("category"), category));
+                getAllItems();
+
             }
 
-            if (priceFrom != null && priceTo != null) {
-                predicates.add(cb.between(root.get("price"), priceFrom, priceTo));
+            if (categoryName != null && !categoryName.isEmpty()) {
+
+                System.out.println("poluchenata categoriqq " + categoryName);
+
+                Optional<Category> optionalCategory = categoryRepository.findByName(categoryName);
+                optionalCategory.ifPresent(category -> predicates.add(cb.equal(root.get("category"), category)));
+            }
+
+            if ((priceFrom != null && priceFrom >= 0) || (priceTo != null && priceTo >= 0)) {
+
+                System.out.println("poluchenata from  " + priceFrom);
+                System.out.println("poluchenata to  " + priceTo);
+
+                if (priceFrom != null && priceTo != null && priceFrom >= 0 && priceTo >= 0) {
+                    predicates.add(cb.between(root.get("price"), priceFrom, priceTo));
+                } else if (priceFrom != null && priceFrom >= 0) {
+                    predicates.add(cb.greaterThanOrEqualTo(root.get("price"), priceFrom));
+                } else if (priceTo != null && priceTo >= 0) {
+                    predicates.add(cb.lessThanOrEqualTo(root.get("price"), priceTo));
+                }
             }
 
             if (cityName != null && !cityName.isEmpty()) {
+                System.out.println("poluchenata city " + cityName);
+
                 List<Address> addresses = addressRepository.findByCity(cityName);
-
-
+                if (!addresses.isEmpty()) {
                     Address address = addresses.get(0);
-                    // Now you can use the 'address' object
-                    // ...
-
-
-                predicates.add(cb.equal(root.get("address"), address));
+                    predicates.add(cb.equal(root.get("address"), address));
+                }
             }
 
             return cb.and(predicates.toArray(new Predicate[0]));
         };
 
-        return itemRepository.findAll(spec);
+
+        return itemRepository.findAll(spec)
+                .stream()
+                .map(this::mapItemToItemDto)
+                .toList();
     }
 
 
