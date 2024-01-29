@@ -23,7 +23,7 @@ import java.util.Date;
 @Entity
 @Table(name = "payment")
 public class Payment {
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     private long id;
 

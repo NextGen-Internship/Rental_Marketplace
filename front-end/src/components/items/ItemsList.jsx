@@ -31,62 +31,80 @@ const ItemsList = ({ searchTerm }) => {
       }
     };
 
-    const handleLikeClick = async (itemId) => {
-      const token = localStorage.getItem("token");
-      const decoded = jwtDecode(token);
-      const userId = decoded.jti;
-      console.log("handleLikeClick called for item:", itemId);
-
-      const updatedLikedItems = new Set(likedItems);
-      if (likedItems.has(itemId)) {
-        updatedLikedItems.delete(itemId);
-      } else {
-        updatedLikedItems.add(itemId);
-      }
-
-      const isLiked = !likedItems.has(itemId);
-      setLikedItems(updatedLikedItems);
-      const requestBody = {
-        itemId: itemId,
-        userId: parseInt(userId, 10),
-        isLiked: isLiked,
-      };
-
+    const fetchLikedItemsFromDB = async () => {
       try {
-        const response = await fetch(
-          "http://localhost:8080/rentify/favorite/liked",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(requestBody),
+        const token = localStorage.getItem("token");
+
+        if (token) {
+          const decoded = jwtDecode(token);
+          const userId = decoded.jti;
+
+          const response = await fetch(
+            `http://localhost:8080/rentify/favourites/userFavourites/${userId}`,
+            {
+              method: "GET",
+            }
+          );
+
+          if (response.ok) {
+            const likedItemsFromDB = await response.json();
+            const likedItemsSet = new Set(likedItemsFromDB);
+            setLikedItems(likedItemsSet);
+          } else {
+            throw new Error(`HTTP error! Status: ${response.status}`);
           }
-        );
-
-        console.log("isLike");
-        console.log(JSON.stringify(requestBody));
-
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
         }
       } catch (error) {
-        console.error("Error in handleLikeClick:", error.message);
+        console.error("Error fetching liked items:", error.message);
       }
     };
 
+    fetchLikedItemsFromDB();
     fetchItems();
   }, []);
 
-  const handleLikeClick = (itemId) => {
+  const handleLikeClick = async (itemId) => {
+    const token = localStorage.getItem("token");
+    const decoded = jwtDecode(token);
+    const userId = decoded.jti;
+    console.log("handleLikeClick called for item:", itemId);
+
     const updatedLikedItems = new Set(likedItems);
     if (likedItems.has(itemId)) {
       updatedLikedItems.delete(itemId);
     } else {
       updatedLikedItems.add(itemId);
     }
+
+    const isLiked = !likedItems.has(itemId);
     setLikedItems(updatedLikedItems);
-    // TODO: Add logic for post request to add or remove a like
+    const requestBody = {
+      itemId: itemId,
+      userId: parseInt(userId, 10),
+      isLiked: isLiked,
+    };
+
+    try {
+      const response = await fetch(
+        "http://localhost:8080/rentify/favourites/liked",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(requestBody),
+        }
+      );
+
+      console.log("isLike");
+      console.log(JSON.stringify(requestBody));
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+    } catch (error) {
+      console.error("Error in handleLikeClick:", error.message);
+    }
   };
 
   const filteredItems = items.filter((item) =>

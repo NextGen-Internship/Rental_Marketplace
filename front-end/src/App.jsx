@@ -10,9 +10,9 @@ import Login from "./components/login/Login";
 import CreateItem from "./components/add-item/Create-item";
 import Register from "./components/login/Register";
 import Views from "./components/views/Views";
+import LikedItemsPage from "./components/items/LikedItemsPage";
 
 function App() {
-
   return (
     <Router>
       <div className="App">
@@ -28,6 +28,7 @@ function App() {
           <Route path="/notfound" element={<NotFound />} />
           <Route path="/items/create" element={<CreateItem />} />
           <Route path="/views" element={<Views />} />
+          <Route exact path="/likes" element={<LikedItemsPage />} />
         </Routes>
 
         <Footer />

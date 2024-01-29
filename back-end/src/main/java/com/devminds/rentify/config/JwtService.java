@@ -33,6 +33,7 @@ public class JwtService {
     public String generateToken(Map<String, Object> extraClaims, User userDetails) {
       return Jwts.builder()
                 .setClaims(extraClaims)
+                .claim("picture",userDetails.getProfilePicture())
                 .setId(String.valueOf(userDetails.getId()))
                 .setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
