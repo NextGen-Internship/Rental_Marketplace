@@ -4,6 +4,7 @@ import "./Login.css";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -11,6 +12,7 @@ function Login() {
   const [errorMessage, setErrorMessage] = useState("");
   const navigate = useNavigate();
 
+  const {REACT_APP_GOOGLE_CLIENT_ID} = process.env;
 
   const handleTogglePassword = () => {
     setShowPassword(!showPassword);
@@ -41,13 +43,8 @@ function Login() {
   };
 
   const handleGoogleLogin = async (response) => {
-    
     const jwt = response.credential;
-    console.log(response);
-    localStorage.setItem("google_token", jwt);
-
     try {
-
       const backendResponse = await axios.post(
         "http://localhost:8080/rentify/google-login",
         {},
@@ -58,8 +55,12 @@ function Login() {
           },
           
         }
-      
       );
+      console.log(backendResponse);
+      const newToken = backendResponse.data;
+
+      localStorage.setItem("token",newToken);
+      
       navigate("/");
     } catch (error) {
       console.log("Error during Google login");
@@ -98,7 +99,7 @@ function Login() {
 
         <GoogleLogin
           onSuccess={handleGoogleLogin}
-          clientId="1022611064919-anjhq49aic100ll017uci89hnctoqf6g.apps.googleusercontent.com"
+          clientId={REACT_APP_GOOGLE_CLIENT_ID}
         />
       </div>
       
