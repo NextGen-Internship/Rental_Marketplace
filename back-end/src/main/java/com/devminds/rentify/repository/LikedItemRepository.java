@@ -13,6 +13,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Set;
 
 @Repository
 
@@ -24,13 +25,12 @@ public interface LikedItemRepository extends JpaRepository<LikedItem , Long> {
 
     boolean existsByUserAndItem(User user, Item item);
 
-    void deleteByUserAndItem(User user, Item item);
 
     @Query("SELECT l FROM LikedItem l WHERE l.user = :user AND l.item = :item")
     LikedItem findByUserAndItem(@Param("user") User user, @Param("item") Item item);
     
-    List<LikedItem> getAllLikesByUserId(Long id);
 
-    List<LikedItem> getAllLikesByItemId(Long id);
+    Set<LikedItem> findByUserId(Long userId);
+
 
 }
