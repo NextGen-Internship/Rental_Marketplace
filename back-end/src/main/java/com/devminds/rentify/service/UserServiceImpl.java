@@ -12,6 +12,7 @@ import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken.Payload;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.gson.GsonFactory;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -24,6 +25,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
     private static final String USER_NOT_FOUND_MESSAGE = "User with %d id not found.";
 
@@ -31,13 +33,6 @@ public class UserServiceImpl implements UserService {
     private final ModelMapper modelMapper;
     private final RoleRepository roleRepository;
     private final JwtService jwtService;
-
-    public UserServiceImpl(UserRepository userRepository, ModelMapper mapper, RoleRepository roleRepository, JwtService jwtService) {
-        this.userRepository = userRepository;
-        this.modelMapper = mapper;
-        this.roleRepository = roleRepository;
-        this.jwtService = jwtService;
-    }
 
     @Value("${google-client-key}")
     private String googleClientId;
