@@ -23,9 +23,7 @@ public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-
     private Long id;
-
 
     @NotEmpty
     @Size(max = 30)
@@ -37,7 +35,6 @@ public class User implements UserDetails {
     @Column(name = "last_name")
     private String lastName;
 
-    @NotEmpty
     @Column(name = "password")
     private String password;
 
@@ -45,14 +42,11 @@ public class User implements UserDetails {
     @Email
     private String email;
 
-    @NotEmpty
     @Column(name = "phone")
     private String phoneNumber;
 
     @Column(name = "profile_picture")
     private String profilePicture;
-
-
 
 
     @OneToMany(fetch = FetchType.LAZY)
