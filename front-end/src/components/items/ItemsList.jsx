@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link, useParams, useNavigate, useLocation } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import "./ItemsList.css";
 import { fetchData } from "../fetchData";
@@ -8,17 +8,13 @@ import { jwtDecode } from "jwt-decode";
 import axios from "axios";
 
 const endpointItems = "items";
-//const endpointPictires = "pictures/thumbnails";
 
 const ItemsList = ({ searchTerm }) => {
   const endpointSuffix = useParams();
-  const navigate = useNavigate();
 
   const [likedItems, setLikedItems] = useState(new Set());
   const [items, setItems] = useState([]);
-  //const [pictures, setPictures] = useState([]);
   const [userId, setUserId] = useState(null);
-
 
   useEffect(() => {
     const fetchItems = async () => {
@@ -79,24 +75,8 @@ const ItemsList = ({ searchTerm }) => {
       }
     };
 
-    // const fetchPictures = async () => {
-    //   try {
-    //     const result = await fetchData(endpointPictires);
-    //     setPictures(result);
-    //   } catch (error) {
-    //     navigate("/notfound");
-    //   }
-    // };
-
     fetchItems();
-    // console.log("all items: " + items)
-    // fetchPictures();
   }, []);
-
-  // const itemPicturesMap = {};
-  // pictures.forEach((picture) => {
-  //   itemPicturesMap[picture.itemId] = picture.url;
-  // });
 
   const handleLikeClick = (itemId) => {
     const updatedLikedItems = new Set(likedItems);
@@ -115,40 +95,36 @@ const ItemsList = ({ searchTerm }) => {
 
   useEffect(() => {
     const googleToken = localStorage.getItem("google_token");
-      const regularToken = localStorage.getItem("token");
+    const regularToken = localStorage.getItem("token");
 
-      const token = googleToken !== null ? googleToken : regularToken;
-      if (token !== null) {
-        const decoded = jwtDecode(token);
-        setUserId(decoded.jti);
-      }
+    const token = googleToken !== null ? googleToken : regularToken;
+    if (token !== null) {
+      const decoded = jwtDecode(token);
+      setUserId(decoded.jti);
+    }
 
-      console.log(userId);
+    console.log(userId);
   }, []);
 
   const handleViewClick = (itemId) => {
     if (userId === null) {
       return;
     }
-    
+
     const url = "http://localhost:8080/rentify/views";
     const postData = {
       user: { id: userId },
       item: { id: itemId },
     };
 
-    axios
-      .post(url, postData)
-      .catch((error) => {
-        console.error("Error making post request:", error);
-      });
+    axios.post(url, postData).catch((error) => {
+      console.error("Error making post request:", error);
+    });
   };
 
   return (
     <div className="items-list">
       {items &&
-        // pictures &&
-        // pictures.length > 0 &&
         filteredItems.map((item) => (
           <div className="items-list-item" key={item.id}>
             <Link
@@ -156,10 +132,7 @@ const ItemsList = ({ searchTerm }) => {
               onClick={() => handleViewClick(item.id)}
             >
               <div className="card">
-                <img
-                  src={item.thumbnail || noImage}
-                  className="card-img-top"
-                />
+                <img src={item.thumbnail || noImage} className="card-img-top" />
                 <div className="card-body">
                   <h3 className="card-title">{item.name}</h3>
                   <p className="card-text">{"$" + item.price}</p>
