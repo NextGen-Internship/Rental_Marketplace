@@ -42,7 +42,6 @@ const Views = () => {
         <div className="items-list-item" key={index}>
           <Link to={`/items/${item.id}`}>
           <div className="card">
-            {console.log(item)}
                 <img
                   src={item.thumbnail || noImage}
                   className="card-img-top"
