@@ -206,7 +206,7 @@ function Register() {
               className="toggle-password-button"
               onClick={handleTogglePassword}
             >
-              {showPassword ? " Hide" : " Show"}
+              {showPassword ? "Hide password" : "Show password"}
             </button>
           </div>
         <button type="submit" onClick={handleSubmit}>
