@@ -17,7 +17,7 @@ import java.util.Date;
 @Entity
 @Table(name = "history")
 public class History {
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     private Long id;
 
