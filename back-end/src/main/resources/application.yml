@@ -51,3 +51,4 @@ application:
   bucket:
     name: ${S3_BUCKET_NAME}
 
+google-client-key: ${GOOGLE_CLIENT_ID}

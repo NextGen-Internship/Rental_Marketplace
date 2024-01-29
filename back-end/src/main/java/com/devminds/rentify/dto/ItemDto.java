@@ -34,6 +34,8 @@ public class ItemDto {
 
     private Category category;
 
+    private String thumbnail;
+
     @NotNull
     private PlainUserDto user;
 }

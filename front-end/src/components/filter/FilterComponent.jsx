@@ -2,10 +2,10 @@ import { AssistWalkerOutlined } from '@mui/icons-material';
 import React, { useState, useEffect } from 'react';
 import "./Filter.css"
 
-//import "./Navbar.css";
 
 
-const FilterComponent = () => {
+
+const FilterComponent = ({onFilterChange} ) => {
   const [categories, setCategories] = useState([]);
   const [prices, setPrices] = useState({});
   const [addresses, setAddresses] = useState([]);
@@ -45,16 +45,10 @@ const FilterComponent = () => {
 
         }
 
-       console.log("responsaa na adresitee")
 
        const addressResponse = await responseAddress.json();
 
 
-       if(addressResponse == null)
-       {
-        console.log("Da ravno e ")
-       }
-       console.log(addressResponse);
        setAddresses(addressResponse)
 
       }catch(error){
@@ -87,12 +81,6 @@ const FilterComponent = () => {
       
 
 
-  
-
-    
-      // const apiUrl = `http://localhost:8080/rentify/items/filter?category=${filters.category}&priceFrom=${filters.priceFrom}&priceTo=${filters.priceTo}&address=${filters.address}`;
-      // const apiUrl = `http://localhost:8080/rentify/items/filter?category=${filters.category}&priceFrom=${Number(filters.priceFrom) || ''}&priceTo=${Number(filters.priceTo) || ''}&address=${filters.address}`;
-
       const apiUrl = `http://localhost:8080/rentify/items/filter?category=${filters.category}&priceFrom=${filters.priceFrom || ''}&priceTo=${filters.priceTo || ''}&address=${filters.address}`;
 
 
@@ -103,8 +91,12 @@ const FilterComponent = () => {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
   
+     
+      
       const filteredItems = await response.json();
-      setFilteredItems(filteredItems);
+
+      // Call the onFilterChange callback with the filtered items
+      onFilterChange(filteredItems);
       console.log('Filtered Items:', filteredItems);
     } catch (error) {
       console.error('Error applying filters:', error);

@@ -9,27 +9,29 @@ import ItemDetails from "./components/items/ItemDetails";
 import Login from "./components/login/Login";
 import CreateItem from "./components/add-item/Create-item";
 import Register from "./components/login/Register";
+
 import FilterComponent from "./components/filter/FilterComponent";
-
-
+import Views from "./components/views/Views";
+import LikedItemsPage from "./components/items/LikedItemsPage";
 function App() {
-
   return (
     <Router>
       <div className="App">
         <Navbar />
 
         <Routes>
-          <Route exact path="/" element={<Home />} />
+          <Route path="/" element={<Home />} />
           <Route path="/items/category/:id" element={<CategoryDetails />} />
           <Route path="items/:id" element={<ItemDetails />} />
-          <Route exact path="/login" element={<Login />} />
-          <Route exact path="/register" element={<Register />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
           <Route path="*" element={<NotFound />} />
           <Route path="/notfound" element={<NotFound />} />
-          <Route exact path="/items/create" element={<CreateItem />} />
 
-          <Route path="/filter" element={<FilterComponent />} />
+<Route path="/filter" element={<FilterComponent />} />
+          <Route path="/items/create" element={<CreateItem />} />
+          <Route path="/views" element={<Views />} />
+          <Route exact path="/likes" element={<LikedItemsPage />} />
 
         </Routes>
 

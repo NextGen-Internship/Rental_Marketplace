@@ -9,15 +9,15 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Data;
+import org.hibernate.annotations.CreationTimestamp;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Data
-
 @Entity
 @Table(name = "history")
 public class History {
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     private Long id;
 
@@ -31,5 +31,6 @@ public class History {
     private Item item;
 
     @Column
-    private Date date;
+    @CreationTimestamp
+    private LocalDateTime date;
 }

@@ -19,4 +19,10 @@ public class LikedItem {
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
+
+    public Long getItemId() {
+        return item.getId();
+    }
 }
+
+

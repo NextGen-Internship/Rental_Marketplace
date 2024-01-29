@@ -6,6 +6,10 @@ import { fetchData } from "../fetchData";
 import noImage from "../../assets/no-image.avif";
 import { jwtDecode } from "jwt-decode";
 
+import FilterComponent  from "../filter/FilterComponent";
+
+
+
 const endpointItems = "items";
 const endpointPictires = "pictures/thumbnails";
 
@@ -16,6 +20,17 @@ const ItemsList = ({ searchTerm }) => {
   const [likedItems, setLikedItems] = useState(new Set());
   const [items, setItems] = useState([]);
   const [pictures, setPictures] = useState([]);
+
+
+
+
+  const [filteredItems, setFilteredItems] = useState([]);
+
+
+  const handleFilterChange = (filteredItems) => {
+    setFilteredItems(filteredItems);
+  };
+
 
   useEffect(() => {
     const fetchItems = async () => {
@@ -105,12 +120,14 @@ const ItemsList = ({ searchTerm }) => {
     // TODO: Add logic for post request to add or remove a like
   };
 
-  const filteredItems = items.filter((item) =>
-    item.name.toLowerCase().includes((searchTerm ?? "").toLowerCase())
-  );
+  // const filteredItems = items.filter((item) =>
+  //   item.name.toLowerCase().includes((searchTerm ?? "").toLowerCase())
+  // );
 
   return (
     <div className="items-list">
+            <FilterComponent onFilterChange={handleFilterChange} />
+
       {items &&
         pictures &&
         pictures.length > 0 &&

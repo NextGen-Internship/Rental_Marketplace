@@ -2,7 +2,11 @@ package com.devminds.rentify.service;
 
 import com.devminds.rentify.dto.CreateItemDto;
 import com.devminds.rentify.dto.ItemDto;
-import com.devminds.rentify.entity.*;
+import com.devminds.rentify.entity.Address;
+import com.devminds.rentify.entity.Category;
+import com.devminds.rentify.entity.Item;
+import com.devminds.rentify.entity.Picture;
+import com.devminds.rentify.entity.User;
 import com.devminds.rentify.exception.ItemNotFoundException;
 import com.devminds.rentify.repository.AddressRepository;
 import com.devminds.rentify.repository.CategoryRepository;
@@ -66,6 +70,10 @@ public class ItemService {
         itemToSave.setPostedDate(LocalDateTime.now());
         itemToSave.setCategory(categoryToSave);
 
+        if (!pictureUrls.isEmpty()) {
+            itemToSave.setThumbnail(pictureUrls.get(0).toString());
+        }
+
         itemToSave.setPictures(new ArrayList<>());
         Item savedItem = this.itemRepository.save(itemToSave);
         List<Picture> picturesToAdd = new ArrayList<>();
@@ -74,7 +82,7 @@ public class ItemService {
             Picture picture = new Picture();
             picture.setUrl(pictureUrls.get(i).toString());
             picture.setItem(savedItem);
-           picturesToAdd.add(this.pictureRepository.save(picture));
+            picturesToAdd.add(this.pictureRepository.save(picture));
         }
         savedItem.setPictures(picturesToAdd);
 
@@ -93,6 +101,7 @@ public class ItemService {
         Optional<Item> itemOptional = itemRepository.findById(itemId);
         return itemOptional.orElse(null);
     }
+
     public ItemDto getItemById(Long id) {
         return itemRepository.findById(id)
                 .map(this::mapItemToItemDto)
