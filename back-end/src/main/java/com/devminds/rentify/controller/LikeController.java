@@ -4,6 +4,7 @@ import com.devminds.rentify.config.JwtService;
 import com.devminds.rentify.dto.LikeDto;
 import com.devminds.rentify.entity.Item;
 import com.devminds.rentify.entity.User;
+
 import com.devminds.rentify.service.ItemService;
 import com.devminds.rentify.service.LikedItemService;
 import com.devminds.rentify.service.UserService;
@@ -11,8 +12,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.Optional;
 import java.util.Set;
+
 
 @RestController
 @RequestMapping("/rentify/favorite")
@@ -25,7 +28,9 @@ public class LikeController {
     private final ItemService itemService;
 
 
+
     private final ItemService itemRepository;
+
     @PostMapping("/liked")
     public ResponseEntity<String> likeItem(@RequestBody LikeDto likeDto) {
         try {
@@ -48,6 +53,7 @@ public class LikeController {
 
         }
     }
+
 
     @GetMapping("/userFavorite/{userId}")
     public ResponseEntity<Set<Long>> getLikedItemsByUserId(@PathVariable Long userId) {
