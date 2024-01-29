@@ -8,7 +8,7 @@ import { jwtDecode } from "jwt-decode";
 import axios from "axios";
 
 const endpointItems = "items";
-const endpointPictires = "pictures/thumbnails";
+//const endpointPictires = "pictures/thumbnails";
 
 const ItemsList = ({ searchTerm }) => {
   const endpointSuffix = useParams();
@@ -16,7 +16,7 @@ const ItemsList = ({ searchTerm }) => {
 
   const [likedItems, setLikedItems] = useState(new Set());
   const [items, setItems] = useState([]);
-  const [pictures, setPictures] = useState([]);
+  //const [pictures, setPictures] = useState([]);
   const [userId, setUserId] = useState(null);
 
 
@@ -79,23 +79,24 @@ const ItemsList = ({ searchTerm }) => {
       }
     };
 
-    const fetchPictures = async () => {
-      try {
-        const result = await fetchData(endpointPictires);
-        setPictures(result);
-      } catch (error) {
-        navigate("/notfound");
-      }
-    };
+    // const fetchPictures = async () => {
+    //   try {
+    //     const result = await fetchData(endpointPictires);
+    //     setPictures(result);
+    //   } catch (error) {
+    //     navigate("/notfound");
+    //   }
+    // };
 
     fetchItems();
-    fetchPictures();
+    // console.log("all items: " + items)
+    // fetchPictures();
   }, []);
 
-  const itemPicturesMap = {};
-  pictures.forEach((picture) => {
-    itemPicturesMap[picture.itemId] = picture.url;
-  });
+  // const itemPicturesMap = {};
+  // pictures.forEach((picture) => {
+  //   itemPicturesMap[picture.itemId] = picture.url;
+  // });
 
   const handleLikeClick = (itemId) => {
     const updatedLikedItems = new Set(likedItems);
@@ -146,8 +147,8 @@ const ItemsList = ({ searchTerm }) => {
   return (
     <div className="items-list">
       {items &&
-        pictures &&
-        pictures.length > 0 &&
+        // pictures &&
+        // pictures.length > 0 &&
         filteredItems.map((item) => (
           <div className="items-list-item" key={item.id}>
             <Link
@@ -156,7 +157,7 @@ const ItemsList = ({ searchTerm }) => {
             >
               <div className="card">
                 <img
-                  src={itemPicturesMap[item.id] || noImage}
+                  src={item.thumbnail || noImage}
                   className="card-img-top"
                 />
                 <div className="card-body">

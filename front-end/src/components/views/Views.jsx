@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { fetchData } from "../fetchData";
 import { jwtDecode } from "jwt-decode";
+import noImage from "../../assets/no-image.avif";
 
 const endpoint = "views/users/";
 
@@ -40,9 +41,18 @@ const Views = () => {
       {items.map((item, index) => (
         <div className="items-list-item" key={index}>
           <Link to={`/items/${item.id}`}>
-            <h2>{item.name}</h2>
-            <h5>{"$" + item.price}</h5>
-            <p>{item.location}</p>
+          <div className="card">
+            {console.log(item)}
+                <img
+                  src={item.thumbnail || noImage}
+                  className="card-img-top"
+                />
+                <div className="card-body">
+                  <h3 className="card-title">{item.name}</h3>
+                  <p className="card-text">{"$" + item.price}</p>
+                  <p className="card-text">{item.address}</p>
+                </div>
+              </div>
           </Link>
         </div>
       ))}
