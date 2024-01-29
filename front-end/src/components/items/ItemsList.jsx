@@ -67,7 +67,7 @@ const ItemsList = ({ searchTerm }) => {
             
 
 
-          const response = await fetch(`http://localhost:8080/rentify/favorite/userFavorite/${userId}`, {
+          const response = await fetch(`http://localhost:8080/rentify/favourites/userFavourites/${userId}`, {
               method: "GET",
           });
 
@@ -129,7 +129,7 @@ const ItemsList = ({ searchTerm }) => {
 
     try {
       const response = await fetch(
-        "http://localhost:8080/rentify/favorite/liked",
+        "http://localhost:8080/rentify/favourites/liked",
         {
           method: "POST",
           headers: {

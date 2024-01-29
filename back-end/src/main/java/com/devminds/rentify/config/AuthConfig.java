@@ -37,8 +37,8 @@ public class AuthConfig {
                                 .requestMatchers("/rentify/items/**").permitAll()
                                 .requestMatchers("/rentify/addresses").permitAll()
                                 .requestMatchers("/rentify/addresses/**").permitAll()
-                                .requestMatchers("/rentify/favorite/**").permitAll()
-                                .requestMatchers("/rentify/favorite/userFavorite/**").permitAll()
+                                .requestMatchers("/rentify/favourites/**").permitAll()
+                                .requestMatchers("/rentify/favourites/userFavourites/**").permitAll()
 
                                 .requestMatchers("/rentify/users").permitAll()
                                 .requestMatchers("/rentify/users/**").permitAll()

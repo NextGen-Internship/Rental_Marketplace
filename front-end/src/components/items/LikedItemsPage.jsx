@@ -23,7 +23,6 @@ const LikedItemsPage = () => {
 
           if (response.ok) {
             const likedItemsIds = await response.json();
-            // Fetch additional details for each liked item
             const detailedLikedItems = await Promise.all(likedItemsIds.map(async (itemId) => {
               const itemResponse = await fetch(`http://localhost:8080/rentify/items/${itemId}`, {
                 method: 'GET',
@@ -45,10 +44,7 @@ const LikedItemsPage = () => {
 
     fetchLikedItemsFromDB();
   }, []);
-
-  console.log("haresanii")
-  console.log(likedItems);
-
+  
   const handleLikeClick = async (itemId) => {
     const token = localStorage.getItem("token");
     const decoded = jwtDecode(token);

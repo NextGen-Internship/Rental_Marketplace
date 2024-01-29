@@ -18,7 +18,7 @@ import java.util.Set;
 
 
 @RestController
-@RequestMapping("/rentify/favorite")
+@RequestMapping("/rentify/favourites")
 @RequiredArgsConstructor
 public class LikeController {
 
@@ -55,7 +55,7 @@ public class LikeController {
     }
 
 
-    @GetMapping("/userFavorite/{userId}")
+    @GetMapping("/userFavourites/{userId}")
     public ResponseEntity<Set<Long>> getLikedItemsByUserId(@PathVariable Long userId) {
         Set<Long> likedItems = likeService.getLikedItemsByUserId(userId);
         return ResponseEntity.ok(likedItems);
