@@ -32,4 +32,6 @@ public class PlainItemDto {
     private float deposit;
 
     private Category category;
+
+    private String thumbnail;
 }

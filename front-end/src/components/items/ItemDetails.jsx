@@ -3,6 +3,7 @@ import { fetchData } from "../fetchData";
 import { useParams, useNavigate } from "react-router-dom";
 import Carousel from "./carousel/Carousel";
 import "./ItemDetails.css";
+import { jwtDecode } from "jwt-decode";
 
 const endpoint = "items/";
 
@@ -10,9 +11,18 @@ const ItemDetails = () => {
   const [item, setItem] = useState(null);
   const { id } = useParams();
   const navigate = useNavigate();
-  
+  let userId = "";
 
   useEffect(() => {
+    const googleToken = localStorage.getItem("google_token");
+    const regularToken = localStorage.getItem("token");
+
+    const token = googleToken !== null ? googleToken : regularToken;
+    if (token !== null) {
+      const decoded = jwtDecode(token);
+      userId = decoded.jti;
+    }
+
     const fetchItem = async () => {
       try {
         const result = await fetchData(endpoint + id);
@@ -26,6 +36,7 @@ const ItemDetails = () => {
     if (!item) {
       fetchItem();
     }
+
   }, [item, id, navigate]);
 
   return (
@@ -43,28 +54,34 @@ const ItemDetails = () => {
                 "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum"}
             </p>
           </div>
-          
-          
+
           <div className="price-deposit-box">
-              <h3>Price</h3>
-              <p>{"$" + item.price}</p>
-              <h3>Deposit</h3>
-              <p>{"$" + item.deposit}</p>
-            
+            <h3>Price</h3>
+            <p>{"$" + item.price}</p>
+            <h3>Deposit</h3>
+            <p>{"$" + item.deposit}</p>
+
             <button className="rent-button">Rent</button>
           </div>
 
           <div className="user-details">
             <h3>Posted on</h3>
-            <p>{ new Date(item.postedDate).toLocaleString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' }) }</p>
+            <p>
+              {new Date(item.postedDate).toLocaleString("en-US", {
+                weekday: "long",
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+                hour: "numeric",
+                minute: "numeric",
+              })}
+            </p>
             <h3>Posted by</h3>
             <p>{item.user.firstName + " " + item.user.lastName}</p>
             <button className="message-button">Message</button>
           </div>
-
         </div>
-      )
-      }
+      )}
     </div>
   );
 };
