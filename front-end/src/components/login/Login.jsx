@@ -1,9 +1,9 @@
 import axios from "axios";
 import { GoogleLogin } from "@react-oauth/google";
 import "./Login.css";
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-
+import AuthContext from "../../contexts/AuthContext";
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -11,6 +11,8 @@ function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const navigate = useNavigate();
+
+  const authContext = useContext(AuthContext);
 
   const {REACT_APP_GOOGLE_CLIENT_ID} = process.env;
 
@@ -36,6 +38,7 @@ function Login() {
       localStorage.setItem("token", token);
       console.log("Login successful:", response.data);
 
+      authContext.login();
       navigate("/");
     } catch (error) {
       setErrorMessage("Email or Password are incorrect");
@@ -60,7 +63,7 @@ function Login() {
       const newToken = backendResponse.data;
 
       localStorage.setItem("token",newToken);
-      
+      authContext.login();
       navigate("/");
     } catch (error) {
       console.log("Error during Google login");

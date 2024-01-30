@@ -12,28 +12,31 @@ const AuthContext = React.createContext({
 });
 
 export const AuthContextProvider = (props) => {
-  const [isLoggedIn, setIsLoggedIn] = useState();
+
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [token, setToken] = useState();
   const [userId, setUserId] = useState();
   const [email, setEmail] = useState();
   const [picture, setPicture] = useState();
 
-  const loginHandler = (response) => {
-    const decodedToken = jwtDecode(response.accessToken);
+  const loginHandler = () => {
+    const decodedToken = jwtDecode(localStorage.getItem("token"));
 
     setIsLoggedIn(true);
-    setToken(response.accessToken);
-    setUserId(decodedToken.userId);
-    setEmail(decodedToken.email);
+    setToken(localStorage.getItem("token"));
+    setUserId(decodedToken.jti);
+    setEmail(decodedToken.sub);
     setPicture(decodedToken.picture);
   };
 
   const logoutHandler = async () => {
+    localStorage.removeItem("token");
     setIsLoggedIn(false);
     setToken(null);
     setUserId(null);
     setEmail(null);
     setPicture(null);
+    console.log("logouutttt")
   };
 
   const contextValue = {
@@ -47,17 +50,15 @@ export const AuthContextProvider = (props) => {
   };
 
   useEffect(() => {
-    let tokenLocal = localStorage.getItem("token");
-
+    const tokenLocal = localStorage.getItem("token");
+  
     if (tokenLocal && !token) {
-      const data = { accessToken: tokenLocal };
-      loginHandler(data);
+      loginHandler();
+    } else {
+      logoutHandler();
     }
-
-    // if (token) {
-    //   // Perform any token expiration checks or refresh logic here
-    // }
-  }, [token]);
+  }, []);
+  
 
   return (
     <AuthContext.Provider value={contextValue}>

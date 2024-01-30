@@ -3,7 +3,6 @@ import { fetchData } from "../fetchData";
 import { useParams, useNavigate } from "react-router-dom";
 import Carousel from "./carousel/Carousel";
 import "./ItemDetails.css";
-import { jwtDecode } from "jwt-decode";
 
 const endpoint = "items/";
 
@@ -11,15 +10,8 @@ const ItemDetails = () => {
   const [item, setItem] = useState(null);
   const { id } = useParams();
   const navigate = useNavigate();
-  let userId = "";
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-
-    if (token !== null) {
-      const decoded = jwtDecode(token);
-      userId = decoded.jti;
-    }
 
     const fetchItem = async () => {
       try {
