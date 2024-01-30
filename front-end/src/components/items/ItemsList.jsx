@@ -6,14 +6,13 @@ import { fetchData } from "../fetchData";
 import noImage from "../../assets/no-image.avif";
 import { jwtDecode } from "jwt-decode";
 
-import FilterComponent  from "../filter/FilterComponent";
 
 
 
 const endpointItems = "items";
 const endpointPictires = "pictures/thumbnails";
 
-const ItemsList = ({ searchTerm }) => {
+const ItemsList = ({ itemList }) => {
   const endpointSuffix = useParams();
   const navigate = useNavigate();
 
@@ -24,12 +23,12 @@ const ItemsList = ({ searchTerm }) => {
 
 
 
-  const [filteredItems, setFilteredItems] = useState([]);
+ 
+  // const filteredItems = itemList;
 
+  const filteredItems = itemList || [];
 
-  const handleFilterChange = (filteredItems) => {
-    setFilteredItems(filteredItems);
-  };
+  
 
 
   useEffect(() => {
@@ -120,13 +119,15 @@ const ItemsList = ({ searchTerm }) => {
     // TODO: Add logic for post request to add or remove a like
   };
 
-  // const filteredItems = items.filter((item) =>
-  //   item.name.toLowerCase().includes((searchTerm ?? "").toLowerCase())
+  // const filteredItems = itemList.filter((item) =>
+  //   item.name.toLowerCase().includes(searchTerm.toLowerCase())
   // );
+
+ // Assuming you want to keep all items
+
 
   return (
     <div className="items-list">
-            <FilterComponent onFilterChange={handleFilterChange} />
 
       {items &&
         pictures &&

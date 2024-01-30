@@ -95,7 +95,7 @@ const FilterComponent = ({onFilterChange} ) => {
       
       const filteredItems = await response.json();
 
-      // Call the onFilterChange callback with the filtered items
+      
       onFilterChange(filteredItems);
       console.log('Filtered Items:', filteredItems);
     } catch (error) {

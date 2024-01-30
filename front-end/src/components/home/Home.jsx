@@ -3,12 +3,19 @@ import CategoriesList from '../categories/CategoriesList';
 import SearchIcon from '@mui/icons-material/Search';
 import ItemsList from '../items/ItemsList';
 import './Home.css'
+import FilterComponent from '../filter/FilterComponent'; // Import the FilterComponent
 
 const Home = () => {
     const [searchTerm, setSearchTerm] = useState('');
+    const [filteredItems, setFilteredItems] = useState([]);
 
+    
     const handleSearchChange = (event) => {
         setSearchTerm(event.target.value);
+    };
+
+    const handleFilterChange = (filteredItems) => {
+        setFilteredItems(filteredItems);
     };
 
     return (
@@ -25,7 +32,8 @@ const Home = () => {
                 />
             </div>
 
-            <ItemsList searchTerm={searchTerm} />
+            <FilterComponent onFilterChange={handleFilterChange} />
+            <ItemsList searchTerm={filteredItems} />
 
         </div>
     );
