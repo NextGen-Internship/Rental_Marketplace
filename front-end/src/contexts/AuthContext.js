@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { jwtDecode } from "jwt-decode";
 
 const AuthContext = React.createContext({
@@ -6,48 +6,64 @@ const AuthContext = React.createContext({
   token: "",
   userId: "",
   email: "",
-  picture: null,
-  login: (token) => {},
+  picture: "",
+  login: () => {},
   logout: () => {},
 });
 
-const AuthProvider = ({ children }) => {
-  const [authState, setAuthState] = useState({
-    isLoggedIn: false,
-    token: "",
-    userId: "",
-    email: "",
-    picture: null,
-  });
+export const AuthContextProvider = (props) => {
+  const [isLoggedIn, setIsLoggedIn] = useState();
+  const [token, setToken] = useState();
+  const [userId, setUserId] = useState();
+  const [email, setEmail] = useState();
+  const [picture, setPicture] = useState();
 
-  const login = (token) => {
-    const decoded = jwtDecode(token);
+  const loginHandler = (response) => {
+    const decodedToken = jwtDecode(response.accessToken);
 
-    setAuthState({
-      isLoggedIn: true,
-      token: localStorage.getItem("token"),
-      userId: decoded.jti,
-      picture: decoded.picture,
-      email: decoded.email,
-    });
+    setIsLoggedIn(true);
+    setToken(response.accessToken);
+    setUserId(decodedToken.userId);
+    setEmail(decodedToken.email);
+    setPicture(decodedToken.picture);
   };
 
-  const logout = () => {
-    localStorage.removeItem("token");
-    setAuthState({
-      isLoggedIn: false,
-      token: "",
-      userId: "",
-      email: "",
-      picture: null,
-    });
+  const logoutHandler = async () => {
+    setIsLoggedIn(false);
+    setToken(null);
+    setUserId(null);
+    setEmail(null);
+    setPicture(null);
   };
+
+  const contextValue = {
+    isLoggedIn: isLoggedIn,
+    token: token,
+    userId: userId,
+    email: email,
+    picture: picture,
+    login: loginHandler,
+    logout: logoutHandler,
+  };
+
+  useEffect(() => {
+    let tokenLocal = localStorage.getItem("token");
+
+    if (tokenLocal && !token) {
+      const data = { accessToken: tokenLocal };
+      loginHandler(data);
+    }
+
+    // if (token) {
+    //   // Perform any token expiration checks or refresh logic here
+    // }
+  }, [token]);
 
   return (
-    <AuthContext.Provider value={{ ...authState, login, logout }}>
-      {children}
+    <AuthContext.Provider value={contextValue}>
+      {props.children}
     </AuthContext.Provider>
   );
 };
 
-export { AuthProvider, AuthContext };
+export default AuthContext;
