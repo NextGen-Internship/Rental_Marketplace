@@ -6,14 +6,16 @@ import { fetchData } from "../fetchData";
 import noImage from "../../assets/no-image.avif";
 import { jwtDecode } from "jwt-decode";
 
+import FilterComponent  from "../filter/FilterComponent";
 
 
 
 const endpointItems = "items";
 const endpointPictires = "pictures/thumbnails";
 
-const ItemsList = ({ itemList }) => {
+const ItemsList = (notShowDropdown ,categoryId) => {
   const endpointSuffix = useParams();
+
   const navigate = useNavigate();
 
   const [likedItems, setLikedItems] = useState(new Set());
@@ -21,15 +23,14 @@ const ItemsList = ({ itemList }) => {
   const [pictures, setPictures] = useState([]);
 
 
+  console.log("da vidim sqqq mai..")
+  console.log(notShowDropdown);
 
 
- 
-  // const filteredItems = itemList;
+  const [filteredItems, setFilteredItems] = useState([]);
 
-  const filteredItems = itemList || [];
 
   
-
 
   useEffect(() => {
     const fetchItems = async () => {
@@ -116,19 +117,22 @@ const ItemsList = ({ itemList }) => {
       updatedLikedItems.add(itemId);
     }
     setLikedItems(updatedLikedItems);
-    // TODO: Add logic for post request to add or remove a like
+  
   };
 
-  // const filteredItems = itemList.filter((item) =>
-  //   item.name.toLowerCase().includes(searchTerm.toLowerCase())
-  // );
+ 
 
- // Assuming you want to keep all items
 
+
+  const handleFilterChange = (filteredItems) => {
+    setFilteredItems(filteredItems);
+  };
 
   return (
-    <div className="items-list">
+    <div>   
+     <FilterComponent notShowDropdown = {notShowDropdown} categoryId={categoryId}  onFilterChange={handleFilterChange} />
 
+    <div className="items-list">
       {items &&
         pictures &&
         pictures.length > 0 &&
@@ -160,6 +164,7 @@ const ItemsList = ({ itemList }) => {
             </button>
           </div>
         ))}
+    </div>
     </div>
   );
 };

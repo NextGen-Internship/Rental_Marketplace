@@ -1,29 +1,44 @@
 package com.devminds.rentify.service;
 
+import com.devminds.rentify.dto.CategoryDTO;
+import com.devminds.rentify.dto.ItemDto;
 import com.devminds.rentify.entity.Category;
+import com.devminds.rentify.entity.Item;
 import com.devminds.rentify.exception.CategoryNotFoundException;
+import com.devminds.rentify.exception.ItemNotFoundException;
 import com.devminds.rentify.repository.CategoryRepository;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class CategoryService {
     private static final String CATEGORY_NOT_FOUND_MESSAGE = "Category with %d id not found.";
     private final CategoryRepository categoryRepository;
+    private final ModelMapper modelMapper;
 
     @Autowired
-    public CategoryService(CategoryRepository categoryRepository) {
+    public CategoryService(CategoryRepository categoryRepository, ModelMapper modelMapper) {
         this.categoryRepository = categoryRepository;
+        this.modelMapper = modelMapper;
     }
 
-    public List<Category> getAllCategories() {
-        return categoryRepository.findAll();
+    public List<CategoryDTO> getAllCategories() {
+        return categoryRepository.findAll().stream().map(this ::mapCategoryToCategoryDTO)
+                .collect(Collectors.toList());
     }
 
     public Category getCategoryById(long id) {
         return categoryRepository.findById(id)
                 .orElseThrow(() -> new CategoryNotFoundException(String.format(CATEGORY_NOT_FOUND_MESSAGE, id)));
     }
+
+
+    private CategoryDTO mapCategoryToCategoryDTO(Category category) {
+        return modelMapper.map(category, CategoryDTO.class);
+    }
+
 }

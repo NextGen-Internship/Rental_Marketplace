@@ -125,21 +125,29 @@ public class ItemService {
 
 
 
-    public List<ItemDto> getFilteredItems(String categoryName, Float priceFrom, Float priceTo, String cityName) {
+    public List<ItemDto> getFilteredItems(Long categoryId, Float priceFrom, Float priceTo, String cityName,
+                                          String searchTerm) {
         Specification<Item> spec = (root, query, cb) -> {
             List<Predicate> predicates = new ArrayList<>();
 
-            if (categoryName == null && priceFrom == null && priceTo == null && cityName == null) {
+            if (searchTerm != null && !searchTerm.isEmpty()) {
+
+//                predicates.add(cb.like(cb.lower(root.get("name")), "%" + searchTerm.toLowerCase() + "%"));
+
+                predicates.add(cb.like(cb.lower(root.get("name")), "%" + searchTerm.toLowerCase() + "%"));
+            }
+
+            if (categoryId == null && priceFrom == null && priceTo == null && cityName == null) {
 
                 getAllItems();
 
             }
 
-            if (categoryName != null && !categoryName.isEmpty()) {
+            if (categoryId != null ) {
 
-                System.out.println("poluchenata categoriqq " + categoryName);
+                System.out.println("poluchenata categoriqq " + categoryId);
 
-                Optional<Category> optionalCategory = categoryRepository.findByName(categoryName);
+                Optional<Category> optionalCategory = categoryRepository.findById(categoryId);
                 optionalCategory.ifPresent(category -> predicates.add(cb.equal(root.get("category"), category)));
             }
 
@@ -166,6 +174,7 @@ public class ItemService {
                     predicates.add(cb.equal(root.get("address"), address));
                 }
             }
+
 
             return cb.and(predicates.toArray(new Predicate[0]));
         };
