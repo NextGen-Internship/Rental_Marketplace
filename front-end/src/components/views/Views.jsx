@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useLayoutEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { fetchData } from "../fetchData";
 //import { jwtDecode } from "jwt-decode";
@@ -16,9 +16,12 @@ const Views = () => {
   //let userId = '';
 
   useEffect(() => {
+    //debugger;
+
     const fetchViews = async () => {
       //const token = localStorage.getItem("token");
 
+      // authContext.login();
       console.log("aa" + authContext.isLoggedIn)
       if (authContext.isLoggedIn) {
         // const decoded = jwtDecode(token);
@@ -34,10 +37,10 @@ const Views = () => {
         navigate("/notfound");
       }
     };
-
-    authContext.login()
+    
+    // authContext.
     fetchViews();
-  }, []);
+  }, [authContext]);
 
   return (
     <div className="items-list">

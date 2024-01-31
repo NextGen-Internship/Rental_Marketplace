@@ -11,8 +11,18 @@ import CreateItem from "./components/add-item/Create-item";
 import Register from "./components/login/Register";
 import Views from "./components/views/Views";
 import LikedItemsPage from "./components/items/LikedItemsPage";
+import AuthContext from "./contexts/AuthContext"
+import { useEffect, useContext } from "react";
 
 function App() {
+  const authContext = useContext(AuthContext);
+
+  useEffect(() => {
+    //debugger;
+    authContext.login();
+    console.log("use effect app")
+  }, []);
+
   return (
     <Router>
       <div className="App">

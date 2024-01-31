@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useLayoutEffect } from "react";
 import { jwtDecode } from "jwt-decode";
 
 const AuthContext = React.createContext({
@@ -12,7 +12,6 @@ const AuthContext = React.createContext({
 });
 
 export const AuthContextProvider = (props) => {
-
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [token, setToken] = useState();
   const [userId, setUserId] = useState();
@@ -22,7 +21,10 @@ export const AuthContextProvider = (props) => {
   const loginHandler = () => {
     const decodedToken = jwtDecode(localStorage.getItem("token"));
 
+    console.log("login handler");
+
     setIsLoggedIn(true);
+    console.log(isLoggedIn)
     setToken(localStorage.getItem("token"));
     setUserId(decodedToken.jti);
     setEmail(decodedToken.sub);
@@ -36,7 +38,7 @@ export const AuthContextProvider = (props) => {
     setUserId(null);
     setEmail(null);
     setPicture(null);
-    console.log("logouutttt")
+    //console.log("logouutttt")
   };
 
   const contextValue = {
@@ -45,20 +47,22 @@ export const AuthContextProvider = (props) => {
     userId: userId,
     email: email,
     picture: picture,
-    login: loginHandler,
+    login: loginHandler, 
     logout: logoutHandler,
   };
 
   useEffect(() => {
+    //debugger;
     const tokenLocal = localStorage.getItem("token");
-  
-    if (tokenLocal && !token) {
+
+    if (tokenLocal) { // && !token
       loginHandler();
     } else {
       logoutHandler();
     }
+
+    console.log("useeffect auth context");
   }, []);
-  
 
   return (
     <AuthContext.Provider value={contextValue}>
