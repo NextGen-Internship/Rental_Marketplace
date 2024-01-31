@@ -2,6 +2,8 @@
 import React, { useState, useEffect } from 'react';
 import "./Filter.css"
 import SearchIcon from '@mui/icons-material/Search';
+import { object } from 'yup';
+import { South } from '@mui/icons-material';
 
 
 
@@ -75,12 +77,29 @@ const FilterComponent = ({ notShowDropdown,categoryId  ,onFilterChange} ) => {
   const applyFilters = async () => {
 
     try {
+      let selectedCategoryId;
       
-      if(notShowDropdown === true ){
+      if (notShowDropdown) {
+        console.log("notShowDropdown exists and is true");
+        console.log(notShowDropdown['categoryId']);
+    
+        // selectedCategory = Object.keys(categoryId);
+        // selectedCategory = (categoryId.categoryId);
 
-        console.log("ifaa za setvanee")
-        console.log(notShowDropdown);
+        // console.log("categoriqqqqqqq")
+        // console.log(categoryId);
+        // setSelectedCategory(categoryId);
+
+
+        setSelectedCategory(notShowDropdown['categoryId']);  
+
       }
+      else{
+        selectedCategoryId = selectedCategory;
+
+      }
+
+      // console.log(selectedCategory);
 
       const filters = {
         category: selectedCategory,
@@ -90,9 +109,7 @@ const FilterComponent = ({ notShowDropdown,categoryId  ,onFilterChange} ) => {
         name: searchTerm,
     };
   
-
-
-    console.log(selectedCategory)
+  
 
 
     console.log("iddd na categoriqqqqq");
