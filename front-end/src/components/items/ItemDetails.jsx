@@ -14,10 +14,8 @@ const ItemDetails = () => {
   let userId = "";
 
   useEffect(() => {
-    const googleToken = localStorage.getItem("google_token");
-    const regularToken = localStorage.getItem("token");
+    const token = localStorage.getItem("token");
 
-    const token = googleToken !== null ? googleToken : regularToken;
     if (token !== null) {
       const decoded = jwtDecode(token);
       userId = decoded.jti;
