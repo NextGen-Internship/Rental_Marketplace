@@ -53,6 +53,3 @@ application:
 
 google-client-key: ${GOOGLE_CLIENT_ID}
 
-server:
-  servlet:
-    context-path: /rentify
