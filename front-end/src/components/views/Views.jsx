@@ -1,29 +1,34 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext, useLayoutEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { fetchData } from "../fetchData";
-import { jwtDecode } from "jwt-decode";
+//import { jwtDecode } from "jwt-decode";
 import noImage from "../../assets/no-image.avif";
+import AuthContext from "../../context/AuthContext";
 
 const endpoint = "views/users/";
 
 const Views = () => {
   const [items, setItems] = useState([]);
-  const location = useLocation();
+  //const location = useLocation();
   const navigate = useNavigate();
-  let userId = '';
+  const authContext = useContext(AuthContext);
+
+  //let userId = '';
 
   useEffect(() => {
-    const fetchViews = async () => {
-      const googleToken = localStorage.getItem("google_token");
-      const regularToken = localStorage.getItem("token");
+    //debugger;
 
-      const token = googleToken !== null ? googleToken : regularToken;
-      if (token !== null) {
-        const decoded = jwtDecode(token);
-        userId = decoded.jti;
+    const fetchViews = async () => {
+      //const token = localStorage.getItem("token");
+
+      // authContext.login();
+      console.log("aa" + authContext.isLoggedIn)
+      if (authContext.isLoggedIn) {
+        // const decoded = jwtDecode(token);
+        // userId = decoded.jti;
 
         try {
-          const result = await fetchData(endpoint + userId);
+          const result = await fetchData(endpoint + authContext.userId);
           setItems(result.map((i) => i.item));
         } catch (error) {
           console.log(error);
@@ -32,9 +37,10 @@ const Views = () => {
         navigate("/notfound");
       }
     };
-
+    
+    //authContext.login()
     fetchViews();
-  }, [userId, location]);
+  }, []);
 
   return (
     <div className="items-list">

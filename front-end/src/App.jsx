@@ -11,10 +11,20 @@ import CreateItem from "./components/add-item/Create-item";
 import Register from "./components/login/Register";
 import Views from "./components/views/Views";
 import LikedItemsPage from "./components/items/LikedItemsPage";
+import { AuthContextProvider } from "./context/AuthContext";
+import { useContext, useEffect } from "react";
+import AuthContext from "./context/AuthContext";
 
 function App() {
+  const authContext = useContext(AuthContext)
+
+  useEffect(() => {
+    authContext.login();
+  }, []);
+
   return (
     <Router>
+      <AuthContextProvider>
       <div className="App">
         <Navbar />
 
@@ -33,6 +43,7 @@ function App() {
 
         <Footer />
       </div>
+      </AuthContextProvider>
     </Router>
   );
 }
