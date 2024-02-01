@@ -67,7 +67,7 @@ const ItemDetails = () => {
           <div className="user-details">
             <h3>Posted on</h3>
             <p>
-              {new Date(item.postedDate).toLocaleString("en-US", {
+              {new Date(...item.postedDate).toLocaleString("en-US", {
                 weekday: "long",
                 year: "numeric",
                 month: "long",
