@@ -50,6 +50,7 @@ public class AuthConfig {
                                 .requestMatchers("/rentify/likes/**").permitAll()
                                 .requestMatchers("/rentify/pictures").permitAll()
                                 .requestMatchers("/rentify/pictures/**").permitAll()
+                                .requestMatchers("/create-payment-intent").permitAll()
                                 .anyRequest().authenticated()
 
                 )

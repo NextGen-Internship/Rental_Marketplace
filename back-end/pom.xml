@@ -122,6 +122,11 @@
 			<artifactId>stripe-java</artifactId>
 			<version>LATEST</version>
 		</dependency>
+		<dependency>
+			<groupId>com.google.code.gson</groupId>
+			<artifactId>gson</artifactId>
+		</dependency>
+
 
 	</dependencies>
 

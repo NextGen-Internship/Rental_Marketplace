@@ -17,7 +17,6 @@ const Carousel = () => {
     const fetchPictures = async () => {
       try {
         const result = await fetchData(endpoint + id);
-        console.log(result);
         setPictures(result);
       } catch (error) {
         navigate("/notfound");

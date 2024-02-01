@@ -4,8 +4,11 @@ import { useParams, useNavigate } from "react-router-dom";
 import Carousel from "./carousel/Carousel";
 import "./ItemDetails.css";
 import { jwtDecode } from "jwt-decode";
+import axios from "axios";
+import StripeApp from "../Stripe";
 
 const endpoint = "items/";
+const { REACT_APP_STRIPE_PUBLISHABLE_KEY } = process.env;
 
 const ItemDetails = () => {
   const [item, setItem] = useState(null);
@@ -36,8 +39,10 @@ const ItemDetails = () => {
     if (!item) {
       fetchItem();
     }
-
   }, [item, id, navigate]);
+
+  
+      
 
   return (
     <div className="item-details-container">
@@ -61,7 +66,8 @@ const ItemDetails = () => {
             <h3>Deposit</h3>
             <p>{"$" + item.deposit}</p>
 
-            <button className="rent-button">Rent</button>
+            <button onClick={() => StripeApp(item)} className="rent-button">Rent</button>
+
           </div>
 
           <div className="user-details">
