@@ -125,36 +125,44 @@ public class ItemService {
 
 
 
-    public List<ItemDto> getFilteredItems(Long categoryId, Float priceFrom, Float priceTo, String cityName,
+    public List<ItemDto> getFilteredItems(String categoryId, Float priceFrom, Float priceTo, String cityName,
                                           String searchTerm) {
         Specification<Item> spec = (root, query, cb) -> {
             List<Predicate> predicates = new ArrayList<>();
 
+
+
+
+            Long idOfCategory;
+
+            try{
+                idOfCategory = Long.parseLong(categoryId);
+
+            }catch (NumberFormatException e){
+                idOfCategory = null;
+            }
+
+
             if (searchTerm != null && !searchTerm.isEmpty()) {
 
-//                predicates.add(cb.like(cb.lower(root.get("name")), "%" + searchTerm.toLowerCase() + "%"));
 
                 predicates.add(cb.like(cb.lower(root.get("name")), "%" + searchTerm.toLowerCase() + "%"));
             }
 
-            if (categoryId == null && priceFrom == null && priceTo == null && cityName == null) {
+            if (idOfCategory == null && priceFrom == null && priceTo == null && cityName == null) {
 
                 getAllItems();
 
             }
 
-            if (categoryId != null ) {
+            if (idOfCategory != null ) {
 
-                System.out.println("poluchenata categoriqq " + categoryId);
 
-                Optional<Category> optionalCategory = categoryRepository.findById(categoryId);
+                Optional<Category> optionalCategory = categoryRepository.findById(idOfCategory);
                 optionalCategory.ifPresent(category -> predicates.add(cb.equal(root.get("category"), category)));
             }
 
             if ((priceFrom != null && priceFrom >= 0) || (priceTo != null && priceTo >= 0)) {
-
-                System.out.println("poluchenata from  " + priceFrom);
-                System.out.println("poluchenata to  " + priceTo);
 
                 if (priceFrom != null && priceTo != null && priceFrom >= 0 && priceTo >= 0) {
                     predicates.add(cb.between(root.get("price"), priceFrom, priceTo));
@@ -166,7 +174,7 @@ public class ItemService {
             }
 
             if (cityName != null && !cityName.isEmpty()) {
-                System.out.println("poluchenata city " + cityName);
+
 
                 List<Address> addresses = addressRepository.findByCity(cityName);
                 if (!addresses.isEmpty()) {
