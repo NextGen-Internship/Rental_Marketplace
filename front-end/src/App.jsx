@@ -11,6 +11,7 @@ import CreateItem from "./components/add-item/Create-item";
 import Register from "./components/login/Register";
 import Views from "./components/views/Views";
 import LikedItemsPage from "./components/items/LikedItemsPage";
+import ProfilePage from "./components/profile-page/ProfilePage";
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
           <Route path="/items/create" element={<CreateItem />} />
           <Route path="/views" element={<Views />} />
           <Route exact path="/likes" element={<LikedItemsPage />} />
+          <Route path = "/settings" element = {<ProfilePage/>}/>
         </Routes>
 
         <Footer />

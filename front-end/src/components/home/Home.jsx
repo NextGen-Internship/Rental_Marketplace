@@ -3,6 +3,7 @@ import CategoriesList from '../categories/CategoriesList';
 import SearchIcon from '@mui/icons-material/Search';
 import ItemsList from '../items/ItemsList';
 import './Home.css'
+import ProfilePage from '../profile-page/ProfilePage';
 
 const Home = () => {
     const [searchTerm, setSearchTerm] = useState('');
