@@ -147,7 +147,7 @@ const FilterComponent = ({ notShowDropdown,categoryId  ,onFilterChange} ) => {
 return (
 
 
-<div className="container">
+<div className="container pb-5">
 {!notShowDropdown || Object.keys(notShowDropdown).length === 0  ? (
   <form className="row row-cols-lg-auto g-3 align-items-center ms-lg-3">
 <div className="col-12">
@@ -238,20 +238,29 @@ return (
 <div className="col-12">
   <div className="input-group">
     <div className="input-group-text"><MonetizationOnIcon className="search-icon" /> </div>
-    <input type="number" class="form-control" id="inlineFormInputGroupUsername" placeholder="Price from"
-    value={priceFrom}
-     onChange={(e) => handlePriceChange(e , setPriceFrom)}
-     onKeyPress={handleKeyPress}
+    <input 
+      type="number" 
+      className="form-control" 
+      id="inlineFormInputGroupUsername" 
+      placeholder="Price from"
+      value={priceFrom}
+      onChange={(e) => handlePriceChange(e, setPriceFrom)}
+      onKeyPress={handleKeyPress}
     />
   </div>
 </div>
+
 <div className="col-12">
   <div className="input-group">
     <div className="input-group-text"><MonetizationOnIcon className="search-icon" /></div>
-    <input type="number" className="form-control" id="inlineFormInputGroupUsername" placeholder="Price to"
-    value={priceFrom}
-    onChange={(e) => handlePriceChange(e , setPriceTo)}
-    onKeyPress={handleKeyPress}
+    <input 
+      type="number" 
+      className="form-control" 
+      id="inlineFormInputGroupUsername" 
+      placeholder="Price to"
+      value={priceTo} 
+      onChange={(e) => handlePriceChange(e, setPriceTo)}
+      onKeyPress={handleKeyPress}
     />
   </div>
 </div>
