@@ -9,12 +9,14 @@ import axios from "axios";
 
 const endpointItems = "items";
 
-const ItemsList = ({ searchTerm }) => {
+const ItemsList = ({ searchTerm   , userItems }) => {
   const endpointSuffix = useParams();
 
   const [likedItems, setLikedItems] = useState(new Set());
   const [items, setItems] = useState([]);
   const [userId, setUserId] = useState(null);
+
+
 
   useEffect(() => {
     const fetchItems = async () => {
@@ -26,6 +28,7 @@ const ItemsList = ({ searchTerm }) => {
               : "/category/" + endpointSuffix.id)
         );
         setItems(result);
+        console.log(result);
       } catch (error) {
         console.log(error);
       }
@@ -61,7 +64,7 @@ const ItemsList = ({ searchTerm }) => {
 
     fetchLikedItemsFromDB();
     fetchItems();
-  }, []);
+  }, [endpointSuffix]);
 
   const handleLikeClick = async (itemId) => {
     const token = localStorage.getItem("token");
@@ -111,6 +114,9 @@ const ItemsList = ({ searchTerm }) => {
     item.name.toLowerCase().includes((searchTerm ?? "").toLowerCase())
   );
 
+
+
+
   useEffect(() => {
     const googleToken = localStorage.getItem("google_token");
     const regularToken = localStorage.getItem("token");
@@ -119,6 +125,7 @@ const ItemsList = ({ searchTerm }) => {
     if (token !== null) {
       const decoded = jwtDecode(token);
       setUserId(decoded.jti);
+
     }
 
     console.log(userId);
@@ -142,7 +149,7 @@ const ItemsList = ({ searchTerm }) => {
 
   return (
     <div className="items-list">
-      {items &&
+      {  
         filteredItems.map((item) => (
           <div className="items-list-item" key={item.id}>
             <Link
@@ -150,6 +157,7 @@ const ItemsList = ({ searchTerm }) => {
               onClick={() => handleViewClick(item.id)}
             >
               <div className="card">
+              
                 <img src={item.thumbnail || noImage} className="card-img-top" />
                 <div className="card-body">
                   <h3 className="card-title">{item.name}</h3>

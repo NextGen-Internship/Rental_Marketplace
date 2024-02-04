@@ -39,4 +39,9 @@ public class ItemController {
     public ResponseEntity<List<ItemDto>> getItemsByCategoryId(@PathVariable Long id) {
         return ResponseEntity.ok(itemService.getItemsByCategoryId(id));
     }
+
+    @GetMapping("/user/published/{userId}")
+    public ResponseEntity<List<ItemDto>> getPublishedItemsByUserId(@PathVariable Long userId) {
+        return ResponseEntity.ok(itemService.getPublishedItemsByUserId(userId));
+    }
 }

@@ -24,6 +24,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class ItemService {
@@ -117,5 +118,12 @@ public class ItemService {
 
     private Item mapItemDtoToItem(ItemDto itemDto) {
         return modelMapper.map(itemDto, Item.class);
+    }
+
+    public List<ItemDto> getPublishedItemsByUserId(Long userId) {
+         return  itemRepository.findByUserId(userId).stream()
+                 .map(this :: mapItemToItemDto)
+                 .collect(Collectors.toList());
+
     }
 }

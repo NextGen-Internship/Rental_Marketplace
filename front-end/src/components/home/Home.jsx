@@ -8,6 +8,7 @@ import ProfilePage from '../profile-page/ProfilePage';
 const Home = () => {
     const [searchTerm, setSearchTerm] = useState('');
 
+     const [items, setItems] = useState([]);
     const handleSearchChange = (event) => {
         setSearchTerm(event.target.value);
     };
