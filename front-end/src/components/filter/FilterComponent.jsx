@@ -144,7 +144,7 @@ return (
 <form className="row row-cols-lg-auto g-3 align-items-center ms-lg-3">
 
 {!notShowDropdown || Object.keys(notShowDropdown).length === 0  ? (
-  <form className="row row-cols-lg-auto g-3 align-items-center ms-lg-3">
+  <>
 <div className="col-12">
   <div className="input-group">
     <div className="input-group-text"><SearchIcon className="search-icon" /></div>
@@ -212,7 +212,7 @@ return (
 <div className="col-12">
   <button type="submit" className="btn btn-primary" onClick={applyFilters}>Submit</button>
 </div>
-</form> 
+</>
 
 
 ):( 
