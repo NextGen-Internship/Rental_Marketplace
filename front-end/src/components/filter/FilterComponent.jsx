@@ -1,6 +1,5 @@
 
 import React, { useState, useEffect } from 'react';
-import "./Filter.css"
 import SearchIcon from '@mui/icons-material/Search';
 import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
 

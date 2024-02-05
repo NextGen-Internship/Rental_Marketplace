@@ -129,10 +129,6 @@ public class ItemService {
                                           String searchTerm) {
         Specification<Item> spec = (root, query, cb) -> {
             List<Predicate> predicates = new ArrayList<>();
-
-
-
-
             Long idOfCategory;
 
             try{
@@ -142,21 +138,16 @@ public class ItemService {
                 idOfCategory = null;
             }
 
-
             if (searchTerm != null && !searchTerm.isEmpty()) {
-
-
+                
                 predicates.add(cb.like(cb.lower(root.get("name")), "%" + searchTerm.toLowerCase() + "%"));
             }
 
             if (idOfCategory == null && priceFrom == null && priceTo == null && cityName == null) {
 
                 getAllItems();
-
             }
-
             if (idOfCategory != null ) {
-
 
                 Optional<Category> optionalCategory = categoryRepository.findById(idOfCategory);
                 optionalCategory.ifPresent(category -> predicates.add(cb.equal(root.get("category"), category)));
@@ -174,7 +165,6 @@ public class ItemService {
             }
 
             if (cityName != null && !cityName.isEmpty()) {
-
 
                 List<Address> addresses = addressRepository.findByCity(cityName);
                 if (!addresses.isEmpty()) {
