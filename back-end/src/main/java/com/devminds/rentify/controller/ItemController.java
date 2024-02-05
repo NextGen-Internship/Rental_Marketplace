@@ -7,7 +7,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
 
@@ -25,15 +31,7 @@ public class ItemController {
     public void createItem(@ModelAttribute CreateItemDto createItemDto) throws IOException {
         this.itemService.saveItem(createItemDto);
     }
-
-    //    @GetMapping
-//    public ResponseEntity<List<ItemDto>> getAllItems(
-//            @RequestParam(defaultValue = "0") int page,
-//            @RequestParam(defaultValue = "2") int size) {
-//
-//        Pageable pageable = PageRequest.of(page, size);
-//        return ResponseEntity.ok(itemService.getAllItems(pageable));
-//    }
+    
     @GetMapping
     public ResponseEntity<Page<ItemDto>> getAllItems(@RequestParam(defaultValue = "0") int page,
                                                      @RequestParam(defaultValue = "2") int size) {
@@ -46,10 +44,6 @@ public class ItemController {
         return ResponseEntity.ok(itemService.getItemById(id));
     }
 
-//    @GetMapping("/category/{id}")
-//    public ResponseEntity<List<ItemDto>> getItemsByCategoryId(@PathVariable Long id) {
-//        return ResponseEntity.ok(itemService.getItemsByCategoryId(id));
-//    }
     @GetMapping("/category/{id}")
     public ResponseEntity<Page<ItemDto>> getItemsByCategoryId(
             @PathVariable Long id,
