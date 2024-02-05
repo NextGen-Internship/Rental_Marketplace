@@ -20,6 +20,8 @@ import java.io.IOException;
 @RestController
 @RequestMapping("/rentify/items")
 public class ItemController {
+    private static final String DEFAULT_PAGE_SIZE = "2";
+    private static final String DEFAULT_FIRST_PAGE_NUMBER = "0";
     private final ItemService itemService;
 
     @Autowired
@@ -31,10 +33,10 @@ public class ItemController {
     public void createItem(@ModelAttribute CreateItemDto createItemDto) throws IOException {
         this.itemService.saveItem(createItemDto);
     }
-    
+
     @GetMapping
-    public ResponseEntity<Page<ItemDto>> getAllItems(@RequestParam(defaultValue = "0") int page,
-                                                     @RequestParam(defaultValue = "2") int size) {
+    public ResponseEntity<Page<ItemDto>> getAllItems(@RequestParam(defaultValue = DEFAULT_FIRST_PAGE_NUMBER) int page,
+                                                     @RequestParam(defaultValue = DEFAULT_PAGE_SIZE) int size) {
         Page<ItemDto> items = itemService.getAllItems(PageRequest.of(page, size));
         return ResponseEntity.ok(items);
     }
@@ -47,8 +49,8 @@ public class ItemController {
     @GetMapping("/category/{id}")
     public ResponseEntity<Page<ItemDto>> getItemsByCategoryId(
             @PathVariable Long id,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "2") int size) {
+            @RequestParam(defaultValue = DEFAULT_FIRST_PAGE_NUMBER) int page,
+            @RequestParam(defaultValue = DEFAULT_PAGE_SIZE) int size) {
 
         Page<ItemDto> items = itemService.getItemsByCategoryId(id, PageRequest.of(page, size));
         return ResponseEntity.ok(items);
