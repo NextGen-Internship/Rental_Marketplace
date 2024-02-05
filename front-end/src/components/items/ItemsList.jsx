@@ -125,6 +125,32 @@ const ItemsList = (notShowDropdown ,categoryId) => {
     setFormSubmitted(true);
     setFilteredItems(filteredItems);
 
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+
+    if (token !== null) {
+      const decoded = jwtDecode(token);
+      setUserId(decoded.jti);
+    }
+
+    console.log(userId);
+  }, []);
+
+  const handleViewClick = (itemId) => {
+    if (userId === null) {
+      return;
+    }
+
+    const url = "http://localhost:8080/rentify/views";
+    const postData = {
+      user: { id: userId },
+      item: { id: itemId },
+    };
+
+    axios.post(url, postData).catch((error) => {
+      console.error("Error making post request:", error);
+    });
   };
 
   return (

@@ -1,7 +1,11 @@
 package com.devminds.rentify.service;
 
+
 import com.devminds.rentify.dto.CategoryDTO;
 import com.devminds.rentify.dto.ItemDto;
+
+import com.devminds.rentify.dto.CategoryDto;
+
 import com.devminds.rentify.entity.Category;
 import com.devminds.rentify.entity.Item;
 import com.devminds.rentify.exception.CategoryNotFoundException;
@@ -26,19 +30,24 @@ public class CategoryService {
         this.modelMapper = modelMapper;
     }
 
-    public List<CategoryDTO> getAllCategories() {
-        return categoryRepository.findAll().stream().map(this ::mapCategoryToCategoryDTO)
-                .collect(Collectors.toList());
+
+    public List<CategoryDto> getAllCategories() {
+        return categoryRepository
+                .findAll()
+                .stream()
+                .map(this::mapCategoryToCategoryDto)
+                .toList();
+
     }
 
-    public Category getCategoryById(long id) {
+    public CategoryDto getCategoryById(long id) {
         return categoryRepository.findById(id)
+                .map(this::mapCategoryToCategoryDto)
                 .orElseThrow(() -> new CategoryNotFoundException(String.format(CATEGORY_NOT_FOUND_MESSAGE, id)));
     }
 
-
-    private CategoryDTO mapCategoryToCategoryDTO(Category category) {
-        return modelMapper.map(category, CategoryDTO.class);
+    private CategoryDto mapCategoryToCategoryDto(Category category) {
+        return modelMapper.map(category, CategoryDto.class);
     }
 
 }
