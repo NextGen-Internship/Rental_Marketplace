@@ -4,6 +4,8 @@ import com.devminds.rentify.dto.CreateItemDto;
 import com.devminds.rentify.dto.ItemDto;
 import com.devminds.rentify.service.ItemService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,12 +24,16 @@ public class ItemController {
 
     @PostMapping("/create")
     public void createItem(@ModelAttribute CreateItemDto createItemDto) throws IOException {
-     this.itemService.saveItem(createItemDto);
+        this.itemService.saveItem(createItemDto);
     }
 
     @GetMapping
-    public ResponseEntity<List<ItemDto>> getAllItems() {
-        return ResponseEntity.ok(itemService.getAllItems());
+    public ResponseEntity<List<ItemDto>> getAllItems(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "2") int size) {
+
+        Pageable pageable = PageRequest.of(page, size);
+        return ResponseEntity.ok(itemService.getAllItems(pageable));
     }
 
     @GetMapping("/{id}")

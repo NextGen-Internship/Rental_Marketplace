@@ -14,6 +14,7 @@ import com.devminds.rentify.repository.ItemRepository;
 import com.devminds.rentify.repository.PictureRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -86,8 +87,8 @@ public class ItemService {
     }
 
 
-    public List<ItemDto> getAllItems() {
-        return itemRepository.findAll()
+    public List<ItemDto> getAllItems(Pageable pageable) {
+        return itemRepository.findAll(pageable)
                 .stream()
                 .map(this::mapItemToItemDto)
                 .toList();
