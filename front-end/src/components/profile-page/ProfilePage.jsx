@@ -6,11 +6,9 @@ import axios from 'axios';
 import { Link, useParams } from "react-router-dom";
 import noImage from "../../assets/no-image.avif";
 import { jwtDecode } from 'jwt-decode';
-import { Spa } from '@mui/icons-material';
+
 const ProfilePage = () => {
     const [userItems, setuserItems] = useState([]);
-
-
 
 
     const [userInfo, setUserInfo] = useState({
@@ -25,7 +23,6 @@ const ProfilePage = () => {
             streetNumber: '',
         },
 
-
     });
 
     const [editedUserInfo, setEditedUserInfo] = useState({ ...userInfo });
@@ -37,9 +34,6 @@ const ProfilePage = () => {
         setEditMode(true);
     };
 
-
-
-
     const handleSaveClick = async () => {
 
         const token = localStorage.getItem("token");
@@ -47,49 +41,42 @@ const ProfilePage = () => {
       
           const decoded = jwtDecode(token);
           const userId = decoded.jti;
+
+          const editedAddress = {
+            city: editedUserInfo.address.city || "",
+            street: editedUserInfo.address.street || "",
+            postCode: editedUserInfo.address.postCode || "",
+            streetNumber: editedUserInfo.address.streetNumber || "",
+        };
+        
+        // Update the address in the editedUserInfo
+        editedUserInfo.address = editedAddress;
+        
         try {
             const response = await axios.put(`http://localhost:8080/rentify/update/${userId}`, {
                 firstName: editedUserInfo.firstName || userInfo.firstName,
                 lastName: editedUserInfo.lastName || userInfo.lastName,
                 email: editedUserInfo.email || userInfo.email,
                 phoneNumber: editedUserInfo.phoneNumber || userInfo.phoneNumber,
-                address: {
-                    ...userInfo.address,
-                    ...editedUserInfo.address,
-                },
-            });
+                addressDto: editedUserInfo.address,
+
+                
+                });
+
+            
     
             setUserInfo(response.data);
     
             setEditMode(false);
         } catch (error) {
             console.error('Error updating user information:', error);
-    
-            // Log more details about the Axios error
-            if (error.response) {
-                // The request was made and the server responded with a status code
-                // that falls out of the range of 2xx
-                console.error('Response data:', error.response.data);
-                console.error('Response status:', error.response.status);
-                console.error('Response headers:', error.response.headers);
-            } else if (error.request) {
-                // The request was made but no response was received
-                console.error('Request data:', error.request);
-            } else {
-                // Something happened in setting up the request that triggered an Error
-                console.error('Error message:', error.message);
-            }
+
         }
     };
     
-      
-
-
-
     const handleInputChange = (e) => {
         const { name, value } = e.target;
-
-
+    
         if (name.startsWith('address.')) {
             const addressField = name.split('.')[1];
             setEditedUserInfo((prevInfo) => ({
@@ -104,10 +91,9 @@ const ProfilePage = () => {
                 ...prevInfo,
                 [name]: value,
             }));
-        }
-
-
+        };
     };
+    
 
     const handleCancelClick = () => {
         setEditMode(false);
@@ -115,19 +101,14 @@ const ProfilePage = () => {
         setEditedUserInfo({ ...userInfo });
     };
 
-
-
-
-
     console.log(userInfo)
-
 
     console.log("userInfo after save:", userInfo);
 
-
-
     useEffect(() => {
+
         const token = localStorage.getItem('token');
+
 
         const decoded = jwtDecode(token);
         const userId = decoded.jti;
@@ -135,7 +116,6 @@ const ProfilePage = () => {
 
         console.log(userId);
         const fetchUserItems = async () => {
-
 
             try {
                 const response = await axios.get(`http://localhost:8080/rentify/items/user/published/${userId}`);
@@ -151,7 +131,6 @@ const ProfilePage = () => {
 
         const fetchUserInfo = async () => {
 
-
             try {
                 const response = await axios.get(`http://localhost:8080/rentify/users/${userId}`);
                 setUserInfo(response.data);
@@ -162,16 +141,11 @@ const ProfilePage = () => {
                 console.error("Error fetching user Info ", error);
             }
 
-
         };
-
-
 
         fetchUserItems();
         fetchUserInfo();
     }, []);
-
-
 
 
     return (

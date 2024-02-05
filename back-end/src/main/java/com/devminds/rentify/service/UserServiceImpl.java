@@ -161,18 +161,19 @@ public class UserServiceImpl implements UserService {
 
         AddressDto addressDto = updatedUserInfoDto.getAddressDto();
         if (addressDto != null && isAnyAddressFieldProvided(addressDto)) {
-            // Create a new Address instance
-            Address newAddress = new Address();
-            newAddress.setCity(addressDto.getCity());
-            newAddress.setStreet(addressDto.getStreet());
-            newAddress.setPostCode(addressDto.getPostCode());
-            newAddress.setStreetNumber(addressDto.getStreetNumber());
+            // Find the existing Address
+            Address existingAddress = existingUser.getAddresses().stream()
+                    .findFirst()
+                    .orElseThrow(() -> new EntityNotFoundException("Address not found"));
 
-            // Set the new Address to the User
-            existingUser.getAddresses().add(newAddress);
+            // Update the existing Address fields
+            existingAddress.setCity(addressDto.getCity());
+            existingAddress.setStreet(addressDto.getStreet());
+            existingAddress.setPostCode(addressDto.getPostCode());
+            existingAddress.setStreetNumber(addressDto.getStreetNumber());
 
-            // Save the new Address
-            addressRepository.save(newAddress);
+            // Save the existing Address
+            addressRepository.save(existingAddress);
         }
 
         User updatedUser = userRepository.save(existingUser);
@@ -180,10 +181,8 @@ public class UserServiceImpl implements UserService {
     }
 
     private boolean isAnyAddressFieldProvided(AddressDto addressDto) {
-        return addressDto.getCity() != null ||
-                addressDto.getStreet() != null ||
-                addressDto.getPostCode() != null ||
-                addressDto.getStreetNumber() != null;
+        return addressDto.getCity() != null || addressDto.getStreet() != null ||
+                addressDto.getPostCode() != null || addressDto.getStreetNumber() != null;
     }
 
 
