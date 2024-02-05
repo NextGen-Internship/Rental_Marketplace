@@ -1,7 +1,7 @@
 package com.devminds.rentify.service;
 
 
-import com.devminds.rentify.dto.CategoryDTO;
+
 import com.devminds.rentify.dto.ItemDto;
 
 import com.devminds.rentify.dto.CategoryDto;

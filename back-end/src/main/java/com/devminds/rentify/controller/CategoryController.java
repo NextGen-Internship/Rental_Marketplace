@@ -1,7 +1,7 @@
 package com.devminds.rentify.controller;
 
 
-import com.devminds.rentify.dto.CategoryDTO;
+
 import com.devminds.rentify.entity.Category;
 
 import com.devminds.rentify.dto.CategoryDto;

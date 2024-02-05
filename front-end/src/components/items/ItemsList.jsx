@@ -5,6 +5,7 @@ import "./ItemsList.css";
 import { fetchData } from "../fetchData";
 import noImage from "../../assets/no-image.avif";
 import { jwtDecode } from "jwt-decode";
+import axios from "axios";
 
 import FilterComponent  from "../filter/FilterComponent";
 
@@ -24,7 +25,7 @@ const ItemsList = (notShowDropdown ,categoryId) => {
 
   const [formSubmitted, setFormSubmitted] = useState(false);
 
-
+  const [userId, setUserId] = useState(null);
 
 
 
@@ -48,48 +49,7 @@ const ItemsList = (notShowDropdown ,categoryId) => {
       }
     };
 
-    const handleLikeClick = async (itemId) => {
-      const token = localStorage.getItem("token");
-      const decoded = jwtDecode(token);
-      const userId = decoded.jti;
-
-      const updatedLikedItems = new Set(likedItems);
-      if (likedItems.has(itemId)) {
-        updatedLikedItems.delete(itemId);
-      } else {
-        updatedLikedItems.add(itemId);
-      }
-
-      const isLiked = !likedItems.has(itemId);
-      setLikedItems(updatedLikedItems);
-      const requestBody = {
-        itemId: itemId,
-        userId: parseInt(userId, 10),
-        isLiked: isLiked,
-      };
-
-      try {
-        const response = await fetch(
-          "http://localhost:8080/rentify/favorite/liked",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(requestBody),
-          }
-        );
-
-        console.log("isLike");
-        console.log(JSON.stringify(requestBody));
-
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-      } catch (error) {
-        console.error("Error in handleLikeClick:", error.message);
-      }
-    };
+  
 
     const fetchPictures = async () => {
       try {
@@ -100,8 +60,38 @@ const ItemsList = (notShowDropdown ,categoryId) => {
       }
     };
 
+
+    const fetchLikedItemsFromDB = async () => {
+      try {
+        const token = localStorage.getItem("token");
+
+        if (token) {
+          const decoded = jwtDecode(token);
+          const userId = decoded.jti;
+
+          const response = await fetch(
+            `http://localhost:8080/rentify/favourites/userFavourites/${userId}`,
+            {
+              method: "GET",
+            }
+          );
+
+          if (response.ok) {
+            const likedItemsFromDB = await response.json();
+            const likedItemsSet = new Set(likedItemsFromDB);
+            setLikedItems(likedItemsSet);
+          } else {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+          }
+        }
+      } catch (error) {
+        console.error("Error fetching liked items:", error.message);
+      }
+    };
+
     fetchItems();
     fetchPictures();
+    fetchLikedItemsFromDB();
   }, []);
 
   const itemPicturesMap = {};
@@ -109,21 +99,60 @@ const ItemsList = (notShowDropdown ,categoryId) => {
     itemPicturesMap[picture.itemId] = picture.url;
   });
 
-  const handleLikeClick = (itemId) => {
+  
+
+ 
+  const handleFilterChange = (filteredItems) => {
+    setFormSubmitted(true);
+    setFilteredItems(filteredItems);
+
+
+  }
+  
+  const handleLikeClick = async (itemId) => {
+    const token = localStorage.getItem("token");
+    const decoded = jwtDecode(token);
+    const userId = decoded.jti;
+    console.log("handleLikeClick called for item:", itemId);
+
     const updatedLikedItems = new Set(likedItems);
     if (likedItems.has(itemId)) {
       updatedLikedItems.delete(itemId);
     } else {
       updatedLikedItems.add(itemId);
     }
+
+    const isLiked = !likedItems.has(itemId);
     setLikedItems(updatedLikedItems);
-  
+    const requestBody = {
+      itemId: itemId,
+      userId: parseInt(userId, 10),
+      isLiked: isLiked,
+    };
+
+    try {
+      const response = await fetch(
+        "http://localhost:8080/rentify/favourites/liked",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(requestBody),
+        }
+      );
+
+      console.log("isLike");
+      console.log(JSON.stringify(requestBody));
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+    } catch (error) {
+      console.error("Error in handleLikeClick:", error.message);
+    }
   };
 
- 
-  const handleFilterChange = (filteredItems) => {
-    setFormSubmitted(true);
-    setFilteredItems(filteredItems);
 
 
   useEffect(() => {
@@ -233,5 +262,6 @@ const ItemsList = (notShowDropdown ,categoryId) => {
   )
     
 };
+
 
 export default ItemsList;
