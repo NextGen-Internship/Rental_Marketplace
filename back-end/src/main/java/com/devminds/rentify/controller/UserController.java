@@ -1,15 +1,11 @@
 package com.devminds.rentify.controller;
 
+import com.devminds.rentify.dto.UpdatedUserInfoDto;
 import com.devminds.rentify.dto.UserDto;
 import com.devminds.rentify.service.UserServiceImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
@@ -46,4 +42,9 @@ public class UserController {
         return new ResponseEntity<>(userService.getUserById(id), HttpStatus.OK);
     }
 
+    @PutMapping("/update/{id}")
+    public ResponseEntity<UserDto> updateUser(@PathVariable Long id ,
+                                              @RequestBody UpdatedUserInfoDto updatedUserInfoDto ){
+        return new ResponseEntity<>(userService.updateUserInfo(id , updatedUserInfoDto), HttpStatus.OK);
+    }
 }

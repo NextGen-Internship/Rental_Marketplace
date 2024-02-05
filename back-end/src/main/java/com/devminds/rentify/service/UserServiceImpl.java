@@ -1,9 +1,14 @@
 package com.devminds.rentify.service;
 
 import com.devminds.rentify.config.JwtService;
+import com.devminds.rentify.dto.AddressDto;
+import com.devminds.rentify.dto.UpdatedUserInfoDto;
 import com.devminds.rentify.dto.UserDto;
+import com.devminds.rentify.entity.Address;
 import com.devminds.rentify.entity.User;
+import com.devminds.rentify.exception.AddressNotFoundException;
 import com.devminds.rentify.exception.DuplicateEntityException;
+import com.devminds.rentify.repository.AddressRepository;
 import com.devminds.rentify.repository.RoleRepository;
 import com.devminds.rentify.repository.UserRepository;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
@@ -12,6 +17,7 @@ import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken.Payload;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.gson.GsonFactory;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
@@ -20,9 +26,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -33,6 +37,7 @@ public class UserServiceImpl implements UserService {
     private final ModelMapper modelMapper;
     private final RoleRepository roleRepository;
     private final JwtService jwtService;
+    private final AddressRepository addressRepository;
 
     @Value("${google-client-key}")
     private String googleClientId;
@@ -137,6 +142,54 @@ public class UserServiceImpl implements UserService {
         }
         return null;
     }
+
+    public UserDto updateUserInfo(Long id, UpdatedUserInfoDto updatedUserInfoDto) {
+        User existingUser = userRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + id));
+
+        if (updatedUserInfoDto.getFirstName() != null) {
+            existingUser.setFirstName(updatedUserInfoDto.getFirstName());
+        }
+
+        if (updatedUserInfoDto.getLastName() != null) {
+            existingUser.setLastName(updatedUserInfoDto.getLastName());
+        }
+
+        if (updatedUserInfoDto.getPhoneNumber() != null) {
+            existingUser.setPhoneNumber(updatedUserInfoDto.getPhoneNumber());
+        }
+
+        AddressDto addressDto = updatedUserInfoDto.getAddressDto();
+        if (addressDto != null && isAnyAddressFieldProvided(addressDto)) {
+            // Create a new Address instance
+            Address newAddress = new Address();
+            newAddress.setCity(addressDto.getCity());
+            newAddress.setStreet(addressDto.getStreet());
+            newAddress.setPostCode(addressDto.getPostCode());
+            newAddress.setStreetNumber(addressDto.getStreetNumber());
+
+            // Set the new Address to the User
+            existingUser.getAddresses().add(newAddress);
+
+            // Save the new Address
+            addressRepository.save(newAddress);
+        }
+
+        User updatedUser = userRepository.save(existingUser);
+        return mapUserToUserDto(updatedUser);
+    }
+
+    private boolean isAnyAddressFieldProvided(AddressDto addressDto) {
+        return addressDto.getCity() != null ||
+                addressDto.getStreet() != null ||
+                addressDto.getPostCode() != null ||
+                addressDto.getStreetNumber() != null;
+    }
+
+
+
+
+
 
 }
 

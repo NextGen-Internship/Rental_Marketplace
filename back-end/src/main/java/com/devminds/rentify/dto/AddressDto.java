@@ -10,15 +10,15 @@ import lombok.Data;
 @AllArgsConstructor
 public class AddressDto {
 
-    @NotEmpty(message = "city is required")
+//    @NotEmpty(message = "city is required")
     private String city;
 
-    @NotEmpty(message = "street is required")
+//    @NotEmpty(message = "street is required")
     private String street;
 
-    @NotEmpty(message = "postCode is required")
+//    @NotEmpty(message = "postCode is required")
     private String postCode;
 
-    @NotEmpty(message = "streetNumber is required")
+//    @NotEmpty(message = "streetNumber is required")
     private String streetNumber;
 }
