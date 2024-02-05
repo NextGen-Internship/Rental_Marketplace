@@ -17,7 +17,7 @@ const ItemsList = ({ searchTerm }) => {
   const [currentPage, setCurrentPage] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
   const [pageSize, setPageSize] = useState(2);
-  const [sortOrder, setSortOrder] = useState("asc"); // Added state for sort order
+  const [sortOrder, setSortOrder] = useState("asc"); 
 
   useEffect(() => {
     const fetchItems = async () => {
@@ -65,7 +65,7 @@ const ItemsList = ({ searchTerm }) => {
 
     fetchLikedItemsFromDB();
     fetchItems();
-  }, [currentPage, categoryId, sortOrder]); // Added sortOrder to dependency array
+  }, [currentPage, categoryId, sortOrder]); 
 
   const handleLikeClick = async (itemId) => {
     const token = localStorage.getItem("token");
@@ -171,7 +171,7 @@ const ItemsList = ({ searchTerm }) => {
           </li>
         </ul>
       </div>
-      
+
       <div className="items-list">
         {items &&
           filteredItems.map((item) => (
