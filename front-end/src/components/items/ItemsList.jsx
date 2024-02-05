@@ -10,24 +10,27 @@ import axios from "axios";
 const endpointItems = "items";
 
 const ItemsList = ({ searchTerm }) => {
-  const endpointSuffix = useParams();
-
+  const { id: categoryId } = useParams();
   const [likedItems, setLikedItems] = useState(new Set());
   const [items, setItems] = useState([]);
   const [userId, setUserId] = useState(null);
+  const [currentPage, setCurrentPage] = useState(0);
+  const [totalPages, setTotalPages] = useState(0);
+  const [pageSize, setPageSize] = useState(2);
 
   useEffect(() => {
     const fetchItems = async () => {
       try {
         const result = await fetchData(
-          endpointItems +
-            (Object.keys(endpointSuffix).length === 0
-              ? ""
-              : "/category/" + endpointSuffix.id)
+          `${endpointItems}${categoryId ? `/category/${categoryId}` : ''}?page=${currentPage}`
         );
-        setItems(result);
+
+        const pageSizeFromBackend = result.pageable.pageSize || 2; 
+        setItems(result.content);
+        setTotalPages(result.totalPages);
+        setPageSize(pageSizeFromBackend);
       } catch (error) {
-        console.log(error);
+        console.error("Error fetching items:", error.message);
       }
     };
 
@@ -61,13 +64,12 @@ const ItemsList = ({ searchTerm }) => {
 
     fetchLikedItemsFromDB();
     fetchItems();
-  }, []);
+  }, [currentPage, categoryId]);
 
   const handleLikeClick = async (itemId) => {
     const token = localStorage.getItem("token");
     const decoded = jwtDecode(token);
     const userId = decoded.jti;
-    console.log("handleLikeClick called for item:", itemId);
 
     const updatedLikedItems = new Set(likedItems);
     if (likedItems.has(itemId)) {
@@ -78,11 +80,6 @@ const ItemsList = ({ searchTerm }) => {
 
     const isLiked = !likedItems.has(itemId);
     setLikedItems(updatedLikedItems);
-    const requestBody = {
-      itemId: itemId,
-      userId: parseInt(userId, 10),
-      isLiked: isLiked,
-    };
 
     try {
       const response = await fetch(
@@ -92,12 +89,13 @@ const ItemsList = ({ searchTerm }) => {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify(requestBody),
+          body: JSON.stringify({
+            itemId,
+            userId: parseInt(userId, 10),
+            isLiked,
+          }),
         }
       );
-
-      console.log("isLike");
-      console.log(JSON.stringify(requestBody));
 
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
@@ -120,8 +118,6 @@ const ItemsList = ({ searchTerm }) => {
       const decoded = jwtDecode(token);
       setUserId(decoded.jti);
     }
-
-    console.log(userId);
   }, []);
 
   const handleViewClick = (itemId) => {
@@ -150,7 +146,7 @@ const ItemsList = ({ searchTerm }) => {
               onClick={() => handleViewClick(item.id)}
             >
               <div className="card">
-                <img src={item.thumbnail || noImage} className="card-img-top" />
+                <img src={item.thumbnail || noImage} className="card-img-top" alt={item.name} />
                 <div className="card-body">
                   <h3 className="card-title">{item.name}</h3>
                   <p className="card-text">{"$" + item.price}</p>
@@ -159,9 +155,7 @@ const ItemsList = ({ searchTerm }) => {
               </div>
             </Link>
             <button
-              className={`like-button ${
-                likedItems.has(item.id) ? "clicked" : ""
-              }`}
+              className={`like-button ${likedItems.has(item.id) ? "clicked" : ""}`}
               onClick={(e) => {
                 e.preventDefault();
                 handleLikeClick(item.id);
@@ -171,6 +165,42 @@ const ItemsList = ({ searchTerm }) => {
             </button>
           </div>
         ))}
+      <nav aria-label="...">
+        <ul className="pagination">
+          <li className={`page-item ${currentPage === 0 ? "disabled" : ""}`}>
+            <a
+              className="page-link"
+              href="#"
+              onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 0))}
+            >
+              Previous
+            </a>
+          </li>
+          {[...Array(totalPages).keys()].map((page) => (
+            <li
+              key={page}
+              className={`page-item ${page === currentPage ? "active" : ""}`}
+            >
+              <a
+                className="page-link"
+                href="#"
+                onClick={() => setCurrentPage(page)}
+              >
+                {page + 1}
+              </a>
+            </li>
+          ))}
+          <li className={`page-item ${currentPage === totalPages - 1 ? "disabled" : ""}`}>
+            <a
+              className="page-link"
+              href="#"
+              onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages - 1))}
+            >
+              Next
+            </a>
+          </li>
+        </ul>
+      </nav>
     </div>
   );
 };

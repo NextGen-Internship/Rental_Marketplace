@@ -14,6 +14,7 @@ import com.devminds.rentify.repository.ItemRepository;
 import com.devminds.rentify.repository.PictureRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -87,11 +88,16 @@ public class ItemService {
     }
 
 
-    public List<ItemDto> getAllItems(Pageable pageable) {
-        return itemRepository.findAll(pageable)
-                .stream()
-                .map(this::mapItemToItemDto)
-                .toList();
+//    public List<ItemDto> getAllItems(Pageable pageable) {
+//        return itemRepository.findAll(pageable)
+//                .stream()
+//                .map(this::mapItemToItemDto)
+//                .toList();
+//    }
+
+    public Page<ItemDto> getAllItems(Pageable pageable) {
+        Page<Item> itemsPage = itemRepository.findAll(pageable);
+        return itemsPage.map(this::mapItemToItemDto);
     }
 
     public Item findById(Long itemId) {
@@ -105,11 +111,16 @@ public class ItemService {
                 .orElseThrow(() -> new ItemNotFoundException(String.format(ITEM_NOT_FOUND_MESSAGE, id)));
     }
 
-    public List<ItemDto> getItemsByCategoryId(Long id) {
-        return itemRepository.findByCategoryId(id)
-                .stream()
-                .map(this::mapItemToItemDto)
-                .toList();
+//    public List<ItemDto> getItemsByCategoryId(Long id) {
+//        return itemRepository.findByCategoryId(id)
+//                .stream()
+//                .map(this::mapItemToItemDto)
+//                .toList();
+//    }
+
+    public Page<ItemDto> getItemsByCategoryId(Long id, Pageable pageable) {
+        Page<Item> itemsPage = itemRepository.findByCategoryId(id, pageable);
+        return itemsPage.map(this::mapItemToItemDto);
     }
 
     private ItemDto mapItemToItemDto(Item item) {
