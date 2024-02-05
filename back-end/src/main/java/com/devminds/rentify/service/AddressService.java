@@ -1,8 +1,10 @@
 package com.devminds.rentify.service;
 
+import com.devminds.rentify.dto.AddressDto;
 import com.devminds.rentify.entity.Address;
 import com.devminds.rentify.exception.AddressNotFoundException;
 import com.devminds.rentify.repository.AddressRepository;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,14 +14,19 @@ import java.util.List;
 public class AddressService {
     private static final String ADDRESS_NOT_FOUND_MESSAGE = "Category with %d id not found.";
     private final AddressRepository addressRepository;
+    private final ModelMapper modelMapper;
 
     @Autowired
-    public AddressService(AddressRepository addressRepository) {
+    public AddressService(AddressRepository addressRepository, ModelMapper modelMapper) {
         this.addressRepository = addressRepository;
+        this.modelMapper = modelMapper;
     }
 
-    public List<Address> getAllAddresses() {
-        return addressRepository.findAll();
+    public List<AddressDto> getAllAddresses() {
+        return addressRepository.findAll()
+                .stream()
+                .map(this::mapAddressToAddressDto)
+                .toList();
     }
 
     public Address getAddressById(long id) {
@@ -40,5 +47,9 @@ public class AddressService {
 
     public void deleteAddressById(long id) {
         addressRepository.deleteById(id);
+    }
+
+    private AddressDto mapAddressToAddressDto(Address address) {
+        return modelMapper.map(address, AddressDto.class);
     }
 }
