@@ -6,6 +6,7 @@ import com.devminds.rentify.service.ItemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -22,6 +23,8 @@ import java.io.IOException;
 public class ItemController {
     private static final String DEFAULT_PAGE_SIZE = "2";
     private static final String DEFAULT_FIRST_PAGE_NUMBER = "0";
+    private static final String DEFAULT_SORTING_ORDER = "asc";
+    private static final String SORT_CRITERIA_PRICE = "price";
     private final ItemService itemService;
 
     @Autowired
@@ -35,9 +38,16 @@ public class ItemController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<ItemDto>> getAllItems(@RequestParam(defaultValue = DEFAULT_FIRST_PAGE_NUMBER) int page,
-                                                     @RequestParam(defaultValue = DEFAULT_PAGE_SIZE) int size) {
-        Page<ItemDto> items = itemService.getAllItems(PageRequest.of(page, size));
+    public ResponseEntity<Page<ItemDto>> getAllItems(
+            @RequestParam(defaultValue = DEFAULT_FIRST_PAGE_NUMBER) int page,
+            @RequestParam(defaultValue = DEFAULT_PAGE_SIZE) int size,
+            @RequestParam(defaultValue = DEFAULT_SORTING_ORDER) String sortDirection) {
+
+        Sort.Direction sortOrder = sortDirection.equalsIgnoreCase(DEFAULT_SORTING_ORDER) ?
+                Sort.Direction.ASC : Sort.Direction.DESC;
+        Page<ItemDto> items = itemService.getAllItems(
+                PageRequest.of(page, size, Sort.by(sortOrder, SORT_CRITERIA_PRICE)));
+
         return ResponseEntity.ok(items);
     }
 
@@ -50,9 +60,14 @@ public class ItemController {
     public ResponseEntity<Page<ItemDto>> getItemsByCategoryId(
             @PathVariable Long id,
             @RequestParam(defaultValue = DEFAULT_FIRST_PAGE_NUMBER) int page,
-            @RequestParam(defaultValue = DEFAULT_PAGE_SIZE) int size) {
+            @RequestParam(defaultValue = DEFAULT_PAGE_SIZE) int size,
+            @RequestParam(defaultValue = DEFAULT_SORTING_ORDER) String sortDirection) {
 
-        Page<ItemDto> items = itemService.getItemsByCategoryId(id, PageRequest.of(page, size));
+        Sort.Direction sortOrder = sortDirection.equalsIgnoreCase(DEFAULT_SORTING_ORDER) ?
+                Sort.Direction.ASC : Sort.Direction.DESC;
+        Page<ItemDto> items = itemService.getItemsByCategoryId(id,
+                PageRequest.of(page, size, Sort.by(sortOrder, SORT_CRITERIA_PRICE)));
+
         return ResponseEntity.ok(items);
     }
 }

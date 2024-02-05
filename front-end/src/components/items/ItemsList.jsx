@@ -17,14 +17,13 @@ const ItemsList = ({ searchTerm }) => {
   const [currentPage, setCurrentPage] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
   const [pageSize, setPageSize] = useState(2);
+  const [sortOrder, setSortOrder] = useState("asc"); // Added state for sort order
 
   useEffect(() => {
     const fetchItems = async () => {
       try {
         const result = await fetchData(
-          `${endpointItems}${
-            categoryId ? `/category/${categoryId}` : ""
-          }?page=${currentPage}`
+          `${endpointItems}${categoryId ? `/category/${categoryId}` : ""}?page=${currentPage}&sortDirection=${sortOrder}`
         );
 
         const pageSizeFromBackend = result.pageable.pageSize || 2;
@@ -66,7 +65,7 @@ const ItemsList = ({ searchTerm }) => {
 
     fetchLikedItemsFromDB();
     fetchItems();
-  }, [currentPage, categoryId]);
+  }, [currentPage, categoryId, sortOrder]); // Added sortOrder to dependency array
 
   const handleLikeClick = async (itemId) => {
     const token = localStorage.getItem("token");
@@ -140,6 +139,39 @@ const ItemsList = ({ searchTerm }) => {
 
   return (
     <div>
+
+<div class="btn-group" role="group">
+        <button
+          id="btnGroupDrop1"
+          type="button"
+          class="btn btn-primary dropdown-toggle"
+          data-bs-toggle="dropdown"
+          aria-expanded="false"
+        >
+          Order by price
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+          <li>
+            <a
+              class="dropdown-item"
+              href="#"
+              onClick={() => setSortOrder("asc")} 
+            >
+              Ascending
+            </a>
+          </li>
+          <li>
+            <a
+              class="dropdown-item"
+              href="#"
+              onClick={() => setSortOrder("desc")} 
+            >
+              Descending
+            </a>
+          </li>
+        </ul>
+      </div>
+      
       <div className="items-list">
         {items &&
           filteredItems.map((item) => (
@@ -218,6 +250,8 @@ const ItemsList = ({ searchTerm }) => {
           </li>
         </ul>
       </nav>
+
+      
     </div>
   );
 };
