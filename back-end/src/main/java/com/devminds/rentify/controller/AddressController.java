@@ -25,5 +25,5 @@ public class AddressController {
         return ResponseEntity.ok(addressService.getAllAddresses());
     }
 
-
+//         const responseAddress = await fetch('http://localhost:8080/rentify/addresses');
 }

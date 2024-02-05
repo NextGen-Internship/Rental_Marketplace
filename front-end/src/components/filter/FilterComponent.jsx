@@ -25,7 +25,6 @@ const FilterComponent = ({ notShowDropdown,categoryId  ,onFilterChange} ) => {
   const handlePriceChange = (e, setPrice) => {
     const inputValue = e.target.value;
     
-    e.preventDefault();
     if (inputValue < 0) {
      
       setPriceError('Price cannot be lower than zero');
@@ -39,13 +38,11 @@ const FilterComponent = ({ notShowDropdown,categoryId  ,onFilterChange} ) => {
 
 
   const handleSearchChange = (event) => {
-    event.preventDefault();
     setSearchTerm(event.target.value);
 };
 
     
   useEffect(() => {
-
 
 
   if (notShowDropdown) {
@@ -69,6 +66,7 @@ const FilterComponent = ({ notShowDropdown,categoryId  ,onFilterChange} ) => {
 
       try{   
          const responseAddress = await fetch('http://localhost:8080/rentify/addresses');
+         console.log(responseAddress)
 
         if(!responseAddress.ok){
         throw new Error(`HTTP error! Status: ${responseAddress.status}`);
@@ -80,6 +78,8 @@ const FilterComponent = ({ notShowDropdown,categoryId  ,onFilterChange} ) => {
 
 
        setAddresses(addressResponse)
+
+       console.log(addressResponse);
 
       }catch(error){
         console.error("Error fetching Address")
@@ -94,10 +94,6 @@ const FilterComponent = ({ notShowDropdown,categoryId  ,onFilterChange} ) => {
 
     e.preventDefault();
     try {
-
-   
-    
-    
       const filters = {
         category:  selectedCategory, 
         priceFrom: parseFloat(priceFrom),
@@ -141,12 +137,12 @@ const FilterComponent = ({ notShowDropdown,categoryId  ,onFilterChange} ) => {
   }
 
 
-
-
 return (
 
 
 <div className="container pb-5">
+<form className="row row-cols-lg-auto g-3 align-items-center ms-lg-3">
+
 {!notShowDropdown || Object.keys(notShowDropdown).length === 0  ? (
   <form className="row row-cols-lg-auto g-3 align-items-center ms-lg-3">
 <div className="col-12">
@@ -220,7 +216,7 @@ return (
 
 
 ):( 
-  <form className="row row-cols-lg-auto g-3 align-items-center ms-lg-3">
+  <> 
 <div className="col-12">
   <div className="input-group">
     <div className="input-group-text"><SearchIcon className="search-icon" /></div>
@@ -283,10 +279,10 @@ return (
 <div className="col-12">
   <button type="submit" className="btn btn-primary" onClick={applyFilters}>Submit</button>
 </div>
-</form> 
+</>
 
 )}
-
+</form>
 </div>
 )
 };
