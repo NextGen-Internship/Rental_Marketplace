@@ -22,10 +22,12 @@ const ItemsList = ({ searchTerm }) => {
     const fetchItems = async () => {
       try {
         const result = await fetchData(
-          `${endpointItems}${categoryId ? `/category/${categoryId}` : ''}?page=${currentPage}`
+          `${endpointItems}${
+            categoryId ? `/category/${categoryId}` : ""
+          }?page=${currentPage}`
         );
 
-        const pageSizeFromBackend = result.pageable.pageSize || 2; 
+        const pageSizeFromBackend = result.pageable.pageSize || 2;
         setItems(result.content);
         setTotalPages(result.totalPages);
         setPageSize(pageSizeFromBackend);
@@ -137,36 +139,45 @@ const ItemsList = ({ searchTerm }) => {
   };
 
   return (
-    <div className="items-list">
-      {items &&
-        filteredItems.map((item) => (
-          <div className="items-list-item" key={item.id}>
-            <Link
-              to={`/items/${item.id}`}
-              onClick={() => handleViewClick(item.id)}
-            >
-              <div className="card">
-                <img src={item.thumbnail || noImage} className="card-img-top" alt={item.name} />
-                <div className="card-body">
-                  <h3 className="card-title">{item.name}</h3>
-                  <p className="card-text">{"$" + item.price}</p>
-                  <p className="card-text">{item.address}</p>
+    <div>
+      <div className="items-list">
+        {items &&
+          filteredItems.map((item) => (
+            <div className="items-list-item" key={item.id}>
+              <Link
+                to={`/items/${item.id}`}
+                onClick={() => handleViewClick(item.id)}
+              >
+                <div className="card">
+                  <img
+                    src={item.thumbnail || noImage}
+                    className="card-img-top"
+                    alt={item.name}
+                  />
+                  <div className="card-body">
+                    <h3 className="card-title">{item.name}</h3>
+                    <p className="card-text">{"$" + item.price}</p>
+                    <p className="card-text">{item.address}</p>
+                  </div>
                 </div>
-              </div>
-            </Link>
-            <button
-              className={`like-button ${likedItems.has(item.id) ? "clicked" : ""}`}
-              onClick={(e) => {
-                e.preventDefault();
-                handleLikeClick(item.id);
-              }}
-            >
-              <FavoriteIcon />
-            </button>
-          </div>
-        ))}
-      <nav aria-label="...">
-        <ul className="pagination">
+              </Link>
+              <button
+                className={`like-button ${
+                  likedItems.has(item.id) ? "clicked" : ""
+                }`}
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleLikeClick(item.id);
+                }}
+              >
+                <FavoriteIcon />
+              </button>
+            </div>
+          ))}
+      </div>
+      <br /> <br />
+      <nav aria-label="Page navigation example">
+        <ul className="pagination justify-content-center">
           <li className={`page-item ${currentPage === 0 ? "disabled" : ""}`}>
             <a
               className="page-link"
@@ -190,11 +201,17 @@ const ItemsList = ({ searchTerm }) => {
               </a>
             </li>
           ))}
-          <li className={`page-item ${currentPage === totalPages - 1 ? "disabled" : ""}`}>
+          <li
+            className={`page-item ${
+              currentPage === totalPages - 1 ? "disabled" : ""
+            }`}
+          >
             <a
               className="page-link"
               href="#"
-              onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages - 1))}
+              onClick={() =>
+                setCurrentPage((prev) => Math.min(prev + 1, totalPages - 1))
+              }
             >
               Next
             </a>
