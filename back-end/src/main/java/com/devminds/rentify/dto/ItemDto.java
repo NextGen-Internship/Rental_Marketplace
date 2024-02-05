@@ -8,7 +8,7 @@ import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Data
 public class ItemDto {
@@ -26,7 +26,7 @@ public class ItemDto {
     private BigDecimal price;
 
     @NotEmpty
-    private Date postedDate;
+    private LocalDateTime postedDate;
 
     @Positive
     @NotEmpty
