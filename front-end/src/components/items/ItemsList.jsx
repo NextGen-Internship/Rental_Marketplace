@@ -161,6 +161,38 @@ const ItemsList = (notShowDropdown) => {
         onFilterChange={handleFilterChange}
       />
 
+<div className="btn-group" role="group">
+        <button
+          id="btnGroupDrop1"
+          type="button"
+          className="btn btn-primary dropdown-toggle"
+          data-bs-toggle="dropdown"
+          aria-expanded="false"
+        >
+          Order by price
+        </button>
+        <ul className="dropdown-menu" aria-labelledby="btnGroupDrop1">
+          <li>
+            <a
+              className="dropdown-item"
+              href="#"
+              onClick={() => setSortOrder("asc")}
+            >
+              Ascending
+            </a>
+          </li>
+          <li>
+            <a
+              className="dropdown-item"
+              href="#"
+              onClick={() => setSortOrder("desc")}
+            >
+              Descending
+            </a>
+          </li>
+        </ul>
+      </div>
+
 
     
       <div className="items-list">
