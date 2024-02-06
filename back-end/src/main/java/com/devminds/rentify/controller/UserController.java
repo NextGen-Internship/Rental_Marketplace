@@ -6,6 +6,7 @@ import com.devminds.rentify.service.UserServiceImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
@@ -26,10 +27,10 @@ public class UserController {
     @PostMapping("/google-login")
     public ResponseEntity<String> handleGoogleLogin(@RequestHeader("Authorization") String googleCredential) throws GeneralSecurityException, IOException {
         String token = this.userService.mapGoogleTokenToOurToken(googleCredential);
-        if(token == null){
-            return new ResponseEntity<>(INVALID_TOKEN_MESSAGE,HttpStatus.BAD_REQUEST);
+        if (token == null) {
+            return new ResponseEntity<>(INVALID_TOKEN_MESSAGE, HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity<>(token,HttpStatus.OK);
+        return new ResponseEntity<>(token, HttpStatus.OK);
     }
 
     @GetMapping("/users")
@@ -43,10 +44,18 @@ public class UserController {
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<UserDto> updateUser(@PathVariable Long id ,
-                                              @RequestBody UpdatedUserInfoDto updatedUserInfoDto ){
+    public ResponseEntity<UserDto> updateUser(@PathVariable Long id,
+                                              @RequestBody UpdatedUserInfoDto updatedUserInfoDto) {
 
-        return new ResponseEntity<>(userService.updateUserInfo(id , updatedUserInfoDto), HttpStatus.OK);
+        return new ResponseEntity<>(userService.updateUserInfo(id, updatedUserInfoDto), HttpStatus.OK);
+
+    }
+
+        @PutMapping("/updateProfilePicture/{userId}")
+        public ResponseEntity<UserDto> uploadFile(@PathVariable Long userId, @RequestParam("file") MultipartFile file)
+            throws IOException {
+
+        return new ResponseEntity<>(userService.updateProfilePicture(userId, file), HttpStatus.OK);
 
     }
 }

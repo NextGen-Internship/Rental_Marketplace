@@ -1,6 +1,7 @@
 package com.devminds.rentify.service;
 
 import com.devminds.rentify.config.JwtService;
+import com.devminds.rentify.config.storage.StorageConfig;
 import com.devminds.rentify.dto.AddressDto;
 import com.devminds.rentify.dto.UpdatedUserInfoDto;
 import com.devminds.rentify.dto.UserDto;
@@ -23,8 +24,10 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.net.URL;
 import java.security.GeneralSecurityException;
 import java.util.*;
 
@@ -38,6 +41,8 @@ public class UserServiceImpl implements UserService {
     private final RoleRepository roleRepository;
     private final JwtService jwtService;
     private final AddressRepository addressRepository;
+
+    private final StorageService storageService;
 
     @Value("${google-client-key}")
     private String googleClientId;
@@ -89,8 +94,6 @@ public class UserServiceImpl implements UserService {
     }
 
     public UserDto getUserById(Long id) {
-
-        System.out.println(id);
         return userRepository.findById(id)
                 .map(this::mapUserToUserDto)
                 .orElseThrow(() -> new UsernameNotFoundException(String.format(USER_NOT_FOUND_MESSAGE, id)));
@@ -168,6 +171,7 @@ public class UserServiceImpl implements UserService {
                 && addressDto.getPostCode() != null) {
 
             Address address = existingUser.getAddress();
+
             if (address == null) {
                 address = new Address();
 
@@ -176,25 +180,14 @@ public class UserServiceImpl implements UserService {
             address.setPostCode(addressDto.getPostCode());
             address.setStreet(addressDto.getStreet());
             address.setStreetNumber(addressDto.getStreetNumber());
-
-
             addressRepository.save(address);
-
             existingUser.setAddress(address);
         }
 
-
-
-
         userRepository.save(existingUser);
-
-
         System.out.println(mapUserToUserDto(existingUser));
         return mapUserToUserDto(existingUser);
     }
-
-
-
 
     private boolean isAnyAddressFieldProvided(AddressDto addressDto) {
         return addressDto.getCity() != null || addressDto.getStreet() != null ||
@@ -202,9 +195,17 @@ public class UserServiceImpl implements UserService {
     }
 
 
+    public UserDto updateProfilePicture(Long userId, MultipartFile file) throws IOException {
 
+        User existingUser = userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + userId));
+        URL pictureUrls = storageService.uploadFile(file);
 
+        existingUser.setProfilePicture(pictureUrls.toString());
 
+        userRepository.save(existingUser);
 
+        return mapUserToUserDto(existingUser);
+    }
 }
 
