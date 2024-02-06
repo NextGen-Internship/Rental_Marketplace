@@ -4,8 +4,26 @@ import { Link } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 import noImage from "../../assets/no-image.avif";
 
+import FilterComponent from "../filter/FilterComponent"; 
+
 const LikedItemsPage = () => {
   const [likedItems, setLikedItems] = useState([]);
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
 
   useEffect(() => {
     const fetchLikedItemsFromDB = async () => {
@@ -103,6 +121,7 @@ const LikedItemsPage = () => {
   };
   return (
     <div className="items-list">
+      
       {likedItems.map((item) => (
         <div className="items-list-item" key={item.id}>
           <Link to={`/items/${item.id}`}>

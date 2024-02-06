@@ -1,6 +1,10 @@
 package com.devminds.rentify.entity;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -15,6 +19,8 @@ import java.util.List;
 @Data
 @Entity
 @Table(name = "item")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+
 public class Item {
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -56,11 +62,12 @@ public class Item {
     private User user;
 
 
+    @JsonIgnore
     @ManyToOne
     private Address address;
 
-    @OneToMany
-    private List<History> histories;
+//    @OneToMany
+//    private List<History> histories;
 
     @OneToMany(fetch = FetchType.LAZY , mappedBy = "item")
     private List<Picture> pictures;
