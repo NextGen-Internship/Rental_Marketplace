@@ -81,7 +81,7 @@ const ItemsList = (notShowDropdown) => {
     };
 
     fetchLikedItemsFromDB();
-    // fetchItems();
+    fetchItems();
 
     console.log("f ", filteredItems)
   

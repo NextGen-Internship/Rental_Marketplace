@@ -6,6 +6,7 @@ import com.devminds.rentify.service.ItemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -72,15 +73,23 @@ public class ItemController {
     }
 
     @GetMapping("/filter")
-    public List<ItemDto> getFilteredItems(
+    public ResponseEntity<Page<ItemDto>> getFilteredItems(
             @RequestParam(required = false) String category,
             @RequestParam(required = false) Float priceFrom,
             @RequestParam(required = false) Float priceTo,
             @RequestParam(required = false) String address,
-            @RequestParam(required = false) String searchTerm) {
+            @RequestParam(required = false) String searchTerm,
+            @RequestParam(defaultValue = DEFAULT_FIRST_PAGE_NUMBER) int page,
+            @RequestParam(defaultValue = DEFAULT_PAGE_SIZE) int size,
+            @RequestParam(defaultValue = DEFAULT_SORTING_ORDER) String sortDirection) {
 
+        Sort.Direction direction = sortDirection.equalsIgnoreCase(DEFAULT_SORTING_ORDER) ?
+                Sort.Direction.ASC : Sort.Direction.DESC;
+        Sort sort = Sort.by(direction, SORT_CRITERIA_PRICE);
 
+        Pageable pageable = PageRequest.of(page, size, sort);
 
-        return itemService.getFilteredItems(category, priceFrom, priceTo, address ,searchTerm );
+        return ResponseEntity.ok(
+                itemService.getFilteredItems(category, priceFrom, priceTo, address, searchTerm, pageable));
     }
 }
