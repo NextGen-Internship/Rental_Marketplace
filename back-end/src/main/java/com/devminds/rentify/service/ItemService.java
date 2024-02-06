@@ -87,14 +87,6 @@ public class ItemService {
         return this.itemRepository.getReferenceById(savedItem.getId());
     }
 
-
-//    public List<ItemDto> getAllItems(Pageable pageable) {
-//        return itemRepository.findAll(pageable)
-//                .stream()
-//                .map(this::mapItemToItemDto)
-//                .toList();
-//    }
-
     public Page<ItemDto> getAllItems(Pageable pageable) {
         Page<Item> itemsPage = itemRepository.findAll(pageable);
         return itemsPage.map(this::mapItemToItemDto);
@@ -110,13 +102,6 @@ public class ItemService {
                 .map(this::mapItemToItemDto)
                 .orElseThrow(() -> new ItemNotFoundException(String.format(ITEM_NOT_FOUND_MESSAGE, id)));
     }
-
-//    public List<ItemDto> getItemsByCategoryId(Long id) {
-//        return itemRepository.findByCategoryId(id)
-//                .stream()
-//                .map(this::mapItemToItemDto)
-//                .toList();
-//    }
 
     public Page<ItemDto> getItemsByCategoryId(Long id, Pageable pageable) {
         Page<Item> itemsPage = itemRepository.findByCategoryId(id, pageable);
