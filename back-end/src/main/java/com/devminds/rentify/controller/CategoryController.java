@@ -1,6 +1,11 @@
 package com.devminds.rentify.controller;
 
+
+
+import com.devminds.rentify.entity.Category;
+
 import com.devminds.rentify.dto.CategoryDto;
+
 import com.devminds.rentify.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +28,9 @@ public class CategoryController {
     }
 
     @GetMapping
+
     public ResponseEntity<List<CategoryDto>> getAllCategories() {
+
         return ResponseEntity.ok(categoryService.getAllCategories());
     }
 

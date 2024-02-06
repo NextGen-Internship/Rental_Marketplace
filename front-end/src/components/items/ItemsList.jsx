@@ -7,17 +7,33 @@ import noImage from "../../assets/no-image.avif";
 import { jwtDecode } from "jwt-decode";
 import axios from "axios";
 
+import FilterComponent from "../filter/FilterComponent";
+
 const endpointItems = "items";
 
-const ItemsList = ({ searchTerm }) => {
-  const { id: categoryId } = useParams();
+const ItemsList = (notShowDropdown) => {
+
   const [likedItems, setLikedItems] = useState(new Set());
   const [items, setItems] = useState([]);
+  const [formSubmitted, setFormSubmitted] = useState(false);
   const [userId, setUserId] = useState(null);
+  const [filteredItems, setFilteredItems] = useState([]);
+  const { id: categoryId } = useParams();
   const [currentPage, setCurrentPage] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
   const [pageSize, setPageSize] = useState(2);
   const [sortOrder, setSortOrder] = useState("asc");
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+
+    if (token !== null) {
+      const decoded = jwtDecode(token);
+      setUserId(decoded.jti);
+    }
+
+    // console.log(userId);
+  }, []);
 
   useEffect(() => {
     const fetchItems = async () => {
@@ -36,7 +52,6 @@ const ItemsList = ({ searchTerm }) => {
         console.error("Error fetching items:", error.message);
       }
     };
-
     const fetchLikedItemsFromDB = async () => {
       try {
         const token = localStorage.getItem("token");
@@ -66,13 +81,22 @@ const ItemsList = ({ searchTerm }) => {
     };
 
     fetchLikedItemsFromDB();
-    fetchItems();
+    // fetchItems();
+
+    console.log("f ", filteredItems)
+  
   }, [currentPage, categoryId, sortOrder]);
+
+  const handleFilterChange = (filteredItems) => {
+    setFormSubmitted(true);
+    setFilteredItems(filteredItems);
+  };
 
   const handleLikeClick = async (itemId) => {
     const token = localStorage.getItem("token");
     const decoded = jwtDecode(token);
     const userId = decoded.jti;
+    console.log("handleLikeClick called for item:", itemId);
 
     const updatedLikedItems = new Set(likedItems);
     if (likedItems.has(itemId)) {
@@ -83,6 +107,11 @@ const ItemsList = ({ searchTerm }) => {
 
     const isLiked = !likedItems.has(itemId);
     setLikedItems(updatedLikedItems);
+    const requestBody = {
+      itemId: itemId,
+      userId: parseInt(userId, 10),
+      isLiked: isLiked,
+    };
 
     try {
       const response = await fetch(
@@ -92,13 +121,12 @@ const ItemsList = ({ searchTerm }) => {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({
-            itemId,
-            userId: parseInt(userId, 10),
-            isLiked,
-          }),
+          body: JSON.stringify(requestBody),
         }
       );
+
+      console.log("isLike");
+      console.log(JSON.stringify(requestBody));
 
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
@@ -108,20 +136,6 @@ const ItemsList = ({ searchTerm }) => {
     }
   };
 
-  const filteredItems = items.filter((item) =>
-    item.name.toLowerCase().includes((searchTerm ?? "").toLowerCase())
-  );
-
-  useEffect(() => {
-    const googleToken = localStorage.getItem("google_token");
-    const regularToken = localStorage.getItem("token");
-
-    const token = googleToken !== null ? googleToken : regularToken;
-    if (token !== null) {
-      const decoded = jwtDecode(token);
-      setUserId(decoded.jti);
-    }
-  }, []);
 
   const handleViewClick = (itemId) => {
     if (userId === null) {
@@ -140,41 +154,19 @@ const ItemsList = ({ searchTerm }) => {
   };
 
   return (
-    <div>
-      <div className="btn-group" role="group">
-        <button
-          id="btnGroupDrop1"
-          type="button"
-          className="btn btn-primary dropdown-toggle"
-          data-bs-toggle="dropdown"
-          aria-expanded="false"
-        >
-          Order by price
-        </button>
-        <ul className="dropdown-menu" aria-labelledby="btnGroupDrop1">
-          <li>
-            <a
-              className="dropdown-item"
-              href="#"
-              onClick={() => setSortOrder("asc")}
-            >
-              Ascending
-            </a>
-          </li>
-          <li>
-            <a
-              className="dropdown-item"
-              href="#"
-              onClick={() => setSortOrder("desc")}
-            >
-              Descending
-            </a>
-          </li>
-        </ul>
-      </div>
+      <div>
+      <FilterComponent
+        notShowDropdown={notShowDropdown}
+        categoryId={categoryId}
+        onFilterChange={handleFilterChange}
+      />
+
+
+    
       <div className="items-list">
-        {items &&
-          filteredItems.map((item) => (
+      {
+          filteredItems && filteredItems.content &&
+          filteredItems.content.map((item) => (
             <div className="items-list-item" key={item.id}>
               <Link
                 to={`/items/${item.id}`}
@@ -189,7 +181,7 @@ const ItemsList = ({ searchTerm }) => {
                   <div className="card-body">
                     <h3 className="card-title">{item.name}</h3>
                     <p className="card-text">{"$" + item.price}</p>
-                    <p className="card-text">{item.address}</p>
+                    <p className="card-text">{item.addresses}</p>
                   </div>
                 </div>
               </Link>
@@ -205,8 +197,12 @@ const ItemsList = ({ searchTerm }) => {
                 <FavoriteIcon />
               </button>
             </div>
-          ))}
+          )
+        )}
       </div>
+
+
+
       <br /> <br />
       <nav aria-label="Page navigation example">
         <ul className="pagination justify-content-center">
@@ -251,7 +247,7 @@ const ItemsList = ({ searchTerm }) => {
         </ul>
       </nav>
     </div>
-  );
+    )
 };
 
 export default ItemsList;

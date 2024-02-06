@@ -70,4 +70,17 @@ public class ItemController {
 
         return ResponseEntity.ok(items);
     }
+
+    @GetMapping("/filter")
+    public List<ItemDto> getFilteredItems(
+            @RequestParam(required = false) String category,
+            @RequestParam(required = false) Float priceFrom,
+            @RequestParam(required = false) Float priceTo,
+            @RequestParam(required = false) String address,
+            @RequestParam(required = false) String searchTerm) {
+
+
+
+        return itemService.getFilteredItems(category, priceFrom, priceTo, address ,searchTerm );
+    }
 }

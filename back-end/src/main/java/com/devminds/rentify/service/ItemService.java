@@ -12,10 +12,12 @@ import com.devminds.rentify.repository.AddressRepository;
 import com.devminds.rentify.repository.CategoryRepository;
 import com.devminds.rentify.repository.ItemRepository;
 import com.devminds.rentify.repository.PictureRepository;
+import jakarta.persistence.criteria.Predicate;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -92,6 +94,13 @@ public class ItemService {
         return itemsPage.map(this::mapItemToItemDto);
     }
 
+    public List<ItemDto> getAllItems() {
+        return itemRepository.findAll()
+                .stream()
+                .map(this::mapItemToItemDto)
+                .toList();
+    }
+
     public Item findById(Long itemId) {
         Optional<Item> itemOptional = itemRepository.findById(itemId);
         return itemOptional.orElse(null);
@@ -115,4 +124,55 @@ public class ItemService {
     private Item mapItemDtoToItem(ItemDto itemDto) {
         return modelMapper.map(itemDto, Item.class);
     }
+
+    public Page<ItemDto> getFilteredItems(String categoryId, Float priceFrom, Float priceTo, String cityName,
+                                          String searchTerm, Pageable pageable) {
+
+        Specification<Item> spec = (root, query, cb) -> {
+            List<Predicate> predicates = new ArrayList<>();
+            Long idOfCategory;
+
+            try {
+                idOfCategory = Long.parseLong(categoryId);
+
+            } catch (NumberFormatException e) {
+                idOfCategory = null;
+            }
+
+            if (searchTerm != null && !searchTerm.isEmpty()) {
+                predicates.add(cb.like(cb.lower(root.get("name")), "%" + searchTerm.toLowerCase() + "%"));
+            }
+
+            if (idOfCategory != null) {
+                Optional<Category> optionalCategory = categoryRepository.findById(idOfCategory);
+                optionalCategory.ifPresent(category -> predicates.add(cb.equal(root.get("category"), category)));
+            }
+
+            if ((priceFrom != null && priceFrom >= 0) || (priceTo != null && priceTo >= 0)) {
+                if (priceFrom != null && priceTo != null && priceFrom >= 0 && priceTo >= 0) {
+                    predicates.add(cb.between(root.get("price"), priceFrom, priceTo));
+                } else if (priceFrom != null && priceFrom >= 0) {
+                    predicates.add(cb.greaterThanOrEqualTo(root.get("price"), priceFrom));
+                } else if (priceTo != null && priceTo >= 0) {
+                    predicates.add(cb.lessThanOrEqualTo(root.get("price"), priceTo));
+                }
+            }
+
+            if (cityName != null && !cityName.isEmpty()) {
+                List<Address> addresses = addressRepository.findByCity(cityName);
+                if (!addresses.isEmpty()) {
+                    Address address = addresses.get(0);
+                    predicates.add(cb.equal(root.get("address"), address));
+                }
+            }
+
+            return cb.and(predicates.toArray(new Predicate[0]));
+        };
+
+        Page<Item> pageResult = itemRepository.findAll(spec, pageable);
+
+        return pageResult.map(this::mapItemToItemDto);
+    }
+
+
 }

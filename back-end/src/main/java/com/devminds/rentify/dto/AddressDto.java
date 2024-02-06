@@ -6,8 +6,6 @@ import lombok.Builder;
 import lombok.Data;
 
 @Data
-@Builder
-@AllArgsConstructor
 public class AddressDto {
 
     @NotEmpty(message = "city is required")

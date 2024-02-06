@@ -1,14 +1,22 @@
 package com.devminds.rentify.service;
 
+
+
+import com.devminds.rentify.dto.ItemDto;
+
 import com.devminds.rentify.dto.CategoryDto;
+
 import com.devminds.rentify.entity.Category;
+import com.devminds.rentify.entity.Item;
 import com.devminds.rentify.exception.CategoryNotFoundException;
+import com.devminds.rentify.exception.ItemNotFoundException;
 import com.devminds.rentify.repository.CategoryRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class CategoryService {
@@ -22,12 +30,14 @@ public class CategoryService {
         this.modelMapper = modelMapper;
     }
 
+
     public List<CategoryDto> getAllCategories() {
         return categoryRepository
                 .findAll()
                 .stream()
                 .map(this::mapCategoryToCategoryDto)
                 .toList();
+
     }
 
     public CategoryDto getCategoryById(long id) {
@@ -39,4 +49,5 @@ public class CategoryService {
     private CategoryDto mapCategoryToCategoryDto(Category category) {
         return modelMapper.map(category, CategoryDto.class);
     }
+
 }
