@@ -89,6 +89,8 @@ public class UserServiceImpl implements UserService {
     }
 
     public UserDto getUserById(Long id) {
+
+        System.out.println(id);
         return userRepository.findById(id)
                 .map(this::mapUserToUserDto)
                 .orElseThrow(() -> new UsernameNotFoundException(String.format(USER_NOT_FOUND_MESSAGE, id)));
@@ -147,6 +149,8 @@ public class UserServiceImpl implements UserService {
         User existingUser = userRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + id));
 
+        AddressDto addressDto = updatedUserInfoDto.getAddressDto();
+
         if (updatedUserInfoDto.getFirstName() != null) {
             existingUser.setFirstName(updatedUserInfoDto.getFirstName());
         }
@@ -159,26 +163,38 @@ public class UserServiceImpl implements UserService {
             existingUser.setPhoneNumber(updatedUserInfoDto.getPhoneNumber());
         }
 
-        AddressDto addressDto = updatedUserInfoDto.getAddressDto();
-        if (addressDto != null && isAnyAddressFieldProvided(addressDto)) {
-            // Find the existing Address
-            Address existingAddress = existingUser.getAddresses().stream()
-                    .findFirst()
-                    .orElseThrow(() -> new EntityNotFoundException("Address not found"));
 
-            // Update the existing Address fields
-            existingAddress.setCity(addressDto.getCity());
-            existingAddress.setStreet(addressDto.getStreet());
-            existingAddress.setPostCode(addressDto.getPostCode());
-            existingAddress.setStreetNumber(addressDto.getStreetNumber());
+        if (addressDto.getCity() != null && addressDto.getStreet() != null && addressDto.getStreetNumber() != null
+                && addressDto.getPostCode() != null) {
 
-            // Save the existing Address
-            addressRepository.save(existingAddress);
+            Address address = existingUser.getAddress();
+            if (address == null) {
+                address = new Address();
+
+            }
+            address.setCity(addressDto.getCity());
+            address.setPostCode(addressDto.getPostCode());
+            address.setStreet(addressDto.getStreet());
+            address.setStreetNumber(addressDto.getStreetNumber());
+
+
+            addressRepository.save(address);
+
+            existingUser.setAddress(address);
         }
 
-        User updatedUser = userRepository.save(existingUser);
-        return mapUserToUserDto(updatedUser);
+
+
+
+        userRepository.save(existingUser);
+
+
+        System.out.println(mapUserToUserDto(existingUser));
+        return mapUserToUserDto(existingUser);
     }
+
+
+
 
     private boolean isAnyAddressFieldProvided(AddressDto addressDto) {
         return addressDto.getCity() != null || addressDto.getStreet() != null ||

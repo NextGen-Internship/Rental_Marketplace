@@ -46,7 +46,6 @@ public class UserController {
     public ResponseEntity<UserDto> updateUser(@PathVariable Long id ,
                                               @RequestBody UpdatedUserInfoDto updatedUserInfoDto ){
 
-        System.out.println(updatedUserInfoDto.getAddressDto());
         return new ResponseEntity<>(userService.updateUserInfo(id , updatedUserInfoDto), HttpStatus.OK);
 
     }
