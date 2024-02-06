@@ -13,6 +13,7 @@ const FilterComponent = ({ notShowDropdown, categoryId, onFilterChange }) => {
   const [priceTo, setPriceTo] = useState("");
   const [selectedAddress, setSelectedAddress] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
+  const [sortOrder, setSortOrder] = useState("asc");
 
   const [priceError, setPriceError] = useState("");
 
@@ -84,13 +85,14 @@ const FilterComponent = ({ notShowDropdown, categoryId, onFilterChange }) => {
         priceTo: parseFloat(priceTo),
         address: selectedAddress,
         name: searchTerm,
+        sortDirection: sortOrder
       };
 
       const apiUrl = `http://localhost:8080/rentify/items/filter?category=${
         filters.category
       }&priceFrom=${filters.priceFrom || ""}&priceTo=${
         filters.priceTo || ""
-      }&address=${filters.address}&searchTerm=${filters.name}`;
+      }&address=${filters.address}&searchTerm=${filters.name}&sortDirection=${filters.sortDirection}`;
 
       console.log(apiUrl);
 
@@ -204,6 +206,18 @@ const FilterComponent = ({ notShowDropdown, categoryId, onFilterChange }) => {
             </div>
 
             <div className="col-12">
+  <select
+    className="form-select"
+    id="orderBySelect"
+    value={sortOrder}
+    onChange={(e) => setSortOrder(e.target.value)}
+  >
+    <option value="asc">Order By Price Asc</option>
+    <option value="desc">Order By Price Desc</option>
+  </select>
+</div>
+
+            <div className="col-12">
               <button
                 type="submit"
                 className="btn btn-primary"
@@ -281,6 +295,19 @@ const FilterComponent = ({ notShowDropdown, categoryId, onFilterChange }) => {
                 ))}
               </select>
             </div>
+
+            <div className="col-12">
+  <select
+    className="form-select"
+    id="orderBySelect"
+    value={sortOrder}
+    onChange={(e) => setSortOrder(e.target.value)}
+  >
+    <option value="asc">Order By Price Asc</option>
+    <option value="desc">Order By Price Desc</option>
+  </select>
+</div>
+
 
             <div className="col-12">
               <button

@@ -83,13 +83,15 @@ const ItemsList = (notShowDropdown) => {
     fetchLikedItemsFromDB();
     fetchItems();
 
-    console.log("f ", filteredItems)
+    //console.log("f ", filteredItems)
   
   }, [currentPage, categoryId, sortOrder]);
 
   const handleFilterChange = (filteredItems) => {
     setFormSubmitted(true);
     setFilteredItems(filteredItems);
+    console.log("aaaa", filteredItems);
+    setTotalPages(filteredItems.totalPages);
   };
 
   const handleLikeClick = async (itemId) => {
@@ -161,7 +163,7 @@ const ItemsList = (notShowDropdown) => {
         onFilterChange={handleFilterChange}
       />
 
-<div className="btn-group" role="group">
+{/* <div className="btn-group" role="group">
         <button
           id="btnGroupDrop1"
           type="button"
@@ -191,12 +193,13 @@ const ItemsList = (notShowDropdown) => {
             </a>
           </li>
         </ul>
-      </div>
+      </div> */}
 
 
     
       <div className="items-list">
       {
+        formSubmitted ? 
           filteredItems && filteredItems.content &&
           filteredItems.content.map((item) => (
             <div className="items-list-item" key={item.id}>
@@ -230,7 +233,46 @@ const ItemsList = (notShowDropdown) => {
               </button>
             </div>
           )
-        )}
+        ) 
+        : 
+        
+        items &&
+          items.map((item) => (
+            <div className="items-list-item" key={item.id}>
+              <Link
+                to={`/items/${item.id}`}
+                onClick={() => handleViewClick(item.id)}
+              >
+                <div className="card">
+                  <img
+                    src={item.thumbnail || noImage}
+                    className="card-img-top"
+                    alt={item.name}
+                  />
+                  <div className="card-body">
+                    <h3 className="card-title">{item.name}</h3>
+                    <p className="card-text">{"$" + item.price}</p>
+                    <p className="card-text">{item.addresses}</p>
+                  </div>
+                </div>
+              </Link>
+              <button
+                className={`like-button ${
+                  likedItems.has(item.id) ? "clicked" : ""
+                }`}
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleLikeClick(item.id);
+                }}
+              >
+                <FavoriteIcon />
+              </button>
+            </div>
+          )
+        )        
+        }
+
+
       </div>
 
 
@@ -278,6 +320,7 @@ const ItemsList = (notShowDropdown) => {
           </li>
         </ul>
       </nav>
+
     </div>
     )
 };
