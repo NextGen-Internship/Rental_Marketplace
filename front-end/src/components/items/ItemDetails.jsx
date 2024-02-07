@@ -4,6 +4,9 @@ import { useParams, useNavigate } from "react-router-dom";
 import Carousel from "./carousel/Carousel";
 import "./ItemDetails.css";
 import { jwtDecode } from "jwt-decode";
+import ReviewsItems  from "../reviews-items/ReviewsItems";
+import { South } from "@mui/icons-material";
+
 
 const endpoint = "items/";
 
@@ -31,6 +34,9 @@ const ItemDetails = () => {
       }
     };
 
+
+    console.log("iditooo na aitemaa")
+    console.log(id);
     if (!item) {
       fetchItem();
     }
@@ -77,6 +83,8 @@ const ItemDetails = () => {
             <h3>Posted by</h3>
             <p>{item.user.firstName + " " + item.user.lastName}</p>
             <button className="message-button">Message</button>
+
+            <ReviewsItems itemId = {id}  userId = {userId}/>
           </div>
         </div>
       )}

@@ -13,6 +13,7 @@ import Register from "./components/login/Register";
 import FilterComponent from "./components/filter/FilterComponent";
 import Views from "./components/views/Views";
 import LikedItemsPage from "./components/items/LikedItemsPage";
+// import ReviewsItems from "./components/reviews-items/ReviewsItems";
 function App() {
   return (
     <Router>
@@ -32,6 +33,7 @@ function App() {
           <Route path="/items/create" element={<CreateItem />} />
           <Route path="/views" element={<Views />} />
           <Route exact path="/likes" element={<LikedItemsPage />} />
+          {/* <Route path="/review" element ={<ReviewsItems /> }/> */}
 
         </Routes>
 
