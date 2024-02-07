@@ -10,19 +10,13 @@ import { jwtDecode } from "jwt-decode";
 
 const Navbar = () => {
   const location = useLocation();
-  const [isLoggedIn, setIsLoggedIn] = useState(
-    localStorage.getItem('google_token') !== null || localStorage.getItem('token') !== null ? true : false);
+  const [isLoggedIn, setIsLoggedIn] = useState(localStorage.getItem('token') !== null ? true : false);
 
   useEffect(() => {
-    const googleToken = localStorage.getItem('google_token');
-    const regularToken = localStorage.getItem('token');
+    const token = localStorage.getItem('token');
 
-    if (googleToken !== null || regularToken !== null) {
-      setIsLoggedIn(true);
-    }
-
-    const token = googleToken !== null ? googleToken : regularToken;
     if (token !== null) {
+      setIsLoggedIn(true);
       const decoded = jwtDecode(token);
 
       setUserProfile({

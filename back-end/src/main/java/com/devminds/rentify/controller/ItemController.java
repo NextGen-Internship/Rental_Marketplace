@@ -40,8 +40,23 @@ public class ItemController {
         return ResponseEntity.ok(itemService.getItemsByCategoryId(id));
     }
 
+
     @GetMapping("/user/published/{userId}")
     public ResponseEntity<List<ItemDto>> getPublishedItemsByUserId(@PathVariable Long userId) {
         return ResponseEntity.ok(itemService.getPublishedItemsByUserId(userId));
+}
+
+    @GetMapping("/filter")
+    public List<ItemDto> getFilteredItems(
+            @RequestParam(required = false) String category,
+            @RequestParam(required = false) Float priceFrom,
+            @RequestParam(required = false) Float priceTo,
+            @RequestParam(required = false) String address,
+            @RequestParam(required = false) String searchTerm) {
+
+
+
+        return itemService.getFilteredItems(category, priceFrom, priceTo, address ,searchTerm );
+
     }
 }

@@ -9,9 +9,13 @@ import ItemDetails from "./components/items/ItemDetails";
 import Login from "./components/login/Login";
 import CreateItem from "./components/add-item/Create-item";
 import Register from "./components/login/Register";
+
+import FilterComponent from "./components/filter/FilterComponent";
 import Views from "./components/views/Views";
 import LikedItemsPage from "./components/items/LikedItemsPage";
+
 import ProfilePage from "./components/profile-page/ProfilePage";
+
 
 function App() {
   return (
@@ -27,10 +31,14 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="*" element={<NotFound />} />
           <Route path="/notfound" element={<NotFound />} />
+
+<Route path="/filter" element={<FilterComponent />} />
           <Route path="/items/create" element={<CreateItem />} />
           <Route path="/views" element={<Views />} />
           <Route exact path="/likes" element={<LikedItemsPage />} />
+
           <Route path = "/settings" element = {<ProfilePage/>}/>
+
         </Routes>
 
         <Footer />

@@ -1,6 +1,6 @@
 package com.devminds.rentify.controller;
 
-import com.devminds.rentify.entity.Address;
+import com.devminds.rentify.dto.AddressDto;
 import com.devminds.rentify.service.AddressService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -21,9 +21,9 @@ public class AddressController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Address>> getAllAddresses() {
+    public ResponseEntity<List<AddressDto>> getAllAddresses() {
         return ResponseEntity.ok(addressService.getAllAddresses());
     }
 
-
+//         const responseAddress = await fetch('http://localhost:8080/rentify/addresses');
 }
