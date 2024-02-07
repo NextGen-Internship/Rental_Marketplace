@@ -57,19 +57,25 @@ public class ItemController {
         return ResponseEntity.ok(itemService.getItemById(id));
     }
 
-    @GetMapping("/category/{id}")
+    @GetMapping("/filter/category/{id}")
     public ResponseEntity<Page<ItemDto>> getItemsByCategoryId(
             @PathVariable Long id,
+            @RequestParam(required = false) Float priceFrom,
+            @RequestParam(required = false) Float priceTo,
+            @RequestParam(required = false) String address,
+            @RequestParam(required = false) String searchTerm,
             @RequestParam(defaultValue = DEFAULT_FIRST_PAGE_NUMBER) int page,
             @RequestParam(defaultValue = DEFAULT_PAGE_SIZE) int size,
             @RequestParam(defaultValue = DEFAULT_SORTING_ORDER) String sortDirection) {
 
-        Sort.Direction sortOrder = sortDirection.equalsIgnoreCase(DEFAULT_SORTING_ORDER) ?
+        Sort.Direction direction = sortDirection.equalsIgnoreCase(DEFAULT_SORTING_ORDER) ?
                 Sort.Direction.ASC : Sort.Direction.DESC;
-        Page<ItemDto> items = itemService.getItemsByCategoryId(id,
-                PageRequest.of(page, size, Sort.by(sortOrder, SORT_CRITERIA_PRICE)));
+        Sort sort = Sort.by(direction, SORT_CRITERIA_PRICE);
 
-        return ResponseEntity.ok(items);
+        Pageable pageable = PageRequest.of(page, size, sort);
+
+        return ResponseEntity.ok(
+                itemService.getFilteredItems(String.valueOf(id), priceFrom, priceTo, address, searchTerm, pageable));
     }
 
     @GetMapping("/filter")

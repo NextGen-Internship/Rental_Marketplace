@@ -5,23 +5,29 @@ import "./ItemsList.css";
 import { fetchData } from "../fetchData";
 import noImage from "../../assets/no-image.avif";
 import { jwtDecode } from "jwt-decode";
+import SearchIcon from "@mui/icons-material/Search";
+import MonetizationOnIcon from "@mui/icons-material/MonetizationOn";
 import axios from "axios";
-
-import FilterComponent from "../filter/FilterComponent";
 
 const endpointItems = "items";
 
-const ItemsList = (notShowDropdown) => {
+const ItemsList = () => {
   const [likedItems, setLikedItems] = useState(new Set());
   const [items, setItems] = useState([]);
-  const [formSubmitted, setFormSubmitted] = useState(false);
   const [userId, setUserId] = useState(null);
-  const [filteredItems, setFilteredItems] = useState([]);
   const { id: categoryId } = useParams();
   const [currentPage, setCurrentPage] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
-  const [pageSize, setPageSize] = useState(2);
   const [sortOrder, setSortOrder] = useState("asc");
+
+  const [categories, setCategories] = useState([]);
+  const [addresses, setAddresses] = useState([]);
+
+  const [selectedCategory, setSelectedCategory] = useState("");
+  const [priceFrom, setPriceFrom] = useState("");
+  const [priceTo, setPriceTo] = useState("");
+  const [selectedAddress, setSelectedAddress] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -30,21 +36,54 @@ const ItemsList = (notShowDropdown) => {
       const decoded = jwtDecode(token);
       setUserId(decoded.jti);
     }
+
+    const fetchAddressAndCategory = async () => {
+      try {
+        const responseCategory = await fetch(
+          "http://localhost:8080/rentify/categories"
+        );
+        if (!responseCategory.ok) {
+          throw new Error(`HTTP error! Status: ${responseCategory.status}`);
+        }
+        const categoriesResponse = await responseCategory.json();
+
+        setCategories(categoriesResponse);
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+      }
+
+      try {
+        const responseAddress = await fetch(
+          "http://localhost:8080/rentify/addresses"
+        );
+
+        if (!responseAddress.ok) {
+          throw new Error(`HTTP error! Status: ${responseAddress.status}`);
+        }
+
+        const addressResponse = await responseAddress.json();
+
+        setAddresses(addressResponse);
+      } catch (error) {
+        console.error("Error fetching Address");
+      }
+    };
+
+    fetchAddressAndCategory();
   }, []);
 
   useEffect(() => {
     const fetchItems = async () => {
       try {
         const result = await fetchData(
-          `${endpointItems}${
+          `${endpointItems}/filter${
             categoryId ? `/category/${categoryId}` : ""
-          }?page=${currentPage}&sortDirection=${sortOrder}`
+          }?page=${currentPage}&sortDirection=${sortOrder}&category=${selectedCategory}&priceFrom=${priceFrom}&priceTo=${priceTo}&address=${selectedAddress}&searchTerm=${searchTerm}`
         );
 
-        const pageSizeFromBackend = result.pageable.pageSize || 2;
+        console.log("rrr", result );
         setItems(result.content);
         setTotalPages(result.totalPages);
-        setPageSize(pageSizeFromBackend);
       } catch (error) {
         console.error("Error fetching items:", error.message);
       }
@@ -79,13 +118,7 @@ const ItemsList = (notShowDropdown) => {
 
     fetchLikedItemsFromDB();
     fetchItems();
-  }, [currentPage, categoryId, sortOrder]);
-
-  const handleFilterChange = (filteredItems) => {
-    setFormSubmitted(true);
-    setFilteredItems(filteredItems);
-    setTotalPages(filteredItems.totalPages);
-  };
+  }, [currentPage, categoryId, sortOrder, selectedCategory, priceFrom, priceTo]);
 
   const handleLikeClick = async (itemId) => {
     const token = localStorage.getItem("token");
@@ -149,48 +182,120 @@ const ItemsList = (notShowDropdown) => {
 
   return (
     <div>
-      <FilterComponent
-        notShowDropdown={notShowDropdown}
-        categoryId={categoryId}
-        onFilterChange={handleFilterChange}
-      />
-      <div className="items-list">
-        {formSubmitted
-          ? filteredItems &&
-            filteredItems.content &&
-            filteredItems.content.map((item) => (
-              <div className="items-list-item" key={item.id}>
-                <Link
-                  to={`/items/${item.id}`}
-                  onClick={() => handleViewClick(item.id)}
-                >
-                  <div className="card">
-                    <img
-                      src={item.thumbnail || noImage}
-                      className="card-img-top"
-                      alt={item.name}
-                    />
-                    <div className="card-body">
-                      <h3 className="card-title">{item.name}</h3>
-                      <p className="card-text">{"$" + item.price}</p>
-                      <p className="card-text">{item.addresses}</p>
-                    </div>
-                  </div>
-                </Link>
-                <button
-                  className={`like-button ${
-                    likedItems.has(item.id) ? "clicked" : ""
-                  }`}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    handleLikeClick(item.id);
-                  }}
-                >
-                  <FavoriteIcon />
-                </button>
+      <div className="container pb-5" style={{"maxWidth" : "10000px"}}>
+      <form className="row row-cols-lg-auto g-3 align-items-center ms-lg-3">
+          <>
+            <div className="col-12">
+              <div className="input-group">
+                <div className="input-group-text">
+                  <SearchIcon className="search-icon" />
+                </div>
+                <input
+                  type="text"
+                  className="form-control"
+                  id="inlineFormInputGroupUsername"
+                  placeholder="Search by name"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                />
               </div>
-            ))
-          : items &&
+            </div>
+
+            { categoryId === undefined && <div className="col-12">
+              <select
+                className="form-select"
+                id="inlineFormSelectPref"
+                value={selectedCategory}
+                onChange={(e) => setSelectedCategory(e.target.value)}
+              >
+                <option value="">Category...</option>
+                {categories.map((category) => (
+                  <option key={category.id} value={category.id}>
+                    {category.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+            }
+
+            <div className="col-12">
+              <label className="visually-hidden">Username</label>
+              <div className="input-group">
+                <div className="input-group-text">
+                  <MonetizationOnIcon className="search-icon" />
+                </div>
+                <input
+                  type="number"
+                  className="form-control"
+                  id="inlineFormInputGroupUsername"
+                  placeholder="Price From"
+                  value={priceFrom}
+                  onChange={(e) => setPriceFrom(e.target.value)}
+                />
+              </div>
+            </div>
+
+            <div className="col-12">
+              <div className="input-group">
+                <div className="input-group-text">
+                  <MonetizationOnIcon className="search-icon" />
+                </div>
+                <input
+                  type="number"
+                  className="form-control"
+                  id="inlineFormInputGroupUsername"
+                  placeholder="Price To"
+                  value={priceTo}
+                  onChange={(e) => setPriceTo(e.target.value)}
+                />
+              </div>
+            </div>
+
+            <div className="col-12">
+              <select
+                className="form-select"
+                id="inlineFormSelectPref"
+                value={selectedAddress}
+                onChange={(e) => setSelectedAddress(e.target.value)}
+              >
+                <option value="">City...</option>
+                {addresses.map((address) => (
+                  <option key={address.id} value={address.name}>
+                    {address.city}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div className="col-12">
+              <select
+                className="form-select"
+                id="orderBySelect"
+                value={sortOrder}
+                onChange={(e) => setSortOrder(e.target.value)}
+              >
+                <option value="asc">Order By Price Asc</option>
+                <option value="desc">Order By Price Desc</option>
+              </select>
+            </div>
+
+            {/* <div className="col-12">
+              <button
+                type="submit"
+                className="btn btn-primary"
+                onClick={applyFilters}
+              >
+                Submit
+              </button>
+            </div> */}
+          </>
+        
+      </form>
+    </div>
+
+      <div className="items-list">
+        {
+          items &&
             items.map((item) => (
               <div className="items-list-item" key={item.id}>
                 <Link
@@ -224,6 +329,8 @@ const ItemsList = (notShowDropdown) => {
               </div>
             ))}
       </div>
+
+
       <br /> <br />
       <nav aria-label="Page navigation example">
         <ul className="pagination justify-content-center">
