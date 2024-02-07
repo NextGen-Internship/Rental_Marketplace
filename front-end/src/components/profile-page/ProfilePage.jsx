@@ -58,17 +58,17 @@ const ProfilePage = () => {
                     'Content-Type': 'multipart/form-data'
                 }
             });
-        
+
             setUserInfo(response.data);
             setEditPictureMode(false);
+            window.location.reload();
+
         } catch (error) {
             console.error('Error uploading picture:', error);
         }
     };
     
     const handleFileChange = (event) => {
-        console.log("chec=kvaaaaa handleafifrfr")
-        console.log(event.target.files[0])
         setimageFile(event.target.files[0]);
       };
 
@@ -89,15 +89,16 @@ const ProfilePage = () => {
             postCode: editedUserInfo.address.postCode || "",
             street: editedUserInfo.address.street || "",
             streetNumber: editedUserInfo.address.streetNumber || ""
-        } : {};
-
+        } : null; 
+        
         const updatedUserInfo = {
             ...editedUserInfo,
-            address: {
+            address: editedAddress !== null ? {
                 ...userInfo.address,
                 ...editedAddress
-            }
+            } : {} 
         };
+        
 
         try {
             const response = await axios.put(`http://localhost:8080/rentify/update/${userId}`, {
@@ -158,13 +159,10 @@ const ProfilePage = () => {
         const userId = decoded.jti;
 
 
-        console.log(userId);
         const fetchUserItems = async () => {
 
             try {
                 const response = await axios.get(`http://localhost:8080/rentify/items/user/published/${userId}`);
-
-                console.log("responsaaaa " + response.data)
 
                 setuserItems(response.data);
 
@@ -175,19 +173,10 @@ const ProfilePage = () => {
 
         const fetchUserInfo = async () => {
 
-            console.log(userId);
 
             try {
                 const response = await axios.get(`http://localhost:8080/rentify/users/${userId}`);
-
-                console.log("responsaa na infoto ");
-                console.log(response.data)
                 setUserInfo(response.data);
-
-                console.log("profilnataaa ")
-                console.log(userInfo.profilePicture);
-
-
 
             }
             catch (error) {
@@ -201,9 +190,6 @@ const ProfilePage = () => {
         fetchUserInfo();
     }, []);
 
-
-    console.log("UserInfo:", userInfo);
-    console.log("Profile Picture URL:", userInfo.profilePicture);
 
     return (
         <div className="container">
@@ -319,6 +305,7 @@ const ProfilePage = () => {
                                                         <input
                                                             type="text"
                                                             name="address.city"
+                                                            placeholder="City"
                                                             value={editedUserInfo.address?.city || ''}
                                                             onChange={handleInputChange}
                                                         />
@@ -327,6 +314,7 @@ const ProfilePage = () => {
                                                         <input
                                                             type="text"
                                                             name="address.postCode"
+                                                            placeholder="Post code"
                                                             value={editedUserInfo.address?.postCode || ''}
                                                             onChange={handleInputChange}
                                                         />
@@ -336,6 +324,7 @@ const ProfilePage = () => {
                                                         <input
                                                             type="text"
                                                             name="address.street"
+                                                            placeholder="Street"
                                                             value={editedUserInfo.address?.street || ''} onChange={handleInputChange}
                                                         />
                                                         <br />
@@ -343,6 +332,7 @@ const ProfilePage = () => {
                                                         <input
                                                             type="text"
                                                             name="address.streetNumber"
+                                                            placeholder="Street number"
                                                             value={editedUserInfo.address?.streetNumber || ''} onChange={handleInputChange}
                                                         />
                                                     </>
@@ -390,20 +380,30 @@ const ProfilePage = () => {
 
                                 <h5 className="card-title">Published  Items:</h5>
                                 <div className="items-list">
-                                    {userItems.map((item) => (
-                                        <div className="items-list-item" key={item.id}>
-                                            <Link to={`/items/${item.id}`} onClick={() => (item.id)}>
-                                                <div className="card">
-                                                    <img src={item.thumbnail || noImage} className="card-img-top" alt={item.name} />
-                                                    <div className="card-body">
-                                                        <h3 className="card-title">{item.name}</h3>
-                                                        <p className="card-text">{"$" + item.price}</p>
-                                                        <p className="card-text">{item.address}</p>
-                                                    </div>
+                               { userItems.length === 0 ? (
+
+                            <h4>Not published Items yet :(</h4>
+                               ): ( 
+                                <> 
+                                {userItems.map((item) => (
+                                    <div className="items-list-item" key={item.id}>
+                                        <Link to={`/items/${item.id}`} onClick={() => (item.id)}>
+                                            <div className="card">
+                                                <img src={item.thumbnail || noImage} className="card-img-top" alt={item.name} />
+                                                <div className="card-body">
+                                                    <h3 className="card-title">{item.name}</h3>
+                                                    <p className="card-text">{"$" + item.price}</p>
+                                                    <p className="card-text">{item.address}</p>
                                                 </div>
-                                            </Link>
-                                        </div>
-                                    ))}
+                                            </div>
+                                        </Link>
+                                    </div>
+                                ))}
+
+                                </>
+                               ) };
+
+                                
                                 </div>
                             </div>
                         </div>
