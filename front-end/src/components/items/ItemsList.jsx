@@ -118,7 +118,7 @@ const ItemsList = () => {
 
     fetchLikedItemsFromDB();
     fetchItems();
-  }, [currentPage, categoryId, sortOrder, selectedCategory, priceFrom, priceTo]);
+  }, [currentPage, categoryId, sortOrder, selectedCategory, priceFrom, priceTo, searchTerm, selectedAddress]);
 
   const handleLikeClick = async (itemId) => {
     const token = localStorage.getItem("token");
