@@ -12,7 +12,6 @@ import FilterComponent from "../filter/FilterComponent";
 const endpointItems = "items";
 
 const ItemsList = (notShowDropdown) => {
-
   const [likedItems, setLikedItems] = useState(new Set());
   const [items, setItems] = useState([]);
   const [formSubmitted, setFormSubmitted] = useState(false);
@@ -31,8 +30,6 @@ const ItemsList = (notShowDropdown) => {
       const decoded = jwtDecode(token);
       setUserId(decoded.jti);
     }
-
-    // console.log(userId);
   }, []);
 
   useEffect(() => {
@@ -82,15 +79,11 @@ const ItemsList = (notShowDropdown) => {
 
     fetchLikedItemsFromDB();
     fetchItems();
-
-    //console.log("f ", filteredItems)
-  
   }, [currentPage, categoryId, sortOrder]);
 
   const handleFilterChange = (filteredItems) => {
     setFormSubmitted(true);
     setFilteredItems(filteredItems);
-    console.log("aaaa", filteredItems);
     setTotalPages(filteredItems.totalPages);
   };
 
@@ -138,7 +131,6 @@ const ItemsList = (notShowDropdown) => {
     }
   };
 
-
   const handleViewClick = (itemId) => {
     if (userId === null) {
       return;
@@ -156,127 +148,82 @@ const ItemsList = (notShowDropdown) => {
   };
 
   return (
-      <div>
+    <div>
       <FilterComponent
         notShowDropdown={notShowDropdown}
         categoryId={categoryId}
         onFilterChange={handleFilterChange}
       />
-
-{/* <div className="btn-group" role="group">
-        <button
-          id="btnGroupDrop1"
-          type="button"
-          className="btn btn-primary dropdown-toggle"
-          data-bs-toggle="dropdown"
-          aria-expanded="false"
-        >
-          Order by price
-        </button>
-        <ul className="dropdown-menu" aria-labelledby="btnGroupDrop1">
-          <li>
-            <a
-              className="dropdown-item"
-              href="#"
-              onClick={() => setSortOrder("asc")}
-            >
-              Ascending
-            </a>
-          </li>
-          <li>
-            <a
-              className="dropdown-item"
-              href="#"
-              onClick={() => setSortOrder("desc")}
-            >
-              Descending
-            </a>
-          </li>
-        </ul>
-      </div> */}
-
-
-    
       <div className="items-list">
-      {
-        formSubmitted ? 
-          filteredItems && filteredItems.content &&
-          filteredItems.content.map((item) => (
-            <div className="items-list-item" key={item.id}>
-              <Link
-                to={`/items/${item.id}`}
-                onClick={() => handleViewClick(item.id)}
-              >
-                <div className="card">
-                  <img
-                    src={item.thumbnail || noImage}
-                    className="card-img-top"
-                    alt={item.name}
-                  />
-                  <div className="card-body">
-                    <h3 className="card-title">{item.name}</h3>
-                    <p className="card-text">{"$" + item.price}</p>
-                    <p className="card-text">{item.addresses}</p>
+        {formSubmitted
+          ? filteredItems &&
+            filteredItems.content &&
+            filteredItems.content.map((item) => (
+              <div className="items-list-item" key={item.id}>
+                <Link
+                  to={`/items/${item.id}`}
+                  onClick={() => handleViewClick(item.id)}
+                >
+                  <div className="card">
+                    <img
+                      src={item.thumbnail || noImage}
+                      className="card-img-top"
+                      alt={item.name}
+                    />
+                    <div className="card-body">
+                      <h3 className="card-title">{item.name}</h3>
+                      <p className="card-text">{"$" + item.price}</p>
+                      <p className="card-text">{item.addresses}</p>
+                    </div>
                   </div>
-                </div>
-              </Link>
-              <button
-                className={`like-button ${
-                  likedItems.has(item.id) ? "clicked" : ""
-                }`}
-                onClick={(e) => {
-                  e.preventDefault();
-                  handleLikeClick(item.id);
-                }}
-              >
-                <FavoriteIcon />
-              </button>
-            </div>
-          )
-        ) 
-        : 
-        
-        items &&
-          items.map((item) => (
-            <div className="items-list-item" key={item.id}>
-              <Link
-                to={`/items/${item.id}`}
-                onClick={() => handleViewClick(item.id)}
-              >
-                <div className="card">
-                  <img
-                    src={item.thumbnail || noImage}
-                    className="card-img-top"
-                    alt={item.name}
-                  />
-                  <div className="card-body">
-                    <h3 className="card-title">{item.name}</h3>
-                    <p className="card-text">{"$" + item.price}</p>
-                    <p className="card-text">{item.addresses}</p>
+                </Link>
+                <button
+                  className={`like-button ${
+                    likedItems.has(item.id) ? "clicked" : ""
+                  }`}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleLikeClick(item.id);
+                  }}
+                >
+                  <FavoriteIcon />
+                </button>
+              </div>
+            ))
+          : items &&
+            items.map((item) => (
+              <div className="items-list-item" key={item.id}>
+                <Link
+                  to={`/items/${item.id}`}
+                  onClick={() => handleViewClick(item.id)}
+                >
+                  <div className="card">
+                    <img
+                      src={item.thumbnail || noImage}
+                      className="card-img-top"
+                      alt={item.name}
+                    />
+                    <div className="card-body">
+                      <h3 className="card-title">{item.name}</h3>
+                      <p className="card-text">{"$" + item.price}</p>
+                      <p className="card-text">{item.addresses}</p>
+                    </div>
                   </div>
-                </div>
-              </Link>
-              <button
-                className={`like-button ${
-                  likedItems.has(item.id) ? "clicked" : ""
-                }`}
-                onClick={(e) => {
-                  e.preventDefault();
-                  handleLikeClick(item.id);
-                }}
-              >
-                <FavoriteIcon />
-              </button>
-            </div>
-          )
-        )        
-        }
-
-
+                </Link>
+                <button
+                  className={`like-button ${
+                    likedItems.has(item.id) ? "clicked" : ""
+                  }`}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleLikeClick(item.id);
+                  }}
+                >
+                  <FavoriteIcon />
+                </button>
+              </div>
+            ))}
       </div>
-
-
-
       <br /> <br />
       <nav aria-label="Page navigation example">
         <ul className="pagination justify-content-center">
@@ -320,9 +267,8 @@ const ItemsList = (notShowDropdown) => {
           </li>
         </ul>
       </nav>
-
     </div>
-    )
+  );
 };
 
 export default ItemsList;

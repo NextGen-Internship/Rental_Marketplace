@@ -4,17 +4,13 @@ import MonetizationOnIcon from "@mui/icons-material/MonetizationOn";
 
 const FilterComponent = ({ notShowDropdown, categoryId, onFilterChange }) => {
   const [categories, setCategories] = useState([]);
-  // const [prices, setPrices] = useState({});
   const [addresses, setAddresses] = useState([]);
-  // const [filteredItems, setFilteredItems] = useState([]);
-
   const [selectedCategory, setSelectedCategory] = useState("");
   const [priceFrom, setPriceFrom] = useState("");
   const [priceTo, setPriceTo] = useState("");
   const [selectedAddress, setSelectedAddress] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
   const [sortOrder, setSortOrder] = useState("asc");
-
   const [priceError, setPriceError] = useState("");
 
   const handlePriceChange = (e, setPrice) => {
@@ -57,7 +53,6 @@ const FilterComponent = ({ notShowDropdown, categoryId, onFilterChange }) => {
         const responseAddress = await fetch(
           "http://localhost:8080/rentify/addresses"
         );
-        console.log(responseAddress);
 
         if (!responseAddress.ok) {
           throw new Error(`HTTP error! Status: ${responseAddress.status}`);
@@ -66,8 +61,6 @@ const FilterComponent = ({ notShowDropdown, categoryId, onFilterChange }) => {
         const addressResponse = await responseAddress.json();
 
         setAddresses(addressResponse);
-
-        console.log(addressResponse);
       } catch (error) {
         console.error("Error fetching Address");
       }
@@ -85,16 +78,16 @@ const FilterComponent = ({ notShowDropdown, categoryId, onFilterChange }) => {
         priceTo: parseFloat(priceTo),
         address: selectedAddress,
         name: searchTerm,
-        sortDirection: sortOrder
+        sortDirection: sortOrder,
       };
 
       const apiUrl = `http://localhost:8080/rentify/items/filter?category=${
         filters.category
       }&priceFrom=${filters.priceFrom || ""}&priceTo=${
         filters.priceTo || ""
-      }&address=${filters.address}&searchTerm=${filters.name}&sortDirection=${filters.sortDirection}`;
-
-      console.log(apiUrl);
+      }&address=${filters.address}&searchTerm=${filters.name}&sortDirection=${
+        filters.sortDirection
+      }`;
 
       const response = await fetch(apiUrl);
       if (!response.ok) {
@@ -102,8 +95,6 @@ const FilterComponent = ({ notShowDropdown, categoryId, onFilterChange }) => {
       }
 
       const filteredItems = await response.json();
-      console.log("Filtered items : ", filteredItems);
-
       onFilterChange(filteredItems);
     } catch (error) {
       console.error("Error applying filters:", error);
@@ -117,7 +108,7 @@ const FilterComponent = ({ notShowDropdown, categoryId, onFilterChange }) => {
   };
 
   return (
-    <div className="container pb-5">
+    <div className="container pb-5" style={{"maxWidth" : "10000px"}}>
       <form className="row row-cols-lg-auto g-3 align-items-center ms-lg-3">
         {!notShowDropdown || Object.keys(notShowDropdown).length === 0 ? (
           <>
@@ -206,16 +197,16 @@ const FilterComponent = ({ notShowDropdown, categoryId, onFilterChange }) => {
             </div>
 
             <div className="col-12">
-  <select
-    className="form-select"
-    id="orderBySelect"
-    value={sortOrder}
-    onChange={(e) => setSortOrder(e.target.value)}
-  >
-    <option value="asc">Order By Price Asc</option>
-    <option value="desc">Order By Price Desc</option>
-  </select>
-</div>
+              <select
+                className="form-select"
+                id="orderBySelect"
+                value={sortOrder}
+                onChange={(e) => setSortOrder(e.target.value)}
+              >
+                <option value="asc">Order By Price Asc</option>
+                <option value="desc">Order By Price Desc</option>
+              </select>
+            </div>
 
             <div className="col-12">
               <button
@@ -235,8 +226,8 @@ const FilterComponent = ({ notShowDropdown, categoryId, onFilterChange }) => {
                   <SearchIcon className="search-icon" />
                 </div>
                 <input
-                  className="text"
-                  class="form-control"
+                  className="text form-control"
+                  // className="form-control"
                   id="inlineFormInputGroupUsername"
                   placeholder="Search by name"
                   value={searchTerm}
@@ -297,17 +288,16 @@ const FilterComponent = ({ notShowDropdown, categoryId, onFilterChange }) => {
             </div>
 
             <div className="col-12">
-  <select
-    className="form-select"
-    id="orderBySelect"
-    value={sortOrder}
-    onChange={(e) => setSortOrder(e.target.value)}
-  >
-    <option value="asc">Order By Price Asc</option>
-    <option value="desc">Order By Price Desc</option>
-  </select>
-</div>
-
+              <select
+                className="form-select"
+                id="orderBySelect"
+                value={sortOrder}
+                onChange={(e) => setSortOrder(e.target.value)}
+              >
+                <option value="asc">Order By Price Asc</option>
+                <option value="desc">Order By Price Desc</option>
+              </select>
+            </div>
 
             <div className="col-12">
               <button
