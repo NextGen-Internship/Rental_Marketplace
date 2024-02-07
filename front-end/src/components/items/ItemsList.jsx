@@ -332,6 +332,7 @@ const ItemsList = () => {
 
 
       <br /> <br />
+      { totalPages > 0 ?
       <nav aria-label="Page navigation example">
         <ul className="pagination justify-content-center">
           <li className={`page-item ${currentPage === 0 ? "disabled" : ""}`}>
@@ -359,7 +360,7 @@ const ItemsList = () => {
           ))}
           <li
             className={`page-item ${
-              currentPage === totalPages - 1 ? "disabled" : ""
+              currentPage === totalPages - 1 || totalPages === 0 ? "disabled" : ""
             }`}
           >
             <a
@@ -373,7 +374,10 @@ const ItemsList = () => {
             </a>
           </li>
         </ul>
-      </nav>
+      </nav> 
+      :
+      <div style={{ "textAlign": "center" }}>No items matching this criteria</div>
+      }
     </div>
   );
 };
