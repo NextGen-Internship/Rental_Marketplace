@@ -7,7 +7,9 @@ import com.devminds.rentify.dto.UserRegisterDto;
 import com.devminds.rentify.entity.User;
 import com.devminds.rentify.exception.UserNotFoundException;
 import com.devminds.rentify.repository.RoleRepository;
+import com.devminds.rentify.service.StripeService;
 import com.devminds.rentify.service.UserService;
+import com.stripe.exception.StripeException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -25,13 +27,17 @@ public class AuthenticationServiceImpl implements AuthService {
     private final AuthenticationManager authenticationManager;
     private final UserMapper userMapper;
     private final RoleRepository roleRepository;
+//    private final StripeService stripeService;
     @Override
-    public AuthenticationRespone register(UserRegisterDto userRegisterDto)  {
+    public AuthenticationRespone register(UserRegisterDto userRegisterDto) throws StripeException {
 
         User user = userMapper.mapToUser(userRegisterDto);
         user.setRole(roleRepository.findUserRole());
         user.setPassword(passwordEncoder.encode(userRegisterDto.getPassword()));
         userService.saveUser(user);
+
+//        stripeService.createStripeAccount();
+
         return AuthenticationRespone.builder()
                 .email(user.getEmail()).build();
 

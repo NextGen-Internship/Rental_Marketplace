@@ -108,7 +108,6 @@ public class UserServiceImpl implements UserService {
 
     public String mapGoogleTokenToOurToken(String googleCredentials) throws GeneralSecurityException, IOException {
         GoogleIdToken idToken = isValidGoogleToken(googleCredentials);
-
         if (idToken != null) {
             Payload payload = idToken.getPayload();
 

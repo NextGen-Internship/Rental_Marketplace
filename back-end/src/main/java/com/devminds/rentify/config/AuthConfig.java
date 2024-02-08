@@ -51,6 +51,7 @@ public class AuthConfig {
                                 .requestMatchers("/rentify/pictures").permitAll()
                                 .requestMatchers("/rentify/pictures/**").permitAll()
                                 .requestMatchers("/v3/**", "/swagger-ui/**").permitAll()
+                                .requestMatchers("/create/stripe").permitAll()
                                 .anyRequest().authenticated()
 
                 )
