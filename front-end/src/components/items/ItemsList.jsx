@@ -282,16 +282,6 @@ const ItemsList = () => {
                 <option value="desc">Order By Price Desc</option>
               </select>
             </div>
-
-            {/* <div className="col-12">
-              <button
-                type="submit"
-                className="btn btn-primary"
-                onClick={applyFilters}
-              >
-                Submit
-              </button>
-            </div> */}
           </>
         
       </form>
