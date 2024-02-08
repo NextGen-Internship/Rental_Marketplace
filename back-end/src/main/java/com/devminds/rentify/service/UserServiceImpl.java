@@ -185,7 +185,6 @@ public class UserServiceImpl implements UserService {
         }
 
         userRepository.save(existingUser);
-        System.out.println(mapUserToUserDto(existingUser));
         return mapUserToUserDto(existingUser);
     }
 
