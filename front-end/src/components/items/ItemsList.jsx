@@ -84,6 +84,10 @@ const ItemsList = () => {
         console.log("rrr", result );
         setItems(result.content);
         setTotalPages(result.totalPages);
+
+        if (totalPages === 1) {
+          setCurrentPage(0);
+        }
       } catch (error) {
         console.error("Error fetching items:", error.message);
       }
@@ -118,7 +122,7 @@ const ItemsList = () => {
 
     fetchLikedItemsFromDB();
     fetchItems();
-  }, [currentPage, categoryId, sortOrder, selectedCategory, priceFrom, priceTo, searchTerm, selectedAddress]);
+  }, [totalPages, currentPage, categoryId, sortOrder, selectedCategory, priceFrom, priceTo, searchTerm, selectedAddress]);
 
   const handleLikeClick = async (itemId) => {
     const token = localStorage.getItem("token");
