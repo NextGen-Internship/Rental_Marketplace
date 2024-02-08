@@ -1,19 +1,14 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
-import { Link, useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 import noImage from "../../assets/no-image.avif";
 
 const PersonalItems = () => {
   const [userItems, setUserItems] = useState(null);
-  const [statusOfItem, setStatusOfItem] = useState(true);
   const token = localStorage.getItem("token");
   const decoded = jwtDecode(token);
   const userId = decoded.jti;
-
-  const handleEditItem = async (itemId) => {
-    // todo
-  };
 
   const handleChangeStatusOfItem = async (itemId) => {
     try {
@@ -21,14 +16,15 @@ const PersonalItems = () => {
         `http://localhost:8080/rentify/items/status/${itemId}`
       );
 
-      console.log("responsaaaa")
-
       console.log(response.data);
-      setStatusOfItem(!setStatusOfItem);
+      setUserItems((prevUserItems) =>
+      prevUserItems.map((item) =>
+        item.id === itemId ? { ...item, isActive: !item.isActive } : item
+      )
+    );
     } catch (error) {
       console.error("Error fetching user items:", error);
     }
-
   };
 
   useEffect(() => {
@@ -46,7 +42,7 @@ const PersonalItems = () => {
     };
 
     fetchUserItems();
-  }, [statusOfItem]);
+  }, []);
 
   return (
     <div className="col-md-8">
@@ -90,12 +86,14 @@ const PersonalItems = () => {
                         {!item.isActive ? "Activate" : "Deactivate"}
                       </button>
                       <br />
+
+                      <Link  to={`/edit/${item.id}`} >
                       <button
                         className="btn btn-info"
-                        onClick={() => handleEditItem(item.id)}
                       >
                         Edit
                       </button>
+                      </Link>
                     </div>
                   ))}
               </>

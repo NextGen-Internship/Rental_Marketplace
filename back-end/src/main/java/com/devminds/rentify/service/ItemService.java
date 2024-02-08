@@ -33,6 +33,7 @@ import java.util.stream.Collectors;
 @Service
 public class ItemService {
     private static final String ITEM_NOT_FOUND_MESSAGE = "Item with %d id not found.";
+    private static final boolean IS_ITEM_ACTIVE_VALUE = true;
     private final ItemRepository itemRepository;
     private final ModelMapper modelMapper;
     private final AddressRepository addressRepository;
@@ -92,7 +93,7 @@ public class ItemService {
     }
 
     public Page<ItemDto> getAllActiveItems(Pageable pageable) {
-        Page<Item> itemsPage = itemRepository.findByIsActive(true, pageable);
+        Page<Item> itemsPage = itemRepository.findByIsActive(IS_ITEM_ACTIVE_VALUE, pageable);
         return itemsPage.map(this::mapItemToItemDto);
     }
 
@@ -115,8 +116,7 @@ public class ItemService {
     }
 
     public Page<ItemDto> getItemsByCategoryId(Long id, Pageable pageable) {
-        // todo change findByActiveandByCategory
-        Page<Item> itemsPage = itemRepository.findByCategoryId(id, pageable);
+        Page<Item> itemsPage = itemRepository.findByCategoryIdAndIsActive(id, IS_ITEM_ACTIVE_VALUE, pageable);
         return itemsPage.map(this::mapItemToItemDto);
     }
 
@@ -166,22 +166,20 @@ public class ItemService {
                 }
             }
 
+            predicates.add(cb.isTrue(root.get("isActive")));
             return cb.and(predicates.toArray(new Predicate[0]));
         };
 
         Page<Item> pageResult = itemRepository.findAll(spec, pageable);
-        // todo find active
-
         return pageResult.map(this::mapItemToItemDto);
     }
 
-    // todo
     public ItemDto updateItem(Long id, ItemDto itemDto) {
         if (!itemExists(id)) {
             throw new ItemNotFoundException(String.format(ITEM_NOT_FOUND_MESSAGE, id));
         }
 
-        // title, desc, price, deposit, photos, how about address?????
+        // title, desc, price, deposit, photos, how about address?????, urls in db, urls in s3
         Item item = mapItemDtoToItem(itemDto);
         item.setId(id);
 //        todo fix it
