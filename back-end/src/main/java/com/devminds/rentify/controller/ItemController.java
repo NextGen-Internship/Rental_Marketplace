@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -101,5 +103,15 @@ public class ItemController {
 
         return ResponseEntity.ok(
                 itemService.getFilteredItems(category, priceFrom, priceTo, address, searchTerm, pageable));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<ItemDto> updateItem(@PathVariable Long id, @RequestBody ItemDto itemDto) {
+        return ResponseEntity.ok(itemService.updateItem(id, itemDto));
+    }
+
+    @PutMapping("/status/{id}")
+    public ResponseEntity<ItemDto> changeStatusOfItem(@PathVariable Long id) {
+        return ResponseEntity.ok(itemService.changeStatusOfItem(id));
     }
 }

@@ -39,7 +39,7 @@ public class Item {
     private String name;
 
     @NotEmpty
-    @Size(max = 255)
+    @Size(max = 1024)
     @Column(name = "description")
     private String description;
 
@@ -61,6 +61,8 @@ public class Item {
     private Category category;
 
     private String thumbnail;
+
+    private Boolean isActive;
 
     @ManyToOne
     @JsonIgnore

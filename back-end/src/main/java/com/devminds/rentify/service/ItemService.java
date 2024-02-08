@@ -70,6 +70,7 @@ public class ItemService {
         itemToSave.setUser(principal);
         itemToSave.setPostedDate(LocalDateTime.now());
         itemToSave.setCategory(categoryToSave);
+        itemToSave.setIsActive(true);
 
         if (!pictureUrls.isEmpty()) {
             itemToSave.setThumbnail(pictureUrls.get(0).toString());
@@ -180,5 +181,31 @@ public class ItemService {
         return pageResult.map(this::mapItemToItemDto);
     }
 
+    public ItemDto updateItem(Long id, ItemDto itemDto) {
+        if (!itemExists(id)) {
+            throw new ItemNotFoundException(String.format(ITEM_NOT_FOUND_MESSAGE, id));
+        }
 
+        // title, desc, price, deposit, photos, how about address?????
+        Item item = mapItemDtoToItem(itemDto);
+        item.setId(id);
+//        todo fix it
+//        item.setPostedDate();
+//        item.setPostedDate();
+
+        Item updatedItem = itemRepository.save(item);
+        return mapItemToItemDto(updatedItem);
+    }
+
+    public ItemDto changeStatusOfItem(Long id) {
+        Item itemToUpdate = itemRepository.findById(id)
+                .orElseThrow(() -> new ItemNotFoundException(String.format(ITEM_NOT_FOUND_MESSAGE, id)));
+
+        itemToUpdate.setIsActive(!itemToUpdate.getIsActive());
+        return mapItemToItemDto(itemRepository.save(itemToUpdate));
+    }
+
+    private boolean itemExists(Long id) {
+        return itemRepository.findById(id).isPresent();
+    }
 }
