@@ -15,6 +15,8 @@ import com.devminds.rentify.repository.PictureRepository;
 import jakarta.persistence.criteria.Predicate;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -27,8 +29,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
-import static java.util.Arrays.stream;
 
 @Service
 public class ItemService {
@@ -90,6 +90,10 @@ public class ItemService {
         return this.itemRepository.getReferenceById(savedItem.getId());
     }
 
+    public Page<ItemDto> getAllItems(Pageable pageable) {
+        Page<Item> itemsPage = itemRepository.findAll(pageable);
+        return itemsPage.map(this::mapItemToItemDto);
+    }
 
     public List<ItemDto> getAllItems() {
         return itemRepository.findAll()
@@ -109,11 +113,9 @@ public class ItemService {
                 .orElseThrow(() -> new ItemNotFoundException(String.format(ITEM_NOT_FOUND_MESSAGE, id)));
     }
 
-    public List<ItemDto> getItemsByCategoryId(Long id) {
-        return itemRepository.findByCategoryId(id)
-                .stream()
-                .map(this::mapItemToItemDto)
-                .toList();
+    public Page<ItemDto> getItemsByCategoryId(Long id, Pageable pageable) {
+        Page<Item> itemsPage = itemRepository.findByCategoryId(id, pageable);
+        return itemsPage.map(this::mapItemToItemDto);
     }
 
     private ItemDto mapItemToItemDto(Item item) {
@@ -124,6 +126,8 @@ public class ItemService {
         return modelMapper.map(itemDto, Item.class);
     }
 
+    public Page<ItemDto> getFilteredItems(String categoryId, Float priceFrom, Float priceTo, String cityName,
+                                          String searchTerm, Pageable pageable) {
 
     public List<ItemDto> getPublishedItemsByUserId(Long userId) {
          return  itemRepository.findByUserId(userId).stream()
@@ -132,38 +136,29 @@ public class ItemService {
 
     }
 
-
-
     public List<ItemDto> getFilteredItems(String categoryId, Float priceFrom, Float priceTo, String cityName,
                                           String searchTerm) {
         Specification<Item> spec = (root, query, cb) -> {
             List<Predicate> predicates = new ArrayList<>();
             Long idOfCategory;
 
-            try{
+            try {
                 idOfCategory = Long.parseLong(categoryId);
 
-            }catch (NumberFormatException e){
+            } catch (NumberFormatException e) {
                 idOfCategory = null;
             }
 
             if (searchTerm != null && !searchTerm.isEmpty()) {
-                
                 predicates.add(cb.like(cb.lower(root.get("name")), "%" + searchTerm.toLowerCase() + "%"));
             }
 
-            if (idOfCategory == null && priceFrom == null && priceTo == null && cityName == null) {
-
-                getAllItems();
-            }
-            if (idOfCategory != null ) {
-
+            if (idOfCategory != null) {
                 Optional<Category> optionalCategory = categoryRepository.findById(idOfCategory);
                 optionalCategory.ifPresent(category -> predicates.add(cb.equal(root.get("category"), category)));
             }
 
             if ((priceFrom != null && priceFrom >= 0) || (priceTo != null && priceTo >= 0)) {
-
                 if (priceFrom != null && priceTo != null && priceFrom >= 0 && priceTo >= 0) {
                     predicates.add(cb.between(root.get("price"), priceFrom, priceTo));
                 } else if (priceFrom != null && priceFrom >= 0) {
@@ -174,7 +169,6 @@ public class ItemService {
             }
 
             if (cityName != null && !cityName.isEmpty()) {
-
                 List<Address> addresses = addressRepository.findByCity(cityName);
                 if (!addresses.isEmpty()) {
                     Address address = addresses.get(0);
@@ -182,15 +176,12 @@ public class ItemService {
                 }
             }
 
-
             return cb.and(predicates.toArray(new Predicate[0]));
         };
 
+        Page<Item> pageResult = itemRepository.findAll(spec, pageable);
 
-        return itemRepository.findAll(spec)
-                .stream()
-                .map(this::mapItemToItemDto)
-                .toList();
+        return pageResult.map(this::mapItemToItemDto);
     }
 
 
