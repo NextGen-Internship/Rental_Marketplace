@@ -85,7 +85,7 @@ const ItemsList = () => {
         setItems(result.content);
         setTotalPages(result.totalPages);
 
-        if (totalPages === 1) {
+        if (currentPage >= totalPages) {
           setCurrentPage(0);
         }
       } catch (error) {
