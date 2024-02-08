@@ -24,7 +24,7 @@ public class ApplicationConfig {
 
     private final UserRepository repository;
     @Value("${myapp.secretKey}")
-    private  String secretKey ;
+    private String secretKey;
 
 
     @Bean
@@ -55,7 +55,7 @@ public class ApplicationConfig {
     @Bean
     public Key signInKey() {
         byte[] keyBytes = Base64.decode(this.secretKey);
-        return  Keys.hmacShaKeyFor(keyBytes);
+        return Keys.hmacShaKeyFor(keyBytes);
     }
 }
 

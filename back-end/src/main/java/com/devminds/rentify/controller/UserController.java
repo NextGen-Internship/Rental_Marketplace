@@ -51,8 +51,8 @@ public class UserController {
 
     }
 
-        @PutMapping("/updateProfilePicture/{userId}")
-        public ResponseEntity<UserDto> uploadFile(@PathVariable Long userId, @RequestParam("file") MultipartFile file)
+    @PutMapping("/updateProfilePicture/{userId}")
+    public ResponseEntity<UserDto> uploadFile(@PathVariable Long userId, @RequestParam("file") MultipartFile file)
             throws IOException {
 
         return new ResponseEntity<>(userService.updateProfilePicture(userId, file), HttpStatus.OK);
