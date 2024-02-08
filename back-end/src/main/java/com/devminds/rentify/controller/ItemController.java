@@ -49,7 +49,7 @@ public class ItemController {
 
         Sort.Direction sortOrder = sortDirection.equalsIgnoreCase(DEFAULT_SORTING_ORDER) ?
                 Sort.Direction.ASC : Sort.Direction.DESC;
-        Page<ItemDto> items = itemService.getAllItems(
+        Page<ItemDto> items = itemService.getAllActiveItems(
                 PageRequest.of(page, size, Sort.by(sortOrder, SORT_CRITERIA_PRICE)));
 
         return ResponseEntity.ok(items);

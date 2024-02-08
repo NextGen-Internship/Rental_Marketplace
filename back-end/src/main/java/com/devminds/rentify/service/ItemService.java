@@ -91,8 +91,8 @@ public class ItemService {
         return this.itemRepository.getReferenceById(savedItem.getId());
     }
 
-    public Page<ItemDto> getAllItems(Pageable pageable) {
-        Page<Item> itemsPage = itemRepository.findAll(pageable);
+    public Page<ItemDto> getAllActiveItems(Pageable pageable) {
+        Page<Item> itemsPage = itemRepository.findByIsActive(true, pageable);
         return itemsPage.map(this::mapItemToItemDto);
     }
 
@@ -115,16 +115,9 @@ public class ItemService {
     }
 
     public Page<ItemDto> getItemsByCategoryId(Long id, Pageable pageable) {
+        // todo change findByActiveandByCategory
         Page<Item> itemsPage = itemRepository.findByCategoryId(id, pageable);
         return itemsPage.map(this::mapItemToItemDto);
-    }
-
-    private ItemDto mapItemToItemDto(Item item) {
-        return modelMapper.map(item, ItemDto.class);
-    }
-
-    private Item mapItemDtoToItem(ItemDto itemDto) {
-        return modelMapper.map(itemDto, Item.class);
     }
 
     public List<ItemDto> getPublishedItemsByUserId(Long userId) {
@@ -177,10 +170,12 @@ public class ItemService {
         };
 
         Page<Item> pageResult = itemRepository.findAll(spec, pageable);
+        // todo find active
 
         return pageResult.map(this::mapItemToItemDto);
     }
 
+    // todo
     public ItemDto updateItem(Long id, ItemDto itemDto) {
         if (!itemExists(id)) {
             throw new ItemNotFoundException(String.format(ITEM_NOT_FOUND_MESSAGE, id));
@@ -207,5 +202,13 @@ public class ItemService {
 
     private boolean itemExists(Long id) {
         return itemRepository.findById(id).isPresent();
+    }
+
+    private ItemDto mapItemToItemDto(Item item) {
+        return modelMapper.map(item, ItemDto.class);
+    }
+
+    private Item mapItemDtoToItem(ItemDto itemDto) {
+        return modelMapper.map(itemDto, Item.class);
     }
 }

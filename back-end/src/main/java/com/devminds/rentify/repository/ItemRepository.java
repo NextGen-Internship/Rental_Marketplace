@@ -16,4 +16,6 @@ public interface ItemRepository extends JpaRepository<Item, Long>, JpaSpecificat
     List<Item> findByUserId(Long userId);
 
     Page<Item> findByCategoryId(Long id, Pageable pageable);
+
+    Page<Item> findByIsActive(Boolean status, Pageable pageable);
 }

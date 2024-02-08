@@ -6,7 +6,7 @@ import noImage from "../../assets/no-image.avif";
 
 const PersonalItems = () => {
   const [userItems, setUserItems] = useState(null);
-//   const [statusOfItem, setStatusOfItem] = useState(true);
+  const [statusOfItem, setStatusOfItem] = useState(true);
   const token = localStorage.getItem("token");
   const decoded = jwtDecode(token);
   const userId = decoded.jti;
@@ -24,8 +24,7 @@ const PersonalItems = () => {
       console.log("responsaaaa")
 
       console.log(response.data);
-    //   setStatusOfItem(!setStatusOfItem);
-    //   setUserItems(response.data);
+      setStatusOfItem(!setStatusOfItem);
     } catch (error) {
       console.error("Error fetching user items:", error);
     }
@@ -47,7 +46,7 @@ const PersonalItems = () => {
     };
 
     fetchUserItems();
-  }, []);
+  }, [statusOfItem]);
 
   return (
     <div className="col-md-8">
