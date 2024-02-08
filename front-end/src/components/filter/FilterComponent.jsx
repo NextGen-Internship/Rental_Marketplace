@@ -109,7 +109,7 @@ const FilterComponent = ({ notShowDropdown, categoryId, onFilterChange }) => {
 
   return (
     <div className="container pb-5" style={{"maxWidth" : "10000px"}}>
-      <form className="row row-cols-lg-auto g-3 align-items-center ms-lg-3">
+     <form className="row row-cols-lg-auto g-3 align-items-center ms-lg-3 d-flex justify-content-end">
         {!notShowDropdown || Object.keys(notShowDropdown).length === 0 ? (
           <>
             <div className="col-12">
