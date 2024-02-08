@@ -9,6 +9,8 @@ import com.devminds.rentify.exception.UserNotFoundException;
 import com.devminds.rentify.repository.RoleRepository;
 import com.devminds.rentify.service.UserService;
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -19,22 +21,25 @@ import org.springframework.stereotype.Service;
 
 public class AuthenticationServiceImpl implements AuthService {
 
+    @Value("${active-profile}")
+    private String defaultPicture;
     private final UserService userService;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
     private final UserMapper userMapper;
     private final RoleRepository roleRepository;
+
     @Override
     public AuthenticationRespone register(UserRegisterDto userRegisterDto)  {
 
         User user = userMapper.mapToUser(userRegisterDto);
         user.setRole(roleRepository.findUserRole());
         user.setPassword(passwordEncoder.encode(userRegisterDto.getPassword()));
+        user.setProfilePicture(defaultPicture);
         userService.saveUser(user);
         return AuthenticationRespone.builder()
                 .email(user.getEmail()).build();
-
     }
 
     @Override

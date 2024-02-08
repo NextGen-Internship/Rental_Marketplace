@@ -49,9 +49,9 @@ public class User implements UserDetails {
     private String profilePicture;
 
 
-    @OneToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id")
-    private List<Address> addresses;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "address_id")
+    private Address address;
 
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")

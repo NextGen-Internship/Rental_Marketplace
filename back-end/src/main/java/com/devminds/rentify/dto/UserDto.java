@@ -9,6 +9,7 @@ import java.util.List;
 
 @Data
 public class UserDto {
+
     private Long id;
     private String firstName;
     private String lastName;
@@ -16,7 +17,7 @@ public class UserDto {
     private String email;
     private String phoneNumber;
     private String profilePicture;
-    private List<Address> addresses;
+    private Address  address;
     private List<PlainItemDto> items = new ArrayList<>();
     private Role role;
 }

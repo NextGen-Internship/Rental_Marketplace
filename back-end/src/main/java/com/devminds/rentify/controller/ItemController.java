@@ -78,6 +78,12 @@ public class ItemController {
                 itemService.getFilteredItems(String.valueOf(id), priceFrom, priceTo, address, searchTerm, pageable));
     }
 
+
+    @GetMapping("/user/published/{userId}")
+    public ResponseEntity<List<ItemDto>> getPublishedItemsByUserId(@PathVariable Long userId) {
+        return ResponseEntity.ok(itemService.getPublishedItemsByUserId(userId));
+}
+
     @GetMapping("/filter")
     public ResponseEntity<Page<ItemDto>> getFilteredItems(
             @RequestParam(required = false) String category,
@@ -97,5 +103,6 @@ public class ItemController {
 
         return ResponseEntity.ok(
                 itemService.getFilteredItems(category, priceFrom, priceTo, address, searchTerm, pageable));
+
     }
 }

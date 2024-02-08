@@ -53,3 +53,6 @@ application:
 
 google-client-key: ${GOOGLE_CLIENT_ID}
 
+
+active-profile: ${DEFAULT_PROFILE_PICTURE}
+

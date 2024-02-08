@@ -28,6 +28,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class ItemService {
@@ -128,6 +129,15 @@ public class ItemService {
     public Page<ItemDto> getFilteredItems(String categoryId, Float priceFrom, Float priceTo, String cityName,
                                           String searchTerm, Pageable pageable) {
 
+    public List<ItemDto> getPublishedItemsByUserId(Long userId) {
+         return  itemRepository.findByUserId(userId).stream()
+                 .map(this :: mapItemToItemDto)
+                 .collect(Collectors.toList());
+
+    }
+
+    public List<ItemDto> getFilteredItems(String categoryId, Float priceFrom, Float priceTo, String cityName,
+                                          String searchTerm) {
         Specification<Item> spec = (root, query, cb) -> {
             List<Predicate> predicates = new ArrayList<>();
             Long idOfCategory;
@@ -173,6 +183,7 @@ public class ItemService {
 
         return pageResult.map(this::mapItemToItemDto);
     }
+
 
 
 }
