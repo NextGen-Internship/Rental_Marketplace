@@ -18,10 +18,10 @@ const PersonalItems = () => {
 
       console.log(response.data);
       setUserItems((prevUserItems) =>
-      prevUserItems.map((item) =>
-        item.id === itemId ? { ...item, isActive: !item.isActive } : item
-      )
-    );
+        prevUserItems.map((item) =>
+          item.id === itemId ? { ...item, isActive: !item.isActive } : item
+        )
+      );
     } catch (error) {
       console.error("Error fetching user items:", error);
     }
@@ -87,21 +87,13 @@ const PersonalItems = () => {
                       </button>
                       <br />
 
-                      <Link  to={`/edit/${item.id}`} >
-                      <button
-                        className="btn btn-info"
-                      >
-                        Edit
-                      </button>
+                      <Link to={`/edit/${item.id}`}>
+                        <button className="btn btn-info">Edit</button>
                       </Link>
 
                       <br />
-                      <Link  to={`/items/${item.id}`} >
-                      <button
-                        className="btn btn-info"
-                      >
-                        View
-                      </button>
+                      <Link to={`/items/${item.id}`}>
+                        <button className="btn btn-info">View</button>
                       </Link>
                     </div>
                   ))}

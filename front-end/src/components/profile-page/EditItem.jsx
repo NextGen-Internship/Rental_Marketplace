@@ -7,7 +7,6 @@ import CategoryModal from "../add-item/CategoryModal";
 import { jwtDecode } from "jwt-decode";
 
 const EditItem = () => {
-  // button for submit -> fetch then -> settings, else cancel, again settings
 
   const token = localStorage.getItem("token");
   const decoded = jwtDecode(token);
@@ -36,10 +35,7 @@ const EditItem = () => {
         const response = await axios.get(
           `http://localhost:8080/rentify/items/${id}`
         );
-        
-        // console.log(response.data)
-        // console.log("uresID", userId)
-        // console.log(userId != response.data.user.id)
+
         if (userId != response.data.user.id) {
           navigate("/notfound");
         }
@@ -61,7 +57,6 @@ const EditItem = () => {
           `http://localhost:8080/rentify/pictures/items/${id}`
         );
 
-        //setPictures..
         console.log(response.data);
         // setPictures(response.data.map(picture => picture.url))
         // setPictures(response.data.map(picture => ({ file: null, url: picture.url })))
@@ -101,12 +96,6 @@ const EditItem = () => {
     setPictures(updatedPictures);
   };
 
-  // const handleFileChange = (index, event) => {
-  //   const file = event.target.files[0];
-  //   const updatedPictures = [...pictures];
-  //   updatedPictures[index] = file;
-  //   setPictures(updatedPictures);
-  // };
   const handleFileChange = (index, event) => {
     const file = event.target.files[0];
     const updatedPictures = [...pictures];
@@ -139,50 +128,11 @@ const EditItem = () => {
     }));
   };
 
-  // const handleAddItem = async () => {
-  //   try {
-  //     const backendUrl = "http://localhost:8080/rentify/items/${id}";
-  //     const formData = new FormData();
-
-  //     formData.append("name", title);
-  //     formData.append("description", description);
-  //     formData.append("price", price);
-  //     formData.append("deposit", deposit);
-  //     formData.append("category", selectedCategory);
-  //     formData.append("city", address.city);
-  //     formData.append("street", address.street);
-  //     formData.append("postCode", address.postCode);
-  //     formData.append("streetNumber", address.streetNumber);
-
-  //     pictures.forEach((picture, index) => {
-  //       if (picture) {
-  //         formData.append(`pictures[${index}]`, picture);
-  //       }
-  //     });
-
-  //     const response = await axios.put(backendUrl, formData, {
-  //       headers: {
-  //         Authorization: `Bearer ${jwt_token}`,
-  //         "Content-Type": "multipart/form-data",
-  //       },
-  //     });
-
-  //     if (response.status === 200) {
-  //       console.log("Item added successfully:", response.data);
-  //     } else {
-  //       console.error("Error adding item. Status:", response.status);
-  //     }
-  //     navigate("/");
-  //   } catch (error) {
-  //     console.error("Error adding item:", error.message);
-  //   }
-  // };
-
   const handleEditItem = async () => {
     try {
       const backendUrl = `http://localhost:8080/rentify/items/${id}`;
       const formData = new FormData();
-  
+
       formData.append("name", title);
       formData.append("description", description);
       formData.append("price", price);
@@ -192,8 +142,7 @@ const EditItem = () => {
       formData.append("street", address.street);
       formData.append("postCode", address.postCode);
       formData.append("streetNumber", address.streetNumber);
-  
-      // Append files to FormData
+
       pictures.forEach((picture, index) => {
         if (picture && picture.file) {
           formData.append(`pictures[${index}]`, picture.file);
@@ -201,14 +150,14 @@ const EditItem = () => {
       });
 
       console.log("ppp", pictures);
-  
+
       const response = await axios.put(backendUrl, formData, {
         headers: {
           Authorization: `Bearer ${jwt_token}`,
           "Content-Type": "multipart/form-data",
         },
       });
-  
+
       if (response.status === 200) {
         console.log("Item updated successfully:", response.data);
       } else {
@@ -219,7 +168,7 @@ const EditItem = () => {
       console.error("Error updating item:", error.message);
     }
   };
-  
+
   const handleCancel = () => {
     navigate("/settings");
   };
@@ -291,15 +240,6 @@ const EditItem = () => {
                   style={{ display: "none" }}
                   onChange={(event) => handleFileChange(index, event)}
                 />
-                {/* {picture ? (
-                      <img
-                        src={URL.createObjectURL(picture)}
-                        alt={`Picture ${index + 1}`}
-                        className="picture-image"
-                      />
-                    ) : (
-                      <p>Click to add picture</p>
-                    )} */}
                 {picture ? (
                   <img
                     src={
@@ -308,7 +248,7 @@ const EditItem = () => {
                         : picture.file
                         ? URL.createObjectURL(picture.file)
                         : ""
-                    } // Check if picture.file is defined before creating an object URL
+                    } 
                     alt={`Picture ${index + 1}`}
                     className="picture-image"
                   />

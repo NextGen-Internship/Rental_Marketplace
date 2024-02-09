@@ -1,10 +1,7 @@
 import React from "react";
-
 import { useState } from "react";
 import { useEffect } from "react";
 import axios from "axios";
-import { Link, useParams } from "react-router-dom";
-import noImage from "../../assets/no-image.avif";
 import { jwtDecode } from "jwt-decode";
 import PersonalItems from "./PersonalItems";
 
@@ -395,43 +392,6 @@ const ProfilePage = () => {
               </ul>
             </div>
           </div>
-          {/* <div className="col-md-8">
-            <div className="card mb-3">
-              <div className="card-body">
-                <h5 className="card-title">Published Items</h5>
-                <div className="items-list">
-                  {userItems.length === 0 ? (
-                    <h4>Not published Items yet</h4>
-                  ) : (
-                    <>
-                      {userItems.map((item) => (
-                        <div className="items-list-item" key={item.id}>
-                          <Link
-                            to={`/items/${item.id}`}
-                            onClick={() => item.id}
-                          >
-                            <div className="card">
-                              <img
-                                src={item.thumbnail || noImage}
-                                className="card-img-top"
-                                alt={item.name}
-                              />
-                              <div className="card-body">
-                                <h3 className="card-title">{item.name}</h3>
-                                <p className="card-text">{"$" + item.price}</p>
-                                <p className="card-text">{item.address}</p>
-                              </div>
-                            </div>
-                          </Link>
-                        </div>
-                      ))}
-                    </>
-                  )}
-                </div>
-              </div>
-            </div>
-          </div> */}
-
           <PersonalItems />
         </div>
       </div>
