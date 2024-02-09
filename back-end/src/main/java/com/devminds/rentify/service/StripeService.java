@@ -8,6 +8,7 @@ import com.stripe.model.checkout.Session;
 import com.stripe.param.AccountCreateParams;
 import com.stripe.param.TokenCreateParams;
 import com.stripe.param.checkout.SessionCreateParams;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -15,6 +16,9 @@ import java.util.Date;
 
 @Service
 public class StripeService {
+
+    @Value("${stripe-key}")
+    private String key;
 
     private static final String[] HEADERS_TO_TRY = {
             "X-Forwarded-For",
@@ -41,7 +45,7 @@ public class StripeService {
     }
 
     public Account createStripeAccount(HttpServletRequest httpServletRequest) throws StripeException {
-        Stripe.apiKey = "sk_test_51OcpzgGAUVgXgq0ONlbbyYZe2l1TwIico5pxExqjnI9aJohhRiMZjdUc7VluBEajW85KsyETv6PygE6WdcvTC5jY001uSdQMTU";
+        Stripe.apiKey = key;
 
         TokenCreateParams tokenParams =
                 TokenCreateParams.builder()
@@ -112,7 +116,7 @@ public class StripeService {
     }
 
     public Session createCheckoutSession() throws StripeException {
-        Stripe.apiKey = "sk_test_51OcpzgGAUVgXgq0ONlbbyYZe2l1TwIico5pxExqjnI9aJohhRiMZjdUc7VluBEajW85KsyETv6PygE6WdcvTC5jY001uSdQMTU";
+        Stripe.apiKey = key;
 
         SessionCreateParams params =
                 SessionCreateParams.builder()

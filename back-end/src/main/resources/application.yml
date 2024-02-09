@@ -53,3 +53,5 @@ application:
 
 google-client-key: ${GOOGLE_CLIENT_ID}
 
+stripe-key: ${STRIPE_SECRET_KEY}
+
