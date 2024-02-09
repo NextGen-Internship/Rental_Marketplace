@@ -27,6 +27,7 @@ import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -174,20 +175,63 @@ public class ItemService {
         return pageResult.map(this::mapItemToItemDto);
     }
 
-    public ItemDto updateItem(Long id, ItemDto itemDto) {
+    public ItemDto updateItem(Long id, CreateItemDto createItemDto) throws IOException {
         if (!itemExists(id)) {
             throw new ItemNotFoundException(String.format(ITEM_NOT_FOUND_MESSAGE, id));
         }
 
-        // title, desc, price, deposit, photos, how about address?????, urls in db, urls in s3
-        Item item = mapItemDtoToItem(itemDto);
-        item.setId(id);
-//        todo fix it
-//        item.setPostedDate();
-//        item.setPostedDate();
 
-        Item updatedItem = itemRepository.save(item);
-        return mapItemToItemDto(updatedItem);
+        User principal = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        Address addressToAdd = new Address();
+        addressToAdd.setCity(createItemDto.getCity());
+        addressToAdd.setPostCode(createItemDto.getPostCode());
+        addressToAdd.setStreet(createItemDto.getStreet());
+        addressToAdd.setStreetNumber(createItemDto.getStreetNumber());
+        this.addressRepository.save(addressToAdd);
+
+        Category categoryToSave = this.categoryRepository.findByName(createItemDto.getCategory()).orElse(null);
+
+        List<MultipartFile> pictureFiles = createItemDto.getPictures()
+                .stream()
+                .filter(Objects::nonNull)
+                .toList();
+        // todo delete old pictures from s3 bucket
+        // todo it like a transaction, 1st delete from repo, then from s3 bucket
+        List<URL> pictureUrls = storageService.uploadFiles(pictureFiles);
+
+        Item itemToSave = this.modelMapper.map(createItemDto, Item.class);
+        itemToSave.setId(id);
+        itemToSave.setAddress(addressToAdd);
+        itemToSave.setUser(principal);
+        itemToSave.setPostedDate(LocalDateTime.now()); // todo remove
+        itemToSave.setCategory(categoryToSave);
+        itemToSave.setIsActive(true); // todo ? maybe remove
+
+        if (!pictureUrls.isEmpty()) {
+            itemToSave.setThumbnail(pictureUrls.get(0).toString());
+        }
+
+        itemToSave.setPictures(new ArrayList<>());
+        // todo delete pictures from db
+        //pictureRepository.deleteByItemId(id);
+        Item savedItem = this.itemRepository.save(itemToSave);
+        List<Picture> picturesToAdd = new ArrayList<>();
+
+        for (int i = 0; i < pictureUrls.size(); i++) {
+            Picture picture = new Picture();
+            picture.setUrl(pictureUrls.get(i).toString());
+            picture.setItem(savedItem);
+            picturesToAdd.add(this.pictureRepository.save(picture));
+        }
+        savedItem.setPictures(picturesToAdd);
+
+//        return this.itemRepository.getReferenceById(savedItem.getId());
+//
+//        Item updatedItem = itemRepository.save(item);
+//        return mapItemToItemDto(updatedItem);
+
+        return mapItemToItemDto(itemRepository.getReferenceById(savedItem.getId()));
     }
 
     public ItemDto changeStatusOfItem(Long id) {

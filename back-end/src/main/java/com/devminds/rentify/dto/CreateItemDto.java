@@ -1,6 +1,6 @@
 package com.devminds.rentify.dto;
 
-import com.devminds.rentify.entity.*;
+import com.devminds.rentify.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;
@@ -12,8 +12,6 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 public class CreateItemDto {
-
-
 
     private String name;
 

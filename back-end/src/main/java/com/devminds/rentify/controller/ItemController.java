@@ -106,8 +106,9 @@ public class ItemController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ItemDto> updateItem(@PathVariable Long id, @RequestBody ItemDto itemDto) {
-        return ResponseEntity.ok(itemService.updateItem(id, itemDto));
+    public ResponseEntity<ItemDto> updateItem(@PathVariable Long id,
+                                              @ModelAttribute CreateItemDto createItemDto) throws IOException {
+        return ResponseEntity.ok(itemService.updateItem(id, createItemDto));
     }
 
     @PutMapping("/status/{id}")

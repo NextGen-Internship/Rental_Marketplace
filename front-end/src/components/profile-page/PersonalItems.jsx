@@ -94,6 +94,15 @@ const PersonalItems = () => {
                         Edit
                       </button>
                       </Link>
+
+                      <br />
+                      <Link  to={`/items/${item.id}`} >
+                      <button
+                        className="btn btn-info"
+                      >
+                        View
+                      </button>
+                      </Link>
                     </div>
                   ))}
               </>
