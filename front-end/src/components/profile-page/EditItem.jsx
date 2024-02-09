@@ -1,5 +1,5 @@
 import { useState, useEffect, React } from 'react'
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import "../../components/add-item/Create-item.css"
@@ -22,23 +22,47 @@ const EditItem = () => {
   });
 
   const navigate = useNavigate();
+  const { id } = useParams();
   const jwt_token = localStorage.getItem('token');
 
   useEffect(() => {
-    const fetchUserItems = async () => {
+    const fetchItemDetails = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:8080/rentify/items/user/published/$`
+          `http://localhost:8080/rentify/items/${id}`
         );
 
-        // setUserItems(response.data);
-        // console.log("uu", userItems);
+        setTitle(response.data.name)
+        setSelectedCategory(response.data.category.name);
+        setDescription(response.data.description)
+        setPrice(response.data.price);
+        setDeposit(response.data.deposit);
+        setAddress(response.data.address)
+
       } catch (error) {
-        console.error("Error fetching user items:", error);
+        console.error("Error fetching item:", error);
       }
     };
 
-    fetchUserItems();
+    const fetchPictures = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:8080/rentify/pictures/items/${id}`
+        );
+
+        //setPictures..
+        console.log(response.data)
+        // setPictures(response.data.map(picture => picture.url))
+        // setPictures(response.data.map(picture => ({ file: null, url: picture.url })))
+        setPictures(Array.from({ length: 8 }, (_, index) => response.data[index] ? { file: null, url: response.data[index].url } : null));
+
+      } catch (error) {
+        console.error("Error fetching item:", error);
+      }
+    }
+
+    fetchItemDetails();
+    fetchPictures();
   }, []);
 
   const handleChange = (event) => {
@@ -61,12 +85,19 @@ const EditItem = () => {
     setPictures(updatedPictures);
   };
 
+  // const handleFileChange = (index, event) => {
+  //   const file = event.target.files[0];
+  //   const updatedPictures = [...pictures];
+  //   updatedPictures[index] = file;
+  //   setPictures(updatedPictures);
+  // };
   const handleFileChange = (index, event) => {
     const file = event.target.files[0];
     const updatedPictures = [...pictures];
-    updatedPictures[index] = file;
+    updatedPictures[index] = { file: file, url: URL.createObjectURL(file) };
     setPictures(updatedPictures);
-  };
+};
+
 
   const handleDescriptionChange = (event) => {
     const descriptionValue = event.target.value;
@@ -131,6 +162,10 @@ const EditItem = () => {
       console.error("Error adding item:", error.message);
     }
   };
+
+  const handleCancel = () => {
+    navigate("/settings");
+  }
 
   return (
         <div className="createItem-container">
@@ -199,7 +234,7 @@ const EditItem = () => {
                       style={{ display: "none" }}
                       onChange={(event) => handleFileChange(index, event)}
                     />
-                    {picture ? (
+                    {/* {picture ? (
                       <img
                         src={URL.createObjectURL(picture)}
                         alt={`Picture ${index + 1}`}
@@ -207,7 +242,16 @@ const EditItem = () => {
                       />
                     ) : (
                       <p>Click to add picture</p>
-                    )}
+                    )} */}
+                    {picture ? (
+  <img
+    src={picture.url ? picture.url : (picture.file ? URL.createObjectURL(picture.file) : '')} // Check if picture.file is defined before creating an object URL
+    alt={`Picture ${index + 1}`}
+    className="picture-image"
+  />
+) : (
+  <p>Click to add picture</p>
+)}
                   </div>
                 </div>
               ))}
@@ -269,7 +313,7 @@ const EditItem = () => {
     <button className="add-btn" onClick={handleAddItem} style={{ backgroundColor: "green", marginRight: "10px" }}>
     <b>Save</b>
   </button>
-  <button className="add-btn" onClick={handleAddItem} style={{ backgroundColor: "red"}}>
+  <button className="add-btn" onClick={handleCancel} style={{ backgroundColor: "red"}}>
     <b>Cancel</b>
   </button>
 </div>
