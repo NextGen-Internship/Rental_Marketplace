@@ -44,6 +44,7 @@ const ProfilePage = () => {
     const handleEditClick = () => {
         setEditedUserInfo({ ...userInfo });
         setEditMode(true);
+       
     };
 
     const handleEditPicture = () => {
@@ -89,10 +90,10 @@ const ProfilePage = () => {
 
 
         const editedAddress = editedUserInfo.address ? {
-            city: editedUserInfo.address.city || "",
-            postCode: editedUserInfo.address.postCode || "",
-            street: editedUserInfo.address.street || "",
-            streetNumber: editedUserInfo.address.streetNumber || ""
+            city: editedUserInfo.address.city,
+            postCode: editedUserInfo.address.postCode ,
+            street: editedUserInfo.address.street ,
+            streetNumber: editedUserInfo.address.streetNumber 
         } : null;
 
         const updatedUserInfo = {
@@ -347,7 +348,6 @@ const ProfilePage = () => {
                                                             placeholder="Street number"
                                                             value={editedUserInfo.address?.streetNumber || ''} onChange={handleInputChange}
                                                         />
-
                                                         {errorFoInputs && (
                                                             <div className="error-message">
                                                                Please fill all fields in Address
@@ -419,7 +419,7 @@ const ProfilePage = () => {
                                             ))}
 
                                         </>
-                                    )};
+                                    )}
 
 
                                 </div>

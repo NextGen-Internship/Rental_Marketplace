@@ -106,10 +106,12 @@ const FilterComponent = ({ notShowDropdown, categoryId, onFilterChange }) => {
       applyFilters(event);
     }
   };
+  
 
   return (
-    <div className="container pb-5" style={{"maxWidth" : "10000px"}}>
-     <form className="row row-cols-lg-auto g-3 align-items-center ms-lg-3 d-flex justify-content-end">
+    <div className="container pb-5">
+    <div className="row justify-content-center">
+      <form className="col-lg-6">
         {!notShowDropdown || Object.keys(notShowDropdown).length === 0 ? (
           <>
             <div className="col-12">
@@ -300,7 +302,7 @@ const FilterComponent = ({ notShowDropdown, categoryId, onFilterChange }) => {
             </div>
 
             <div className="col-12">
-              <button
+              <button 
                 type="submit"
                 className="btn btn-primary"
                 onClick={applyFilters}
@@ -311,6 +313,7 @@ const FilterComponent = ({ notShowDropdown, categoryId, onFilterChange }) => {
           </>
         )}
       </form>
+    </div>
     </div>
   );
 };
