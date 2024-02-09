@@ -127,8 +127,21 @@ public class ItemService {
                 .collect(Collectors.toList());
     }
 
-    public Page<ItemDto> getFilteredItems(String categoryId, Float priceFrom, Float priceTo, String cityName,
-                                          String searchTerm, Pageable pageable) {
+//    public Page<ItemDto> getFilteredItems(String categoryId, Float priceFrom, Float priceTo, String cityName,
+//                                          String searchTerm, Pageable pageable) {
+//
+//
+//    }
+
+    public List<ItemDto> getPublishedItemsByUserId(Long userId) {
+         return  itemRepository.findByUserId(userId).stream()
+                 .map(this :: mapItemToItemDto)
+                 .collect(Collectors.toList());
+
+    }
+
+    public  Page<ItemDto> getFilteredItems(String categoryId, Float priceFrom, Float priceTo, String cityName,
+                                          String searchTerm , Pageable pageable) {
         Specification<Item> spec = (root, query, cb) -> {
             List<Predicate> predicates = new ArrayList<>();
             Long idOfCategory;

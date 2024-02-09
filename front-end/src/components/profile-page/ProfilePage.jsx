@@ -9,7 +9,9 @@ import { jwtDecode } from "jwt-decode";
 import PersonalItems from "./PersonalItems";
 
 const ProfilePage = () => {
-  //   const [userItems, setuserItems] = useState([]);
+  const [userItems, setuserItems] = useState([]);
+  const [errorFoInputs, setErrorForInputs] = useState(false);
+  const [errorForProfilePicture, setErrorForProfilePicture] = useState(false);
 
   const token = localStorage.getItem("token");
 
@@ -62,9 +64,10 @@ const ProfilePage = () => {
 
       setUserInfo(response.data);
       setEditPictureMode(false);
-      window.location.reload();
+      setErrorForProfilePicture(false);
     } catch (error) {
       console.error("Error uploading picture:", error);
+      setErrorForProfilePicture(true);
     }
   };
 
@@ -81,22 +84,21 @@ const ProfilePage = () => {
   const handleSaveClick = async () => {
     const editedAddress = editedUserInfo.address
       ? {
-          city: editedUserInfo.address.city || "",
-          postCode: editedUserInfo.address.postCode || "",
-          street: editedUserInfo.address.street || "",
-          streetNumber: editedUserInfo.address.streetNumber || "",
+          city: editedUserInfo.address.city,
+          postCode: editedUserInfo.address.postCode,
+          street: editedUserInfo.address.street,
+          streetNumber: editedUserInfo.address.streetNumber,
         }
       : null;
 
     const updatedUserInfo = {
       ...editedUserInfo,
-      address:
-        editedAddress !== null
-          ? {
-              ...userInfo.address,
-              ...editedAddress,
-            }
-          : {},
+      address: editedAddress
+        ? {
+            ...userInfo.address,
+            ...editedAddress,
+          }
+        : {},
     };
 
     try {
@@ -112,10 +114,12 @@ const ProfilePage = () => {
       );
 
       setUserInfo(response.data);
-
       setEditMode(false);
+      setErrorForInputs(false);
     } catch (error) {
       console.error("Error updating user information:", error);
+
+      setErrorForInputs(true);
     }
   };
 
@@ -146,22 +150,22 @@ const ProfilePage = () => {
   };
 
   useEffect(() => {
-    // const token = localStorage.getItem("token");
+    const token = localStorage.getItem("token");
 
-    // const decoded = jwtDecode(token);
-    // const userId = decoded.jti;
+    const decoded = jwtDecode(token);
+    const userId = decoded.jti;
 
-    // const fetchUserItems = async () => {
-    //   try {
-    //     const response = await axios.get(
-    //       `http://localhost:8080/rentify/items/user/published/${userId}`
-    //     );
+    const fetchUserItems = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:8080/rentify/items/user/published/${userId}`
+        );
 
-    //     setuserItems(response.data);
-    //   } catch (error) {
-    //     console.error("Error fetching user items:", error);
-    //   }
-    // };
+        setuserItems(response.data);
+      } catch (error) {
+        console.error("Error fetching user items:", error);
+      }
+    };
 
     const fetchUserInfo = async () => {
       try {
@@ -174,7 +178,7 @@ const ProfilePage = () => {
       }
     };
 
-    // fetchUserItems();
+    fetchUserItems();
     fetchUserInfo();
   }, []);
 
@@ -216,6 +220,12 @@ const ProfilePage = () => {
                         >
                           Cancel picture
                         </button>
+
+                        {errorForProfilePicture && (
+                          <div className="error-message">
+                            Please upload the picture.
+                          </div>
+                        )}
                       </>
                     ) : (
                       <>
@@ -335,6 +345,11 @@ const ProfilePage = () => {
                               value={editedUserInfo.address?.streetNumber || ""}
                               onChange={handleInputChange}
                             />
+                            {errorFoInputs && (
+                              <div className="error-message">
+                                Please fill all fields in Address
+                              </div>
+                            )}
                           </>
                         ) : (
                           <>
@@ -380,6 +395,43 @@ const ProfilePage = () => {
               </ul>
             </div>
           </div>
+          {/* <div className="col-md-8">
+            <div className="card mb-3">
+              <div className="card-body">
+                <h5 className="card-title">Published Items</h5>
+                <div className="items-list">
+                  {userItems.length === 0 ? (
+                    <h4>Not published Items yet</h4>
+                  ) : (
+                    <>
+                      {userItems.map((item) => (
+                        <div className="items-list-item" key={item.id}>
+                          <Link
+                            to={`/items/${item.id}`}
+                            onClick={() => item.id}
+                          >
+                            <div className="card">
+                              <img
+                                src={item.thumbnail || noImage}
+                                className="card-img-top"
+                                alt={item.name}
+                              />
+                              <div className="card-body">
+                                <h3 className="card-title">{item.name}</h3>
+                                <p className="card-text">{"$" + item.price}</p>
+                                <p className="card-text">{item.address}</p>
+                              </div>
+                            </div>
+                          </Link>
+                        </div>
+                      ))}
+                    </>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div> */}
+
           <PersonalItems />
         </div>
       </div>

@@ -50,13 +50,14 @@ const Navbar = () => {
       fetchUserInfo();
     }
     
-  }, [location]);
+  }, [location , userProfile.picture]);
 
 
 
   const handleLogout = () => {
     Object.keys(localStorage).forEach(key => { localStorage.removeItem(key); });
     setIsLoggedIn(false);
+
   };
 
 
@@ -65,9 +66,11 @@ const Navbar = () => {
       <Link to="/"> <img src={logo} width={"200px"} alt="Logo" /> </Link>
       <div className="links">
         <Link to="/">Home</Link>
-        <Link to="/items/create">Add Item</Link>
+       
         {isLoggedIn ? (
           <>
+
+<Link to="/items/create">Add Item</Link>
             <Link to="/likes"> <FavoriteBorderIcon /> </Link>
             <Link to="/views"><VisibilityIcon /> </Link>
             {userProfile.picture ? (

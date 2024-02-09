@@ -167,15 +167,17 @@ public class UserServiceImpl implements UserService {
         }
 
 
-        if (addressDto.getCity() != null && addressDto.getStreet() != null && addressDto.getStreetNumber() != null
-                && addressDto.getPostCode() != null) {
 
+        if (addressDto.getCity() != null && !addressDto.getCity().isEmpty() &&
+                addressDto.getStreet() != null && !addressDto.getStreet().isEmpty() &&
+                addressDto.getStreetNumber() != null && !addressDto.getStreetNumber().isEmpty() &&
+                addressDto.getPostCode() != null && !addressDto.getPostCode().isEmpty()) {
             Address address = existingUser.getAddress();
 
             if (address == null) {
                 address = new Address();
-
             }
+
             address.setCity(addressDto.getCity());
             address.setPostCode(addressDto.getPostCode());
             address.setStreet(addressDto.getStreet());

@@ -3,6 +3,7 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 import { Link } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 import noImage from "../../assets/no-image.avif";
+import "./LIkedItemsPage.css" 
 
 import FilterComponent from "../filter/FilterComponent"; 
 
@@ -120,8 +121,10 @@ const LikedItemsPage = () => {
     );
   };
   return (
+    
+    <div>
+      <h1 className="favourite-title">Favourite Items</h1>
     <div className="items-list">
-      
       {likedItems.map((item) => (
         <div className="items-list-item" key={item.id}>
           <Link to={`/items/${item.id}`}>
@@ -151,6 +154,7 @@ const LikedItemsPage = () => {
           </Link>
         </div>
       ))}
+    </div>
     </div>
   );
 };
