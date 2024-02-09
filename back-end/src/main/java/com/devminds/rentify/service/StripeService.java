@@ -3,13 +3,14 @@ package com.devminds.rentify.service;
 import com.stripe.Stripe;
 import com.stripe.exception.StripeException;
 import com.stripe.model.Account;
-import com.stripe.model.AccountLink;
 import com.stripe.model.Token;
+import com.stripe.model.checkout.Session;
 import com.stripe.param.AccountCreateParams;
-import com.stripe.param.AccountLinkCreateParams;
 import com.stripe.param.TokenCreateParams;
+import com.stripe.param.checkout.SessionCreateParams;
 import org.springframework.stereotype.Service;
 import jakarta.servlet.http.HttpServletRequest;
+
 import java.util.Date;
 
 @Service
@@ -110,5 +111,35 @@ public class StripeService {
         return account;
     }
 
+    public Session createCheckoutSession() throws StripeException {
+        Stripe.apiKey = "sk_test_51OcpzgGAUVgXgq0ONlbbyYZe2l1TwIico5pxExqjnI9aJohhRiMZjdUc7VluBEajW85KsyETv6PygE6WdcvTC5jY001uSdQMTU";
+
+        SessionCreateParams params =
+                SessionCreateParams.builder()
+                        .setMode(SessionCreateParams.Mode.PAYMENT)
+                        .addLineItem(
+                                SessionCreateParams.LineItem.builder()
+                                        .setPrice("price_1OevcNGAUVgXgq0OqzS1PTkF")
+                                        .setQuantity(1L)
+                                        .build()
+                        )
+                        .setPaymentIntentData(
+                                SessionCreateParams.PaymentIntentData.builder()
+                                        .setApplicationFeeAmount(123L)
+                                        .setTransferData(
+                                                SessionCreateParams.PaymentIntentData.TransferData.builder()
+                                                        .setDestination("acct_1OhpD1QAOyFXfIlp")
+                                                        .build()
+                                        )
+                                        .build()
+                        )
+                        .setSuccessUrl("https://example.com/success")
+                        .setCancelUrl("https://example.com/cancel")
+                        .build();
+
+        Session session = Session.create(params);
+        System.out.println();
+        return Session.create(params);
+    }
 
 }

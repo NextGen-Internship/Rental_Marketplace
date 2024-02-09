@@ -27,7 +27,6 @@ public class AuthenticationServiceImpl implements AuthService {
     private final AuthenticationManager authenticationManager;
     private final UserMapper userMapper;
     private final RoleRepository roleRepository;
-//    private final StripeService stripeService;
     @Override
     public AuthenticationRespone register(UserRegisterDto userRegisterDto) throws StripeException {
 
@@ -35,8 +34,6 @@ public class AuthenticationServiceImpl implements AuthService {
         user.setRole(roleRepository.findUserRole());
         user.setPassword(passwordEncoder.encode(userRegisterDto.getPassword()));
         userService.saveUser(user);
-
-//        stripeService.createStripeAccount();
 
         return AuthenticationRespone.builder()
                 .email(user.getEmail()).build();

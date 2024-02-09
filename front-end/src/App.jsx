@@ -32,7 +32,7 @@ function App() {
           <Route path="/items/create" element={<CreateItem />} />
           <Route path="/views" element={<Views />} />
           <Route exact path="/likes" element={<LikedItemsPage />} />
-
+          <Route path="/rent"></Route>
         </Routes>
 
         <Footer />

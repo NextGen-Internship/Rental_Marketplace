@@ -4,6 +4,8 @@ import { useParams, useNavigate } from "react-router-dom";
 import Carousel from "./carousel/Carousel";
 import "./ItemDetails.css";
 import { jwtDecode } from "jwt-decode";
+import StripePay from "../stripe/Stripe";
+import { Link } from "react-router-dom";
 
 const endpoint = "items/";
 
@@ -58,8 +60,9 @@ const ItemDetails = () => {
             <p>{"$" + item.price}</p>
             <h3>Deposit</h3>
             <p>{"$" + item.deposit}</p>
-
-            <button className="rent-button">Rent</button>
+            <Link to="/rent">
+            <button onClick={StripePay} className="rent-button">Rent</button>
+            </Link>
           </div>
 
           <div className="user-details">

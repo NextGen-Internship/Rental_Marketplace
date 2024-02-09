@@ -2,6 +2,7 @@ package com.devminds.rentify.controller;
 
 import com.devminds.rentify.service.StripeService;
 import com.stripe.exception.StripeException;
+import com.stripe.model.checkout.Session;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -16,10 +17,17 @@ public class StripeController {
 
     @PostMapping("create/stripe")
     public ResponseEntity<?> createStripeLinkedAccount(HttpServletRequest httpServletRequest) throws StripeException {
-     stripeService.getClientIpAddress(httpServletRequest);
-     stripeService.createStripeAccount(httpServletRequest);
-     // get body from request
+        stripeService.getClientIpAddress(httpServletRequest);
+        stripeService.createStripeAccount(httpServletRequest);
+        // get body from request
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PostMapping("stripe/checkout")
+    public ResponseEntity<?> createCheckout() throws StripeException {
+        Session session =stripeService.createCheckoutSession();
+
+        return new ResponseEntity<>(session,HttpStatus.OK);
     }
 
 
