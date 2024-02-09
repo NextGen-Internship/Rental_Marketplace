@@ -5,10 +5,12 @@ import { useEffect } from 'react';
 import axios from 'axios';
 import { Link, useParams } from "react-router-dom";
 import noImage from "../../assets/no-image.avif";
-import { jwtDecode } from 'jwt-decode';     
+import { jwtDecode } from 'jwt-decode';
 
 const ProfilePage = () => {
     const [userItems, setuserItems] = useState([]);
+    const [errorFoInputs, setErrorForInputs] = useState(false);
+    const [errorForProfilePicture, setErrorForProfilePicture] = useState(false);
 
     const token = localStorage.getItem("token");
 
@@ -42,6 +44,7 @@ const ProfilePage = () => {
     const handleEditClick = () => {
         setEditedUserInfo({ ...userInfo });
         setEditMode(true);
+       
     };
 
     const handleEditPicture = () => {
@@ -51,8 +54,8 @@ const ProfilePage = () => {
     const handleUpload = async () => {
         try {
             const formData = new FormData();
-            formData.append('file', imageFile); 
-        
+            formData.append('file', imageFile);
+
             const response = await axios.put(`http://localhost:8080/rentify/updateProfilePicture/${userId}`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
@@ -61,16 +64,16 @@ const ProfilePage = () => {
 
             setUserInfo(response.data);
             setEditPictureMode(false);
-            window.location.reload();
-
-        } catch (error) {
+            setErrorForProfilePicture(false);
+            } catch (error) {
             console.error('Error uploading picture:', error);
+            setErrorForProfilePicture(true)
         }
     };
-    
+
     const handleFileChange = (event) => {
         setimageFile(event.target.files[0]);
-      };
+    };
 
 
 
@@ -82,23 +85,25 @@ const ProfilePage = () => {
 
     const handleSaveClick = async () => {
 
-     
+
+
+
 
         const editedAddress = editedUserInfo.address ? {
-            city: editedUserInfo.address.city || "",
-            postCode: editedUserInfo.address.postCode || "",
-            street: editedUserInfo.address.street || "",
-            streetNumber: editedUserInfo.address.streetNumber || ""
-        } : null; 
-        
+            city: editedUserInfo.address.city,
+            postCode: editedUserInfo.address.postCode ,
+            street: editedUserInfo.address.street ,
+            streetNumber: editedUserInfo.address.streetNumber 
+        } : null;
+
         const updatedUserInfo = {
             ...editedUserInfo,
-            address: editedAddress !== null ? {
+            address: editedAddress ? {
                 ...userInfo.address,
                 ...editedAddress
-            } : {} 
+            } : {}
         };
-        
+
 
         try {
             const response = await axios.put(`http://localhost:8080/rentify/update/${userId}`, {
@@ -112,13 +117,14 @@ const ProfilePage = () => {
 
 
             setUserInfo(response.data);
-
             setEditMode(false);
+            setErrorForInputs(false);
+
         } catch (error) {
             console.error('Error updating user information:', error);
 
-
-
+            setErrorForInputs(true);
+         
         };
     }
 
@@ -213,6 +219,12 @@ const ProfilePage = () => {
                                                 <input type="file" accept="image/*" onChange={handleFileChange} />
                                                 <button className="btn btn-primary" onClick={handleUpload}>Upload picture</button>
                                                 <button className="btn btn-primary" onClick={handleCancelClickPicture}>Cancel picture</button>
+
+                                                {errorForProfilePicture && (
+                                                            <div className="error-message">
+                                                                Please upload the picture.
+                                                            </div>
+                                                        )}
                                             </>
                                         ) : (
                                             <>
@@ -258,6 +270,7 @@ const ProfilePage = () => {
                                                         <span>{userInfo.firstName} </span>
                                                         <span>{userInfo.lastName} </span>
                                                     </>
+
 
                                                 )}
 
@@ -335,6 +348,11 @@ const ProfilePage = () => {
                                                             placeholder="Street number"
                                                             value={editedUserInfo.address?.streetNumber || ''} onChange={handleInputChange}
                                                         />
+                                                        {errorFoInputs && (
+                                                            <div className="error-message">
+                                                               Please fill all fields in Address
+                                                            </div>
+                                                        )}
                                                     </>
                                                 ) : (
                                                     <>
@@ -378,32 +396,32 @@ const ProfilePage = () => {
                         <div className="card mb-3">
                             <div className="card-body">
 
-                                <h5 className="card-title">Published  Items:</h5>
+                                <h5 className="card-title">Published  Items</h5>
                                 <div className="items-list">
-                               { userItems.length === 0 ? (
+                                    {userItems.length === 0 ? (
 
-                            <h4>Not published Items yet :(</h4>
-                               ): ( 
-                                <> 
-                                {userItems.map((item) => (
-                                    <div className="items-list-item" key={item.id}>
-                                        <Link to={`/items/${item.id}`} onClick={() => (item.id)}>
-                                            <div className="card">
-                                                <img src={item.thumbnail || noImage} className="card-img-top" alt={item.name} />
-                                                <div className="card-body">
-                                                    <h3 className="card-title">{item.name}</h3>
-                                                    <p className="card-text">{"$" + item.price}</p>
-                                                    <p className="card-text">{item.address}</p>
+                                        <h4>Not published Items yet</h4>
+                                    ) : (
+                                        <>
+                                            {userItems.map((item) => (
+                                                <div className="items-list-item" key={item.id}>
+                                                    <Link to={`/items/${item.id}`} onClick={() => (item.id)}>
+                                                        <div className="card">
+                                                            <img src={item.thumbnail || noImage} className="card-img-top" alt={item.name} />
+                                                            <div className="card-body">
+                                                                <h3 className="card-title">{item.name}</h3>
+                                                                <p className="card-text">{"$" + item.price}</p>
+                                                                <p className="card-text">{item.address}</p>
+                                                            </div>
+                                                        </div>
+                                                    </Link>
                                                 </div>
-                                            </div>
-                                        </Link>
-                                    </div>
-                                ))}
+                                            ))}
 
-                                </>
-                               ) };
+                                        </>
+                                    )}
 
-                                
+
                                 </div>
                             </div>
                         </div>

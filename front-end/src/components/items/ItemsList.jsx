@@ -8,6 +8,7 @@ import { jwtDecode } from "jwt-decode";
 import SearchIcon from "@mui/icons-material/Search";
 import MonetizationOnIcon from "@mui/icons-material/MonetizationOn";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const endpointItems = "items";
 
@@ -28,6 +29,10 @@ const ItemsList = () => {
   const [priceTo, setPriceTo] = useState("");
   const [selectedAddress, setSelectedAddress] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
+  const navigate = useNavigate();
+
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -36,6 +41,11 @@ const ItemsList = () => {
       const decoded = jwtDecode(token);
       setUserId(decoded.jti);
     }
+    else{
+     setIsLoggedIn(false)
+
+    }
+    
 
     const fetchAddressAndCategory = async () => {
       try {
@@ -96,7 +106,11 @@ const ItemsList = () => {
       try {
         const token = localStorage.getItem("token");
 
-        if (token) {
+        if (token === null) {
+         setLikedItems(  new Set());
+        
+        }
+        else{
           const decoded = jwtDecode(token);
           const userId = decoded.jti;
 
@@ -115,6 +129,7 @@ const ItemsList = () => {
             throw new Error(`HTTP error! Status: ${response.status}`);
           }
         }
+        
       } catch (error) {
         console.error("Error fetching liked items:", error.message);
       }
@@ -126,10 +141,13 @@ const ItemsList = () => {
 
   const handleLikeClick = async (itemId) => {
     const token = localStorage.getItem("token");
-    const decoded = jwtDecode(token);
-    const userId = decoded.jti;
-    console.log("handleLikeClick called for item:", itemId);
 
+   
+
+    if(token!== null){ 
+      const decoded = jwtDecode(token);
+    const userId = decoded.jti;
+    
     const updatedLikedItems = new Set(likedItems);
     if (likedItems.has(itemId)) {
       updatedLikedItems.delete(itemId);
@@ -166,6 +184,11 @@ const ItemsList = () => {
     } catch (error) {
       console.error("Error in handleLikeClick:", error.message);
     }
+  }
+  else{
+    
+    navigate("/login");
+  }
   };
 
   const handleViewClick = (itemId) => {
