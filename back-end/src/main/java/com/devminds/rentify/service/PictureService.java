@@ -41,6 +41,13 @@ public class PictureService {
                 .orElseThrow(() -> new PictureNotFoundException(String.format(PICTURE_NOT_FOUND_MESSAGE, id)));
     }
 
+    public void deletePictureById(Long id) {
+        if (pictureRepository.findById(id).isEmpty()) {
+            throw new PictureNotFoundException(String.format(PICTURE_NOT_FOUND_MESSAGE, id));
+        }
+        pictureRepository.deleteById(id);
+    }
+
     public List<PictureDto> getPicturesByItemId(Long id) {
         return pictureRepository.findByItemId(id)
                 .stream()
@@ -48,18 +55,18 @@ public class PictureService {
                 .toList();
     }
 
-    public List<PictureDto> getThumbnails() {
-        return pictureRepository.findAll()
-                .stream()
-                .collect(Collectors.groupingBy(Picture::getItem,
-                        Collectors.collectingAndThen(
-                                Collectors.minBy(Comparator.comparingLong(Picture::getId)),
-                                optional -> optional.map(this::mapPictureToPictureDto).orElse(null))))
-                .values()
-                .stream()
-                .filter(Objects::nonNull)
-                .collect(Collectors.toList());
-    }
+//    public List<PictureDto> getThumbnails() {
+//        return pictureRepository.findAll()
+//                .stream()
+//                .collect(Collectors.groupingBy(Picture::getItem,
+//                        Collectors.collectingAndThen(
+//                                Collectors.minBy(Comparator.comparingLong(Picture::getId)),
+//                                optional -> optional.map(this::mapPictureToPictureDto).orElse(null))))
+//                .values()
+//                .stream()
+//                .filter(Objects::nonNull)
+//                .collect(Collectors.toList());
+//    }
 
     private PictureDto mapPictureToPictureDto(Picture picture) {
         PictureDto pictureDto = new PictureDto();

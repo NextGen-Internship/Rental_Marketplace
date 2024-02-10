@@ -38,8 +38,8 @@ public class PictureController {
         return ResponseEntity.ok(pictureService.getPictureById(id));
     }
 
-    @GetMapping("/thumbnails")
-    public ResponseEntity<List<PictureDto>> getThumbnails() {
-        return ResponseEntity.ok(pictureService.getThumbnails());
-    }
+//    @GetMapping("/thumbnails")
+//    public ResponseEntity<List<PictureDto>> getThumbnails() {
+//        return ResponseEntity.ok(pictureService.getThumbnails());
+//    }
 }

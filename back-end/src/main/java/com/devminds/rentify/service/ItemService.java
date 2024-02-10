@@ -1,6 +1,7 @@
 package com.devminds.rentify.service;
 
 import com.devminds.rentify.dto.CreateItemDto;
+import com.devminds.rentify.dto.EditItemDto;
 import com.devminds.rentify.dto.ItemDto;
 import com.devminds.rentify.entity.Address;
 import com.devminds.rentify.entity.Category;
@@ -13,6 +14,7 @@ import com.devminds.rentify.repository.CategoryRepository;
 import com.devminds.rentify.repository.ItemRepository;
 import com.devminds.rentify.repository.PictureRepository;
 import jakarta.persistence.criteria.Predicate;
+import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -127,12 +129,6 @@ public class ItemService {
                 .collect(Collectors.toList());
     }
 
-//    public Page<ItemDto> getFilteredItems(String categoryId, Float priceFrom, Float priceTo, String cityName,
-//                                          String searchTerm, Pageable pageable) {
-//
-//
-//    }
-
     public  Page<ItemDto> getFilteredItems(String categoryId, Float priceFrom, Float priceTo, String cityName,
                                           String searchTerm , Pageable pageable) {
         Specification<Item> spec = (root, query, cb) -> {
@@ -181,24 +177,26 @@ public class ItemService {
         return pageResult.map(this::mapItemToItemDto);
     }
 
-    public ItemDto updateItem(Long id, CreateItemDto createItemDto) throws IOException {
+    @Transactional
+    public ItemDto updateItem(Long id, EditItemDto editItemDto) throws IOException {
         if (!itemExists(id)) {
             throw new ItemNotFoundException(String.format(ITEM_NOT_FOUND_MESSAGE, id));
         }
 
-
         User principal = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//        CreateItemDto createItemDto = editItemDto.getCreateItemDto();
 
         Address addressToAdd = new Address();
-        addressToAdd.setCity(createItemDto.getCity());
-        addressToAdd.setPostCode(createItemDto.getPostCode());
-        addressToAdd.setStreet(createItemDto.getStreet());
-        addressToAdd.setStreetNumber(createItemDto.getStreetNumber());
+        addressToAdd.setCity(editItemDto.getCity());
+        addressToAdd.setPostCode(editItemDto.getPostCode());
+        addressToAdd.setStreet(editItemDto.getStreet());
+        addressToAdd.setStreetNumber(editItemDto.getStreetNumber());
         this.addressRepository.save(addressToAdd);
 
-        Category categoryToSave = this.categoryRepository.findByName(createItemDto.getCategory()).orElse(null);
+        Category categoryToSave = this.categoryRepository.findByName(editItemDto.getCategory()).orElse(null);
 
-        List<MultipartFile> pictureFiles = createItemDto.getPictures()
+
+        List<MultipartFile> pictureFiles = editItemDto.getPictures()
                 .stream()
                 .filter(Objects::nonNull)
                 .toList();
@@ -206,13 +204,12 @@ public class ItemService {
         // todo it like a transaction, 1st delete from repo, then from s3 bucket
         List<URL> pictureUrls = storageService.uploadFiles(pictureFiles);
 
-        Item itemToSave = this.modelMapper.map(createItemDto, Item.class);
+        Item itemToSave = this.modelMapper.map(editItemDto, Item.class);
         itemToSave.setId(id);
         itemToSave.setAddress(addressToAdd);
         itemToSave.setUser(principal);
         itemToSave.setPostedDate(LocalDateTime.now()); // todo remove
         itemToSave.setCategory(categoryToSave);
-        itemToSave.setIsActive(true); // todo ? maybe remove
 
         if (!pictureUrls.isEmpty()) {
             itemToSave.setThumbnail(pictureUrls.get(0).toString());
@@ -221,6 +218,12 @@ public class ItemService {
         itemToSave.setPictures(new ArrayList<>());
         // todo delete pictures from db
         //pictureRepository.deleteByItemId(id);
+
+        String[] picturesToDelete = editItemDto.getDeletedPicturesOnEdit();
+        for (String s : picturesToDelete) {
+            pictureRepository.deleteAllByUrl(s);
+        }
+
         Item savedItem = this.itemRepository.save(itemToSave);
         List<Picture> picturesToAdd = new ArrayList<>();
 

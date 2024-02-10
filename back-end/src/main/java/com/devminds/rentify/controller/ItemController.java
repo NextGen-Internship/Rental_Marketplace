@@ -1,6 +1,7 @@
 package com.devminds.rentify.controller;
 
 import com.devminds.rentify.dto.CreateItemDto;
+import com.devminds.rentify.dto.EditItemDto;
 import com.devminds.rentify.dto.ItemDto;
 import com.devminds.rentify.service.ItemService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -107,8 +108,10 @@ public class ItemController {
 
     @PutMapping("/{id}")
     public ResponseEntity<ItemDto> updateItem(@PathVariable Long id,
-                                              @ModelAttribute CreateItemDto createItemDto) throws IOException {
-        return ResponseEntity.ok(itemService.updateItem(id, createItemDto));
+                                              @ModelAttribute EditItemDto editItemDto) throws IOException {
+//        System.out.println("here");
+//        System.out.println(editItemDto.getCreateItemDto().getName());
+        return ResponseEntity.ok(itemService.updateItem(id, editItemDto));
     }
 
     @PutMapping("/status/{id}")

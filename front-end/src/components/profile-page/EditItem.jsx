@@ -7,7 +7,7 @@ import CategoryModal from "../add-item/CategoryModal";
 import { jwtDecode } from "jwt-decode";
 
 const EditItem = () => {
-
+  // todo array with deleted pictures to send on BE
   const token = localStorage.getItem("token");
   const decoded = jwtDecode(token);
   const userId = decoded.jti;
@@ -28,6 +28,8 @@ const EditItem = () => {
   const navigate = useNavigate();
   const { id } = useParams();
   const jwt_token = localStorage.getItem("token");
+
+  const [deletedPictures, setDeletedPictures] = useState([]);
 
   useEffect(() => {
     const fetchItemDetails = async () => {
@@ -67,6 +69,7 @@ const EditItem = () => {
               : null
           )
         );
+        console.log("p", pictures);
       } catch (error) {
         console.error("Error fetching item:", error);
       }
@@ -90,7 +93,13 @@ const EditItem = () => {
     fileInput && fileInput.click();
   };
 
-  const handleRemovePicture = (index) => {
+  const handleRemovePicture = (index, picture) => {
+    if (!picture) {
+      return;
+    }
+    setDeletedPictures([...deletedPictures, picture.url]);
+    console.log("dddduuu", picture.url);
+    console.log(deletedPictures)
     const updatedPictures = [...pictures];
     updatedPictures[index] = null;
     setPictures(updatedPictures);
@@ -142,14 +151,19 @@ const EditItem = () => {
       formData.append("street", address.street);
       formData.append("postCode", address.postCode);
       formData.append("streetNumber", address.streetNumber);
-
+      formData.append("deletedPicturesOnEdit", deletedPictures)
+      const body = {"createItemDto": 7, "deletedPicturesOnEdit": deletedPictures};
+    
       pictures.forEach((picture, index) => {
         if (picture && picture.file) {
           formData.append(`pictures[${index}]`, picture.file);
         }
       });
 
-      console.log("ppp", pictures);
+      // console.log("ppp", pictures);
+      console.log("tt", title)
+      console.log("bbb", formData);
+      console.log(formData.get("deletedPicturesOnEdit"));
 
       const response = await axios.put(backendUrl, formData, {
         headers: {
@@ -225,7 +239,7 @@ const EditItem = () => {
             <div key={index}>
               <button
                 className="remove-picture-btn"
-                onClick={() => handleRemovePicture(index)}
+                onClick={() => handleRemovePicture(index, picture)}
               >
                 <DeleteForeverIcon></DeleteForeverIcon>
               </button>
