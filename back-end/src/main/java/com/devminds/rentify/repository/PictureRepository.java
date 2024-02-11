@@ -11,5 +11,4 @@ public interface PictureRepository extends JpaRepository<Picture, Long> {
     List<Picture> findByItemId(Long id);
 
     void deleteByUrl(String url);
-//    long deleteAllByUrl(String url);
 }

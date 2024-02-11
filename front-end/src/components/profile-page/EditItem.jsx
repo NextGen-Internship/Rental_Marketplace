@@ -7,7 +7,6 @@ import CategoryModal from "../add-item/CategoryModal";
 import { jwtDecode } from "jwt-decode";
 
 const EditItem = () => {
-  // todo array with deleted pictures to send on BE
   const token = localStorage.getItem("token");
   const decoded = jwtDecode(token);
   const userId = decoded.jti;
@@ -59,9 +58,6 @@ const EditItem = () => {
           `http://localhost:8080/rentify/pictures/items/${id}`
         );
 
-        console.log(response.data);
-        // setPictures(response.data.map(picture => picture.url))
-        // setPictures(response.data.map(picture => ({ file: null, url: picture.url })))
         setPictures(
           Array.from({ length: 8 }, (_, index) =>
             response.data[index]
@@ -69,7 +65,6 @@ const EditItem = () => {
               : null
           )
         );
-        console.log("p", pictures);
       } catch (error) {
         console.error("Error fetching item:", error);
       }
@@ -98,10 +93,7 @@ const EditItem = () => {
       return;
     }
     setDeletedPictures([...deletedPictures, picture.url]);
-    console.log("dddduuu", picture.url);
-    console.log(deletedPictures)
     const updatedPictures = [...pictures];
-    // console.log("up", updatedPictures);
     updatedPictures[index] = null;
     setPictures(updatedPictures);
   };
@@ -153,18 +145,12 @@ const EditItem = () => {
       formData.append("postCode", address.postCode);
       formData.append("streetNumber", address.streetNumber);
       formData.append("deletedPicturesOnEdit", deletedPictures)
-      // const body = {"createItemDto": 7, "deletedPicturesOnEdit": deletedPictures};
     
       pictures.forEach((picture, index) => {
         if (picture && picture.file) {
           formData.append(`pictures[${index}]`, picture.file);
         }
       });
-
-      // console.log("ppp", pictures);
-      console.log("tt", title)
-      console.log("bbb", formData);
-      console.log(formData.get("deletedPicturesOnEdit"));
 
       const response = await axios.put(backendUrl, formData, {
         headers: {

@@ -179,14 +179,7 @@ public class ItemService {
 
     @Transactional
     public ItemDto updateItem(Long id, EditItemDto editItemDto) throws IOException {
-        if (!itemExists(id)) {
-            throw new ItemNotFoundException(String.format(ITEM_NOT_FOUND_MESSAGE, id));
-        }
-
-        User principal = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-//        CreateItemDto createItemDto = editItemDto.getCreateItemDto();
-
-        int picturesCountBeforeEdit = pictureRepository.findByItemId(id).size();
+        itemExists(id);
 
         Address addressToAdd = new Address();
         addressToAdd.setCity(editItemDto.getCity());
@@ -195,67 +188,27 @@ public class ItemService {
         addressToAdd.setStreetNumber(editItemDto.getStreetNumber());
         this.addressRepository.save(addressToAdd);
 
+        User principal = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Category categoryToSave = this.categoryRepository.findByName(editItemDto.getCategory()).orElse(null);
-
-        List<MultipartFile> pictureFiles = new ArrayList<>();
-        if (editItemDto.getPictures() != null) {
-            pictureFiles = editItemDto.getPictures()
-                    .stream()
-                    .filter(Objects::nonNull)
-                    .toList();
-        }
-
-        // todo delete old pictures from s3 bucket
-        // todo it like a transaction, 1st delete from repo, then from s3 bucket
-        List<URL> pictureUrls = storageService.uploadFiles(pictureFiles);
 
         Item itemToSave = this.modelMapper.map(editItemDto, Item.class);
         itemToSave.setId(id);
         itemToSave.setAddress(addressToAdd);
         itemToSave.setUser(principal);
-        itemToSave.setPostedDate(LocalDateTime.now()); // todo remove
+        itemToSave.setPostedDate(LocalDateTime.now());
         itemToSave.setCategory(categoryToSave);
-        itemToSave.setIsActive(true); // todo change it
-
-        if (pictureFiles.isEmpty()) {
-            itemToSave.setThumbnail(itemRepository.findById(id).get().getThumbnail());
-        }
-
-
-        if (!pictureUrls.isEmpty()) {
-            itemToSave.setThumbnail(pictureUrls.get(0).toString());
-        }
-
+        itemToSave.setIsActive(true);
         itemToSave.setPictures(new ArrayList<>());
-        // todo delete pictures from db
-        //pictureRepository.deleteByItemId(id);
-
-        String[] picturesToDelete = editItemDto.getDeletedPicturesOnEdit();
-        for (String s : picturesToDelete) {
-            pictureRepository.deleteByUrl(s);
-        }
-
-        /*if (pictureFiles.size() == picturesToDelete.length) {
-            itemToSave.setThumbnail(null);
-        } */
-
-
         Item savedItem = this.itemRepository.save(itemToSave);
-        List<Picture> picturesToAdd = new ArrayList<>();
 
-        for (int i = 0; i < pictureUrls.size(); i++) {
-            Picture picture = new Picture();
-            picture.setUrl(pictureUrls.get(i).toString());
-            picture.setItem(savedItem);
-            picturesToAdd.add(this.pictureRepository.save(picture));
-        }
-        savedItem.setPictures(picturesToAdd);
+        deletePictures(editItemDto.getDeletedPicturesOnEdit());
 
-        if (picturesToAdd.isEmpty() && picturesCountBeforeEdit == picturesToDelete.length) {
-            savedItem.setThumbnail(null);
+        List<MultipartFile> pictureFiles = new ArrayList<>();
+        if (editItemDto.getPictures() != null) {
+            pictureFiles = editItemDto.getPictures().stream().filter(Objects::nonNull).toList();
         }
-        savedItem.setThumbnail(!pictureRepository.findByItemId(id).isEmpty() ?
-                pictureRepository.findByItemId(id).get(0).getUrl() : null);
+        List<URL> pictureUrls = storageService.uploadFiles(pictureFiles);
+        savePictures(id, pictureUrls, savedItem);
 
         return mapItemToItemDto(itemRepository.getReferenceById(savedItem.getId()));
     }
@@ -268,8 +221,10 @@ public class ItemService {
         return mapItemToItemDto(itemRepository.save(itemToUpdate));
     }
 
-    private boolean itemExists(Long id) {
-        return itemRepository.findById(id).isPresent();
+    private void itemExists(Long id) {
+        if (itemRepository.findById(id).isEmpty()) {
+            throw new ItemNotFoundException(String.format(ITEM_NOT_FOUND_MESSAGE, id));
+        }
     }
 
     private ItemDto mapItemToItemDto(Item item) {
@@ -278,5 +233,26 @@ public class ItemService {
 
     private Item mapItemDtoToItem(ItemDto itemDto) {
         return modelMapper.map(itemDto, Item.class);
+    }
+
+    private void deletePictures(String[] picturesToDelete) {
+        for (String url : picturesToDelete) {
+            pictureRepository.deleteByUrl(url);
+        }
+    }
+
+    private void savePictures(Long id, List<URL> pictureUrls, Item savedItem) {
+        List<Picture> picturesToAdd = new ArrayList<>();
+
+        for (URL pictureUrl : pictureUrls) {
+            Picture picture = new Picture();
+            picture.setUrl(pictureUrl.toString());
+            picture.setItem(savedItem);
+            picturesToAdd.add(this.pictureRepository.save(picture));
+        }
+        savedItem.setPictures(picturesToAdd);
+
+        savedItem.setThumbnail(!pictureRepository.findByItemId(id).isEmpty() ?
+                pictureRepository.findByItemId(id).get(0).getUrl() : null);
     }
 }
