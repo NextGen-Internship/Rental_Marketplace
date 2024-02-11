@@ -11,24 +11,16 @@ import java.util.List;
 @Data
 public class EditItemDto {
     private String name;
-
     private String description;
-
     private BigDecimal price;
-
     private LocalDateTime postedDate;
-
     private float deposit;
-
     private String category;
-
     private User user;
-
     private List<MultipartFile> pictures;
-
     private String city;
     private String street;
     private String postCode;
     private String streetNumber;
-    String[] deletedPicturesOnEdit;
+    private String[] deletedPicturesOnEdit;
 }

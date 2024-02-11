@@ -10,5 +10,6 @@ import java.util.List;
 public interface PictureRepository extends JpaRepository<Picture, Long> {
     List<Picture> findByItemId(Long id);
 
-    long deleteAllByUrl(String url);
+    void deleteByUrl(String url);
+//    long deleteAllByUrl(String url);
 }

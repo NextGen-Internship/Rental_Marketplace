@@ -186,6 +186,8 @@ public class ItemService {
         User principal = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 //        CreateItemDto createItemDto = editItemDto.getCreateItemDto();
 
+        int picturesCountBeforeEdit = pictureRepository.findByItemId(id).size();
+
         Address addressToAdd = new Address();
         addressToAdd.setCity(editItemDto.getCity());
         addressToAdd.setPostCode(editItemDto.getPostCode());
@@ -195,11 +197,14 @@ public class ItemService {
 
         Category categoryToSave = this.categoryRepository.findByName(editItemDto.getCategory()).orElse(null);
 
+        List<MultipartFile> pictureFiles = new ArrayList<>();
+        if (editItemDto.getPictures() != null) {
+            pictureFiles = editItemDto.getPictures()
+                    .stream()
+                    .filter(Objects::nonNull)
+                    .toList();
+        }
 
-        List<MultipartFile> pictureFiles = editItemDto.getPictures()
-                .stream()
-                .filter(Objects::nonNull)
-                .toList();
         // todo delete old pictures from s3 bucket
         // todo it like a transaction, 1st delete from repo, then from s3 bucket
         List<URL> pictureUrls = storageService.uploadFiles(pictureFiles);
@@ -210,6 +215,12 @@ public class ItemService {
         itemToSave.setUser(principal);
         itemToSave.setPostedDate(LocalDateTime.now()); // todo remove
         itemToSave.setCategory(categoryToSave);
+        itemToSave.setIsActive(true); // todo change it
+
+        if (pictureFiles.isEmpty()) {
+            itemToSave.setThumbnail(itemRepository.findById(id).get().getThumbnail());
+        }
+
 
         if (!pictureUrls.isEmpty()) {
             itemToSave.setThumbnail(pictureUrls.get(0).toString());
@@ -221,8 +232,13 @@ public class ItemService {
 
         String[] picturesToDelete = editItemDto.getDeletedPicturesOnEdit();
         for (String s : picturesToDelete) {
-            pictureRepository.deleteAllByUrl(s);
+            pictureRepository.deleteByUrl(s);
         }
+
+        /*if (pictureFiles.size() == picturesToDelete.length) {
+            itemToSave.setThumbnail(null);
+        } */
+
 
         Item savedItem = this.itemRepository.save(itemToSave);
         List<Picture> picturesToAdd = new ArrayList<>();
@@ -235,10 +251,11 @@ public class ItemService {
         }
         savedItem.setPictures(picturesToAdd);
 
-//        return this.itemRepository.getReferenceById(savedItem.getId());
-//
-//        Item updatedItem = itemRepository.save(item);
-//        return mapItemToItemDto(updatedItem);
+        if (picturesToAdd.isEmpty() && picturesCountBeforeEdit == picturesToDelete.length) {
+            savedItem.setThumbnail(null);
+        }
+        savedItem.setThumbnail(!pictureRepository.findByItemId(id).isEmpty() ?
+                pictureRepository.findByItemId(id).get(0).getUrl() : null);
 
         return mapItemToItemDto(itemRepository.getReferenceById(savedItem.getId()));
     }

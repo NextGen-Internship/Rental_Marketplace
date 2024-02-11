@@ -101,6 +101,7 @@ const EditItem = () => {
     console.log("dddduuu", picture.url);
     console.log(deletedPictures)
     const updatedPictures = [...pictures];
+    // console.log("up", updatedPictures);
     updatedPictures[index] = null;
     setPictures(updatedPictures);
   };
@@ -152,7 +153,7 @@ const EditItem = () => {
       formData.append("postCode", address.postCode);
       formData.append("streetNumber", address.streetNumber);
       formData.append("deletedPicturesOnEdit", deletedPictures)
-      const body = {"createItemDto": 7, "deletedPicturesOnEdit": deletedPictures};
+      // const body = {"createItemDto": 7, "deletedPicturesOnEdit": deletedPictures};
     
       pictures.forEach((picture, index) => {
         if (picture && picture.file) {
