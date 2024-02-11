@@ -1,11 +1,77 @@
 import React, { useState } from 'react';
 import "./Review.css"
 import axios from 'axios';
+import { jwtDecode } from 'jwt-decode';
+import { useEffect } from 'react';
 
 
-const ReviewsItems = ({ itemId, userId }) => {
+
+
+const ReviewsItems = ({ itemId }) => {
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState('');
+
+
+  const[showForm, setShowForm] = useState(false);
+
+  const [userInfo, setUserInfo] = useState({
+    firstName: '',
+    lastName: '',
+    email: '',
+    phoneNumber: '',
+    address: {
+        city: '',
+        postCode: '',
+        street: '',
+        streetNumber: '',
+    }
+    , profilePicture: ''
+
+
+
+});
+
+
+
+useEffect(() => {
+
+
+
+
+  const token = localStorage.getItem('token');
+
+
+
+
+  const decoded = jwtDecode(token);
+  const userId = decoded.jti;
+
+
+
+  const fetchUserInfo = async () => {
+
+
+    if(token){
+      
+    }
+
+
+      try {
+          const response = await axios.get(`http://localhost:8080/rentify/users/${userId}`);
+          setUserInfo(response.data);
+
+      }
+      catch (error) {
+          console.error("Error fetching user Info ", error);
+      }
+
+  };
+
+
+  fetchUserInfo();
+}, []);
+
+
 
   const handleRatingChange = (event) => {
     setRating(parseInt(event.target.value));
@@ -17,8 +83,7 @@ const ReviewsItems = ({ itemId, userId }) => {
 
   const handleCancel = () => {
 
-    setRating(0);
-    setComment('');
+    
   };
 
   console.log(rating);
@@ -27,33 +92,35 @@ const ReviewsItems = ({ itemId, userId }) => {
   const handleSend = async () => {
 
 
-    //localhost:8080/rentify/reviews/addReview/4/4
+    try{ 
+    const token = localStorage.getItem("token");
 
 
+    const decoded = jwtDecode(token);
+    const userId = decoded.jti;
+    console.log("useraa idito" + userId);
 
 
-    const response = await axios.post(`http:/localhost:8080/rentify/reviews/addReview/${userId}/${itemId}`, {
-      rating: rating,
-      comment: comment
+    const response = await axios.post(`http://localhost:8080/rentify/reviews/addReview/${userId}/${itemId}`, {
+      ratingStars: rating,
+      comments: comment
     });
 
+    setRating(0);
+    setComment('');
 
+  }catch(error){
+    console.error(error);
 
-
-
-    console.log(response);
-
-
-
-
+  }
 
   };
 
   return (
-    <div className="card">
+    <div className="cardRevieRating">
       <div className="row">
         <div className="col-2">
-          <img src="https://i.imgur.com/xELPaag.jpg" width="70" className="rounded-circle mt-2" alt="User" />
+          <img src={userInfo.profilePicture} width="70" className="rounded-circle mt-2" alt="User" />
         </div>
         <div className="col-10">
           <div className="comment-box ml-2">
@@ -71,13 +138,10 @@ const ReviewsItems = ({ itemId, userId }) => {
             <div className="comment-btns mt-2">
               <div className="row">
                 <div className="col-6">
-                  <div className="pull-left">
-                    <button className="btn btn-success btn-sm" onClick={handleCancel}>Cancel</button>
-                  </div>
                 </div>
                 <div className="col-6">
                   <div className="pull-right">
-                    <button className="btn btn-success send btn-sm" onClick={handleSend}>Send <i className="fa fa-long-arrow-right ml-1"></i></button>
+                  <button className="btn btn-success send btn-sm custom-blue-button" onClick={handleSend}>Send <i className="fa fa-long-arrow-right ml-1"></i></button>
                   </div>
                 </div>
               </div>

@@ -12,20 +12,6 @@ const LikedItemsPage = () => {
 
 
 
-  
-
-
-
-
-
-
-
-
-
-
-
-
-
   useEffect(() => {
     const fetchLikedItemsFromDB = async () => {
       try {

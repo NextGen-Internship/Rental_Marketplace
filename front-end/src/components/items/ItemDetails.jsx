@@ -4,17 +4,25 @@ import { useParams, useNavigate } from "react-router-dom";
 import Carousel from "./carousel/Carousel";
 import "./ItemDetails.css";
 import { jwtDecode } from "jwt-decode";
-import ReviewsItems  from "../reviews-items/ReviewsItems";
-import { South } from "@mui/icons-material";
+import ReviewsItems from "../reviews-items/ReviewsItems";
+import ShowReviews from "../reviews-items/ShowReviews";
+
 
 
 const endpoint = "items/";
+
 
 const ItemDetails = () => {
   const [item, setItem] = useState(null);
   const { id } = useParams();
   const navigate = useNavigate();
+  const [showReviews, setShowReviews] = useState(false);
+
+
   let userId = "";
+
+
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -22,6 +30,7 @@ const ItemDetails = () => {
     if (token !== null) {
       const decoded = jwtDecode(token);
       userId = decoded.jti;
+      setIsLoggedIn(true);
     }
 
     const fetchItem = async () => {
@@ -42,6 +51,23 @@ const ItemDetails = () => {
     }
 
   }, [item, id, navigate]);
+
+
+  const handleButtonClick = () => {
+    console.log("lognat li summ")
+    if (isLoggedIn) {
+      console.log("da wee");
+      //  return <ReviewsItems itemId = {id}/>
+      // navigate(`/reviews/${id}`);
+      setShowReviews(true);
+
+    } else {
+
+      navigate("/login");
+    }
+
+
+  };
 
   return (
     <div className="item-details-container">
@@ -65,7 +91,10 @@ const ItemDetails = () => {
             <h3>Deposit</h3>
             <p>{"$" + item.deposit}</p>
 
+            <ShowReviews  itemId={id}/>
             <button className="rent-button">Rent</button>
+       
+
           </div>
 
           <div className="user-details">
@@ -82,9 +111,20 @@ const ItemDetails = () => {
             </p>
             <h3>Posted by</h3>
             <p>{item.user.firstName + " " + item.user.lastName}</p>
-            <button className="message-button">Message</button>
+            <button className="message-button" onClick={handleButtonClick}>
+              Add Review
+            </button>
 
-            <ReviewsItems itemId = {id}  userId = {userId}/>
+            <button className="message-button" onClick={handleButtonClick}>
+              Add Review
+            </button>
+
+
+            {showReviews && <ReviewsItems itemId={id} />}
+
+
+            {/* <ReviewsItems itemId = {id}/> */}
+
           </div>
         </div>
       )}
