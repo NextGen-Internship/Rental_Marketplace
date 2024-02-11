@@ -61,3 +61,14 @@
 .items-list-item .like-button.clicked {
     color: rgb(128, 22, 22);
 }
+
+.favourite-title{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 2em;
+  }
+  
+  .App{
+      height: 100vh;
+  }

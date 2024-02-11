@@ -13,8 +13,14 @@ import Register from "./components/login/Register";
 import FilterComponent from "./components/filter/FilterComponent";
 import Views from "./components/views/Views";
 import LikedItemsPage from "./components/items/LikedItemsPage";
-// import ReviewsItems from "./components/reviews-items/ReviewsItems";
+
+
+import ProfilePage from "./components/profile-page/ProfilePage";
+
+
 function App() {
+
+  
   return (
     <Router>
       <div className="App">
@@ -34,6 +40,8 @@ function App() {
           <Route path="/views" element={<Views />} />
           <Route exact path="/likes" element={<LikedItemsPage />} />
           {/* <Route path="/review" element ={<ReviewsItems /> }/> */}
+
+          <Route path = "/settings" element = {<ProfilePage/>}/>
 
         </Routes>
 
