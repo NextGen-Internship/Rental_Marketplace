@@ -35,6 +35,8 @@ const Views = () => {
   }, [userId, location]);
 
   return (
+    <div> 
+       <h1 className="favourite-title">History</h1>
     <div className="items-list">
       {items.map((item, index) => (
         <div className="items-list-item" key={index}>
@@ -53,6 +55,7 @@ const Views = () => {
           </Link>
         </div>
       ))}
+    </div>
     </div>
   );
 };

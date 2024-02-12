@@ -14,7 +14,9 @@ import java.util.List;
 public class AddressService {
     private static final String ADDRESS_NOT_FOUND_MESSAGE = "Category with %d id not found.";
     private final AddressRepository addressRepository;
+
     private final ModelMapper modelMapper;
+
 
     @Autowired
     public AddressService(AddressRepository addressRepository, ModelMapper modelMapper) {
