@@ -34,6 +34,11 @@ const ItemDetails = () => {
     if (!item) {
       fetchItem();
     }
+
+    if (item && !item.isActive && item.user.id != userId) {
+      navigate("/notfound");
+    }
+    
   }, [item, id, navigate]);
 
   return (
