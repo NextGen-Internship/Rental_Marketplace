@@ -66,9 +66,6 @@ public class Item {
     @ManyToOne
     private Address address;
 
-//    @OneToMany
-//    private List<History> histories;
-
     @OneToMany(fetch = FetchType.LAZY , mappedBy = "item")
     private List<Picture> pictures;
 
@@ -80,4 +77,11 @@ public class Item {
 
     @OneToMany
     private List<Review> reviews;
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", email='" + name + '\'' ;
+    }
 }

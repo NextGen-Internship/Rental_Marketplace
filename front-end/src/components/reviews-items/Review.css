@@ -52,10 +52,11 @@
 
 .rating {
  display: flex;
-        margin-top: -10px;
+    margin-top: -10px;
     flex-direction: row-reverse;
     margin-left: -4px;
-        float: left;
+    float: left;
+    background-color: #FFFFFF;
 }
 
 .rating>input {
@@ -92,4 +93,12 @@
 
 .custom-blue-button {
     background-color: blue;
+  }
+
+  .editButton{
+    
+      
+      background-color: rgba(23, 23, 240, 0.714) ;  
+    
+    
   }

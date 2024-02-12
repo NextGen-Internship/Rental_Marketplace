@@ -11,8 +11,14 @@ const ReviewsItems = ({ itemId }) => {
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState('');
 
+  const [addedReview, setAddedReview] = useState(false);
+  const [review, setReviews] = useState('');
 
-  const[showForm, setShowForm] = useState(false);
+  const [editReview, setEditedReview] = useState(false);
+
+
+
+  const [showForm, setShowForm] = useState(false);
 
   const [userInfo, setUserInfo] = useState({
     firstName: '',
@@ -20,56 +26,94 @@ const ReviewsItems = ({ itemId }) => {
     email: '',
     phoneNumber: '',
     address: {
-        city: '',
-        postCode: '',
-        street: '',
-        streetNumber: '',
+      city: '',
+      postCode: '',
+      street: '',
+      streetNumber: '',
     }
     , profilePicture: ''
 
 
 
-});
+  });
 
 
 
-useEffect(() => {
+  useEffect(() => {
 
 
-
-
-  const token = localStorage.getItem('token');
+    const token = localStorage.getItem('token');
 
 
 
 
-  const decoded = jwtDecode(token);
-  const userId = decoded.jti;
+    const decoded = jwtDecode(token);
+    const userId = decoded.jti;
 
 
 
-  const fetchUserInfo = async () => {
+    const fetchUserInfo = async () => {
 
-
-    if(token){
-      
-    }
 
 
       try {
-          const response = await axios.get(`http://localhost:8080/rentify/users/${userId}`);
-          setUserInfo(response.data);
+        const response = await axios.get(`http://localhost:8080/rentify/users/${userId}`);
+        setUserInfo(response.data);
 
       }
       catch (error) {
-          console.error("Error fetching user Info ", error);
+        console.error("Error fetching user Info ", error);
       }
 
-  };
+    };
 
 
-  fetchUserInfo();
-}, []);
+    const fetchReviewUserAdd = async () => {
+
+
+      //localhost:8080/rentify/reviews/4/5
+      try {
+        const response = await axios.get(`http://localhost:8080/rentify/reviews/${userId}/${itemId}`);
+
+        console.log("responsaa na chekvaneto na revutataa");
+        console.log(response.data);
+
+        setAddedReview(response.data);
+
+
+
+        { }
+
+      }
+      catch (error) {
+        console.error("Error fetching user Info ", error);
+      }
+
+    };
+
+
+    const fetchReview = async () => {
+
+
+      //localhost:8080/rentify/reviews/userReview/4/1
+
+      try {
+        const response = await axios.get(`http://localhost:8080/rentify/reviews/userReview/${userId}/${itemId}`);
+
+        setReviews(response.data);
+
+        console.log("responsaa na revutatat ")
+        console.log(response.data);
+      } catch (error) {
+        console.error('Error fetching reviews:', error);
+        return [];
+      }
+    };
+
+    fetchUserInfo();
+    fetchReviewUserAdd();
+    fetchReview();
+  }, []);
 
 
 
@@ -83,7 +127,7 @@ useEffect(() => {
 
   const handleCancel = () => {
 
-    
+    setEditedReview(false);
   };
 
   console.log(rating);
@@ -92,64 +136,174 @@ useEffect(() => {
   const handleSend = async () => {
 
 
-    try{ 
-    const token = localStorage.getItem("token");
+    try {
+      const token = localStorage.getItem("token");
 
 
-    const decoded = jwtDecode(token);
-    const userId = decoded.jti;
-    console.log("useraa idito" + userId);
+      const decoded = jwtDecode(token);
+      const userId = decoded.jti;
 
 
-    const response = await axios.post(`http://localhost:8080/rentify/reviews/addReview/${userId}/${itemId}`, {
-      ratingStars: rating,
-      comments: comment
-    });
 
-    setRating(0);
-    setComment('');
+      const response = await axios.post(`http://localhost:8080/rentify/reviews/addReview/${userId}/${itemId}`, {
+        ratingStars: rating,
+        comments: comment
+      });
 
-  }catch(error){
-    console.error(error);
+      setAddedReview(true);
+      setRating(0);
+      setComment('');
 
-  }
+    } catch (error) {
+      console.error(error);
+
+    }
 
   };
 
+
+  const handleEditReview = () => {
+    setEditedReview(true);
+
+  };
+
+  const handleUpdateSend = async () => {
+
+    try {
+      const token = localStorage.getItem("token");
+
+
+      const decoded = jwtDecode(token);
+      const userId = decoded.jti;
+
+
+
+      const response = await axios.put(`http://localhost:8080/rentify/reviews/updateReview/${userId}/${itemId}`, {
+        ratingStars: rating,
+        comments: comment
+      });
+
+      setRating(0);
+      setComment('');
+
+      setEditedReview(false);
+
+    } catch (error) {
+      console.error(error);
+
+    }
+  }
+
   return (
-    <div className="cardRevieRating">
-      <div className="row">
-        <div className="col-2">
-          <img src={userInfo.profilePicture} width="70" className="rounded-circle mt-2" alt="User" />
-        </div>
-        <div className="col-10">
-          <div className="comment-box ml-2">
-            <h4>Add a comment</h4>
-            <div className="rating">
-              <input type="radio" name="rating" value="5" id="5" checked={rating === 5} onChange={handleRatingChange} /><label htmlFor="5">☆</label>
-              <input type="radio" name="rating" value="4" id="4" checked={rating === 4} onChange={handleRatingChange} /><label htmlFor="4">☆</label>
-              <input type="radio" name="rating" value="3" id="3" checked={rating === 3} onChange={handleRatingChange} /><label htmlFor="3">☆</label>
-              <input type="radio" name="rating" value="2" id="2" checked={rating === 2} onChange={handleRatingChange} /><label htmlFor="2">☆</label>
-              <input type="radio" name="rating" value="1" id="1" checked={rating === 1} onChange={handleRatingChange} /><label htmlFor="1">☆</label>
+    <>
+      {!addedReview ? (
+        <div className="cardRevieRating">
+          <div className="row">
+            <div className="col-2">
+              <img src={userInfo.profilePicture} width="70" className="rounded-circle mt-2" alt="User" />
             </div>
-            <div className="comment-area">
-              <textarea className="form-control" placeholder="What is your view?" rows="4" value={comment} onChange={handleCommentChange}></textarea>
-            </div>
-            <div className="comment-btns mt-2">
-              <div className="row">
-                <div className="col-6">
+            <div className="col-10">
+              <div className="comment-box ml-2">
+                <h4>Add a comment</h4>
+                <div className="rating">
+                  <input type="radio" name="rating" value="5" id="5" checked={rating === 5} onChange={handleRatingChange} /><label htmlFor="5">☆</label>
+                  <input type="radio" name="rating" value="4" id="4" checked={rating === 4} onChange={handleRatingChange} /><label htmlFor="4">☆</label>
+                  <input type="radio" name="rating" value="3" id="3" checked={rating === 3} onChange={handleRatingChange} /><label htmlFor="3">☆</label>
+                  <input type="radio" name="rating" value="2" id="2" checked={rating === 2} onChange={handleRatingChange} /><label htmlFor="2">☆</label>
+                  <input type="radio" name="rating" value="1" id="1" checked={rating === 1} onChange={handleRatingChange} /><label htmlFor="1">☆</label>
                 </div>
-                <div className="col-6">
-                  <div className="pull-right">
-                  <button className="btn btn-success send btn-sm custom-blue-button" onClick={handleSend}>Send <i className="fa fa-long-arrow-right ml-1"></i></button>
+                <div className="comment-area">
+                  <textarea className="form-control" placeholder="What is your view?" rows="4" value={comment} onChange={handleCommentChange}></textarea>
+                </div>
+                <div className="comment-btns mt-2">
+                  <div className="row">
+                    <div className="col-6">
+                    </div>
+                    <div className="col-6">
+                      <div className="pull-right">
+                        <button className="btn btn-success send btn-sm custom-blue-button" onClick={handleSend}>Send <i className="fa fa-long-arrow-right ml-1"></i></button>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-    </div>
+      ) : (
+
+        <>
+          {!editReview ? (
+            <div className="cardProfileReview">
+              <div className="row d-flex align-items-center">
+                <div>
+                  <img className="profile-pic" src={review.profilePicture} alt="Profile" />
+                </div>
+                <div className="d-flex flex-column">
+                  <h3 className="mt-2 mb-0">{review.firstName} {review.lastName}</h3>
+                  <div>
+                    <br></br>
+                    <p className="text-center">
+                      <span className="text-muted">{review.stars}.0</span>
+                      
+                    </p>
+                    <p className="text-center">
+                      
+                      <h4 className="blue-text mt-3">{review.comment}</h4>
+                      
+                    </p>
+                    <div className="row text-center">
+                      <button className="rent-button"  onClick={handleEditReview}>Edit Review</button>
+                     
+                    </div> 
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          ) : (
+            <div className="cardRevieRating">
+              <div className="row">
+                <div className="col-2">
+                  <img src={userInfo.profilePicture} width="70" className="rounded-circle mt-2" alt="User" />
+                </div>
+                <div className="col-10">
+                  <div className="comment-box ml-2">
+                    <h4>Add a comment</h4>
+                    <div className="rating">
+                      <input type="radio" name="rating" value="5" id="5" checked={rating === 5} onChange={handleRatingChange} /><label htmlFor="5">☆</label>
+                      <input type="radio" name="rating" value="4" id="4" checked={rating === 4} onChange={handleRatingChange} /><label htmlFor="4">☆</label>
+                      <input type="radio" name="rating" value="3" id="3" checked={rating === 3} onChange={handleRatingChange} /><label htmlFor="3">☆</label>
+                      <input type="radio" name="rating" value="2" id="2" checked={rating === 2} onChange={handleRatingChange} /><label htmlFor="2">☆</label>
+                      <input type="radio" name="rating" value="1" id="1" checked={rating === 1} onChange={handleRatingChange} /><label htmlFor="1">☆</label>
+                    </div>
+                    <div className="comment-area">
+                      <textarea className="form-control" placeholder="What is your view?" rows="4" value={comment} onChange={handleCommentChange}></textarea>
+                    </div>
+                    <div className="comment-btns mt-2">
+                      <div className="row">
+                        <div className="col-6">
+                        </div>
+                        <div className="col-6">
+                          <div className="pull-right">
+                            <button className="btn btn-success send btn-sm custom-blue-button" onClick={handleUpdateSend}>Send <i className="fa fa-long-arrow-right ml-1"></i></button>
+                            <button className="btn btn-success send btn-sm custom-blue-button" onClick={handleCancel}>Cancel <i className="fa fa-long-arrow-right ml-1"></i></button>
+
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+        </>
+
+      )}
+
+
+    </>
   );
 };
 

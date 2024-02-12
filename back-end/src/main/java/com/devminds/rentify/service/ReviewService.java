@@ -1,7 +1,6 @@
 package com.devminds.rentify.service;
 
 import com.devminds.rentify.dto.ReviewDto;
-import com.devminds.rentify.dto.UserDto;
 import com.devminds.rentify.dto.UserReviewDto;
 import com.devminds.rentify.entity.Item;
 import com.devminds.rentify.entity.Review;
@@ -12,7 +11,6 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -35,8 +33,6 @@ public class ReviewService {
 
             Item itemToReview = itemService.findById(itemId);
 
-
-            System.out.println(reviewDto.getRatingStars());
             review.setRating(reviewDto.getRatingStars());
             review.setComments(reviewDto.getComments());
             review.setUser(existingUser);
@@ -47,10 +43,6 @@ public class ReviewService {
         } catch (EntityNotFoundException e) {
 
         }
-
-
-//        System.out.println( mapReviewDtoToIReview(reviewDto));
-
         return mapReviewToReviewDto(review);
 
     }
@@ -83,6 +75,7 @@ public class ReviewService {
     public List<UserReviewDto> getReviews(Long itemId) {
         List<Review> reviews = reviewRepository.findByItemId(itemId);
         return reviews.stream()
+                .filter(review -> review.getComments() != null)
                 .map(review -> UserReviewDto.builder()
                         .firstName(review.getUser().getFirstName())
                         .lastName(review.getUser().getLastName())
@@ -91,7 +84,39 @@ public class ReviewService {
                         .profilePicture(review.getUser().getProfilePicture())
                         .build())
                 .collect(Collectors.toList());
+    }
 
+    public boolean hasUserReviewedItem(Long userId, Long itemId) {
+        return reviewRepository.existsByUserIdAndItemId(userId, itemId);
+    }
+
+
+    public UserReviewDto getUserReview(Long userId, Long itemId) {
+        Review review = reviewRepository.findByUserIdAndItemId(userId, itemId);
+        if (review == null) {
+            return null;
+        }
+
+        return UserReviewDto.builder()
+                .firstName(review.getUser().getFirstName())
+                .lastName(review.getUser().getLastName())
+                .stars(review.getRating())
+                .comment(review.getComments())
+                .profilePicture(review.getUser().getProfilePicture())
+                .build();
+    }
+
+    public ReviewDto updateReview(Long userId, Long itemId, ReviewDto reviewDto) {
+            Review existingReview = reviewRepository.findByUserIdAndItemId(userId, itemId);
+
+            if(existingReview != null){
+                existingReview.setRating(reviewDto.getRatingStars());
+                existingReview.setComments(reviewDto.getComments());
+
+                reviewRepository.save(existingReview);
+            }
+
+            return reviewDto;
     }
 }
 

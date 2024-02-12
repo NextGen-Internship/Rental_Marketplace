@@ -2,7 +2,6 @@ package com.devminds.rentify.controller;
 
 
 import com.devminds.rentify.dto.ReviewDto;
-import com.devminds.rentify.dto.UserDto;
 import com.devminds.rentify.dto.UserReviewDto;
 import com.devminds.rentify.service.ReviewService;
 import lombok.RequiredArgsConstructor;
@@ -42,7 +41,25 @@ public class ReviewController {
     }
 
 
+    @GetMapping("/{userId}/{itemId}")
+    public ResponseEntity<Boolean> getReviewsUser(@PathVariable Long userId , @PathVariable Long itemId) {
 
+        return new ResponseEntity<>( reviewService.hasUserReviewedItem(userId, itemId ), HttpStatus.OK);
 
+    }
 
+    @GetMapping("/userReview/{userId}/{itemId}")
+    public ResponseEntity<UserReviewDto> getUserReview(@PathVariable Long userId , @PathVariable Long itemId) {
+
+        return new ResponseEntity<>( reviewService.getUserReview(userId, itemId ), HttpStatus.OK);
+
+    }
+
+    @PutMapping("/updateReview/{userId}/{itemId}")
+    public ResponseEntity<ReviewDto> updateReview(@PathVariable Long userId , @PathVariable Long itemId
+            , @RequestBody ReviewDto reviewDto) {
+
+        return new ResponseEntity<>( reviewService.updateReview(userId, itemId, reviewDto ), HttpStatus.OK);
+
+    }
 }

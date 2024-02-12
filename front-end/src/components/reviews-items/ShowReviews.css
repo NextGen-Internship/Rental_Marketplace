@@ -34,14 +34,17 @@ a:hover {
     padding-top: 30px;
     padding-bottom: 30px
 }
-.rating-box {
+.ratingBox {
     width: 130px;
     height: 130px;
     margin-right: auto;
     margin-left: auto;
-    background-color: #FBC02D;
-    color: #fff
+    color: #fff;
+    background-color: #0091EA;
 }
+
+
+
 
 .rating-label {
     font-weight: bold
