@@ -17,6 +17,7 @@ import LikedItemsPage from "./components/items/LikedItemsPage";
 import ProfilePage from "./components/profile-page/ProfilePage";
 
 
+
 function App() {
 
   
@@ -26,6 +27,7 @@ function App() {
         <Navbar />
 
         <Routes>
+          
           <Route path="/" element={<Home />} />
           <Route path="/items/category/:id" element={<CategoryDetails />} />
           <Route path="items/:id" element={<ItemDetails />} />

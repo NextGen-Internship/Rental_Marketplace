@@ -8,11 +8,15 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import "./Navbar.css";
 import { jwtDecode } from "jwt-decode";
 import axios from 'axios';
+import { useDispatch } from 'react-redux'; 
+// import { like } from './path-to-your-likedItemsSlice'; 
+import { like } from "../../features/likedItems";
+
 
 
 const Navbar = () => {
   const location = useLocation();
-
+  const dispatch = useDispatch();
   const [userProfile, setUserProfile] = useState({
 
     name: '',
@@ -56,7 +60,11 @@ const Navbar = () => {
 
   const handleLogout = () => {
     Object.keys(localStorage).forEach(key => { localStorage.removeItem(key); });
+
+    dispatch(like([]));
     setIsLoggedIn(false);
+
+  
 
   };
 
