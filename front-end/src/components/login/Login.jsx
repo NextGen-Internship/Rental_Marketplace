@@ -1,9 +1,8 @@
 import axios from "axios";
 import { GoogleLogin } from "@react-oauth/google";
+import { Link, useNavigate } from "react-router-dom";
 import "./Login.css";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -12,7 +11,7 @@ function Login() {
   const [errorMessage, setErrorMessage] = useState("");
   const navigate = useNavigate();
 
-  const {REACT_APP_GOOGLE_CLIENT_ID} = process.env;
+  const { REACT_APP_GOOGLE_CLIENT_ID } = process.env;
 
   const handleTogglePassword = () => {
     setShowPassword(!showPassword);
@@ -31,7 +30,7 @@ function Login() {
         email,
         password,
       });
-    
+
       const { token } = response.data;
       localStorage.setItem("token", token);
       console.log("Login successful:", response.data);
@@ -53,14 +52,13 @@ function Login() {
             "Content-Type": "application/json",
             Authorization: jwt,
           },
-          
         }
       );
       console.log(backendResponse);
       const newToken = backendResponse.data;
 
-      localStorage.setItem("token",newToken);
-      
+      localStorage.setItem("token", newToken);
+
       navigate("/");
     } catch (error) {
       console.log("Error during Google login");
@@ -94,7 +92,8 @@ function Login() {
               {showPassword ? "Hide" : "Show"}
             </button>
           </div>
-          <button type="submit"> Submit</button>
+          <button type="submit">Submit</button>
+          <Link to="/forgot-password">Forgot Password?</Link>
         </form>
 
         <GoogleLogin
@@ -102,7 +101,6 @@ function Login() {
           clientId={REACT_APP_GOOGLE_CLIENT_ID}
         />
       </div>
-      
     </div>
   );
 }
