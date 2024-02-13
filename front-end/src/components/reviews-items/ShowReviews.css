@@ -149,19 +149,19 @@ td {
 
 
 .cardProfileReview.smaller {
-    max-width: 300px; /* Adjust the maximum width as needed */
+    max-width: 300px;
 }
 
 .cardProfileReview .profile-pic {
-    max-width: 5000px; /* Adjust the maximum width of the profile picture */
-    height: auto; /* Maintain aspect ratio */
+    max-width: 5000px; 
+    height: auto; 
 }
 
 .cardProfileReview .row.text-left {
-    font-size: 14px; /* Adjust the font size of the text content */
+    font-size: 14px; 
 }
 
 .cardProfileReview .blue-text {
-    font-size: 18px; /* Adjust the font size of the blue-text */
+    font-size: 18px; 
 }
 

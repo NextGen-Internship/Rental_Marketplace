@@ -5,8 +5,6 @@ import { jwtDecode } from 'jwt-decode';
 import { useEffect } from 'react';
 
 
-
-
 const ReviewsItems = ({ itemId }) => {
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState('');
@@ -15,8 +13,6 @@ const ReviewsItems = ({ itemId }) => {
   const [review, setReviews] = useState('');
 
   const [editReview, setEditedReview] = useState(false);
-
-
 
   const [showForm, setShowForm] = useState(false);
 
@@ -37,15 +33,10 @@ const ReviewsItems = ({ itemId }) => {
 
   });
 
-
-
   useEffect(() => {
 
 
     const token = localStorage.getItem('token');
-
-
-
 
     const decoded = jwtDecode(token);
     const userId = decoded.jti;
@@ -53,8 +44,6 @@ const ReviewsItems = ({ itemId }) => {
 
 
     const fetchUserInfo = async () => {
-
-
 
       try {
         const response = await axios.get(`http://localhost:8080/rentify/users/${userId}`);
@@ -67,22 +56,13 @@ const ReviewsItems = ({ itemId }) => {
 
     };
 
-
     const fetchReviewUserAdd = async () => {
 
-
-      //localhost:8080/rentify/reviews/4/5
       try {
         const response = await axios.get(`http://localhost:8080/rentify/reviews/${userId}/${itemId}`);
 
-        console.log("responsaa na chekvaneto na revutataa");
-        console.log(response.data);
-
         setAddedReview(response.data);
-
-
-
-        { }
+        
 
       }
       catch (error) {
@@ -91,19 +71,11 @@ const ReviewsItems = ({ itemId }) => {
 
     };
 
-
     const fetchReview = async () => {
-
-
-      //localhost:8080/rentify/reviews/userReview/4/1
-
       try {
         const response = await axios.get(`http://localhost:8080/rentify/reviews/userReview/${userId}/${itemId}`);
 
         setReviews(response.data);
-
-        console.log("responsaa na revutatat ")
-        console.log(response.data);
       } catch (error) {
         console.error('Error fetching reviews:', error);
         return [];
@@ -114,8 +86,6 @@ const ReviewsItems = ({ itemId }) => {
     fetchReviewUserAdd();
     fetchReview();
   }, []);
-
-
 
   const handleRatingChange = (event) => {
     setRating(parseInt(event.target.value));
@@ -130,12 +100,7 @@ const ReviewsItems = ({ itemId }) => {
     setEditedReview(false);
   };
 
-  console.log(rating);
-  console.log(comment);
-
   const handleSend = async () => {
-
-
     try {
       const token = localStorage.getItem("token");
 
@@ -161,7 +126,6 @@ const ReviewsItems = ({ itemId }) => {
 
   };
 
-
   const handleEditReview = () => {
     setEditedReview(true);
 
@@ -175,8 +139,6 @@ const ReviewsItems = ({ itemId }) => {
 
       const decoded = jwtDecode(token);
       const userId = decoded.jti;
-
-
 
       const response = await axios.put(`http://localhost:8080/rentify/reviews/updateReview/${userId}/${itemId}`, {
         ratingStars: rating,
@@ -193,7 +155,6 @@ const ReviewsItems = ({ itemId }) => {
 
     }
   }
-
   return (
     <>
       {!addedReview ? (

@@ -14,12 +14,12 @@ public class Review {
     @Id
     private Long id;
 
-//    @NotEmpty
-//    @Positive
+
+    @Positive
     @Column(name = "rating")
     private int rating;
 
-//    @NotEmpty
+
     @Size(max = 255)
     @Column(name = "comment")
     private String comments;

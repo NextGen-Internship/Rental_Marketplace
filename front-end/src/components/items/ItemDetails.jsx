@@ -69,9 +69,8 @@ const ItemDetails = () => {
 
 
   const handleButtonClick = () => {
-    console.log("lognat li summ")
+   
     if (isLoggedIn) {
-      console.log("da wee");
    
       setShowReviews(true);
 
