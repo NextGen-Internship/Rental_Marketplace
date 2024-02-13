@@ -1,6 +1,7 @@
 package com.devminds.rentify.service;
 
 import com.devminds.rentify.dto.CreateItemDto;
+import com.devminds.rentify.dto.EditItemDto;
 import com.devminds.rentify.dto.ItemDto;
 import com.devminds.rentify.entity.Address;
 import com.devminds.rentify.entity.Category;
@@ -13,6 +14,7 @@ import com.devminds.rentify.repository.CategoryRepository;
 import com.devminds.rentify.repository.ItemRepository;
 import com.devminds.rentify.repository.PictureRepository;
 import jakarta.persistence.criteria.Predicate;
+import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -27,12 +29,14 @@ import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
 public class ItemService {
     private static final String ITEM_NOT_FOUND_MESSAGE = "Item with %d id not found.";
+    private static final boolean IS_ITEM_ACTIVE_VALUE = true;
     private final ItemRepository itemRepository;
     private final ModelMapper modelMapper;
     private final AddressRepository addressRepository;
@@ -70,6 +74,7 @@ public class ItemService {
         itemToSave.setUser(principal);
         itemToSave.setPostedDate(LocalDateTime.now());
         itemToSave.setCategory(categoryToSave);
+        itemToSave.setIsActive(true);
 
         if (!pictureUrls.isEmpty()) {
             itemToSave.setThumbnail(pictureUrls.get(0).toString());
@@ -90,8 +95,8 @@ public class ItemService {
         return this.itemRepository.getReferenceById(savedItem.getId());
     }
 
-    public Page<ItemDto> getAllItems(Pageable pageable) {
-        Page<Item> itemsPage = itemRepository.findAll(pageable);
+    public Page<ItemDto> getAllActiveItems(Pageable pageable) {
+        Page<Item> itemsPage = itemRepository.findByIsActive(IS_ITEM_ACTIVE_VALUE, pageable);
         return itemsPage.map(this::mapItemToItemDto);
     }
 
@@ -114,33 +119,18 @@ public class ItemService {
     }
 
     public Page<ItemDto> getItemsByCategoryId(Long id, Pageable pageable) {
-        Page<Item> itemsPage = itemRepository.findByCategoryId(id, pageable);
+        Page<Item> itemsPage = itemRepository.findByCategoryIdAndIsActive(id, IS_ITEM_ACTIVE_VALUE, pageable);
         return itemsPage.map(this::mapItemToItemDto);
     }
 
-    private ItemDto mapItemToItemDto(Item item) {
-        return modelMapper.map(item, ItemDto.class);
-    }
-
-    private Item mapItemDtoToItem(ItemDto itemDto) {
-        return modelMapper.map(itemDto, Item.class);
-    }
-
-//    public Page<ItemDto> getFilteredItems(String categoryId, Float priceFrom, Float priceTo, String cityName,
-//                                          String searchTerm, Pageable pageable) {
-//
-//
-//    }
-
     public List<ItemDto> getPublishedItemsByUserId(Long userId) {
-         return  itemRepository.findByUserId(userId).stream()
-                 .map(this :: mapItemToItemDto)
-                 .collect(Collectors.toList());
-
+        return itemRepository.findByUserId(userId).stream()
+                .map(this::mapItemToItemDto)
+                .collect(Collectors.toList());
     }
 
-    public  Page<ItemDto> getFilteredItems(String categoryId, Float priceFrom, Float priceTo, String cityName,
-                                          String searchTerm , Pageable pageable) {
+    public Page<ItemDto> getFilteredItems(String categoryId, Float priceFrom, Float priceTo, String cityName,
+                                          String searchTerm, Pageable pageable) {
         Specification<Item> spec = (root, query, cb) -> {
             List<Predicate> predicates = new ArrayList<>();
             Long idOfCategory;
@@ -179,14 +169,90 @@ public class ItemService {
                 }
             }
 
+            predicates.add(cb.isTrue(root.get("isActive")));
             return cb.and(predicates.toArray(new Predicate[0]));
         };
 
         Page<Item> pageResult = itemRepository.findAll(spec, pageable);
-
         return pageResult.map(this::mapItemToItemDto);
     }
 
+    @Transactional
+    public ItemDto updateItem(Long id, EditItemDto editItemDto) throws IOException {
+        itemExists(id);
 
+        Address addressToAdd = new Address();
+        addressToAdd.setCity(editItemDto.getCity());
+        addressToAdd.setPostCode(editItemDto.getPostCode());
+        addressToAdd.setStreet(editItemDto.getStreet());
+        addressToAdd.setStreetNumber(editItemDto.getStreetNumber());
+        this.addressRepository.save(addressToAdd);
 
+        User principal = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Category categoryToSave = this.categoryRepository.findByName(editItemDto.getCategory()).orElse(null);
+
+        Item itemToSave = this.modelMapper.map(editItemDto, Item.class);
+        itemToSave.setId(id);
+        itemToSave.setAddress(addressToAdd);
+        itemToSave.setUser(principal);
+        itemToSave.setPostedDate(LocalDateTime.now());
+        itemToSave.setCategory(categoryToSave);
+        itemToSave.setIsActive(true);
+        itemToSave.setPictures(new ArrayList<>());
+        Item savedItem = this.itemRepository.save(itemToSave);
+
+        deletePictures(editItemDto.getDeletedPicturesOnEdit());
+
+        List<MultipartFile> pictureFiles = new ArrayList<>();
+        if (editItemDto.getPictures() != null) {
+            pictureFiles = editItemDto.getPictures().stream().filter(Objects::nonNull).toList();
+        }
+        List<URL> pictureUrls = storageService.uploadFiles(pictureFiles);
+        savePictures(id, pictureUrls, savedItem);
+
+        return mapItemToItemDto(itemRepository.getReferenceById(savedItem.getId()));
+    }
+
+    public ItemDto changeStatusOfItem(Long id) {
+        Item itemToUpdate = itemRepository.findById(id)
+                .orElseThrow(() -> new ItemNotFoundException(String.format(ITEM_NOT_FOUND_MESSAGE, id)));
+
+        itemToUpdate.setIsActive(!itemToUpdate.getIsActive());
+        return mapItemToItemDto(itemRepository.save(itemToUpdate));
+    }
+
+    private void itemExists(Long id) {
+        if (itemRepository.findById(id).isEmpty()) {
+            throw new ItemNotFoundException(String.format(ITEM_NOT_FOUND_MESSAGE, id));
+        }
+    }
+
+    private ItemDto mapItemToItemDto(Item item) {
+        return modelMapper.map(item, ItemDto.class);
+    }
+
+    private Item mapItemDtoToItem(ItemDto itemDto) {
+        return modelMapper.map(itemDto, Item.class);
+    }
+
+    private void deletePictures(String[] picturesToDelete) {
+        for (String url : picturesToDelete) {
+            pictureRepository.deleteByUrl(url);
+        }
+    }
+
+    private void savePictures(Long id, List<URL> pictureUrls, Item savedItem) {
+        List<Picture> picturesToAdd = new ArrayList<>();
+
+        for (URL pictureUrl : pictureUrls) {
+            Picture picture = new Picture();
+            picture.setUrl(pictureUrl.toString());
+            picture.setItem(savedItem);
+            picturesToAdd.add(this.pictureRepository.save(picture));
+        }
+        savedItem.setPictures(picturesToAdd);
+
+        savedItem.setThumbnail(!pictureRepository.findByItemId(id).isEmpty() ?
+                pictureRepository.findByItemId(id).get(0).getUrl() : null);
+    }
 }

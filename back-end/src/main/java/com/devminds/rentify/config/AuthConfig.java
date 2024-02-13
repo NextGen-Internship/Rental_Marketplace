@@ -39,7 +39,6 @@ public class AuthConfig {
                                 .requestMatchers("/rentify/addresses/**").permitAll()
                                 .requestMatchers("/rentify/favourites/**").permitAll()
                                 .requestMatchers("/rentify/favourites/userFavourites/**").permitAll()
-
                                 .requestMatchers("/rentify/users").permitAll()
                                 .requestMatchers("/rentify/users/**").permitAll()
                                 .requestMatchers("/rentify/images").permitAll()
@@ -50,10 +49,8 @@ public class AuthConfig {
                                 .requestMatchers("/rentify/likes/**").permitAll()
                                 .requestMatchers("/rentify/pictures").permitAll()
                                 .requestMatchers("/rentify/pictures/**").permitAll()
-
                                 .requestMatchers("/rentify/**").permitAll()
                                 .requestMatchers("/static/profilePicture.jpg").permitAll()
-
                                 .requestMatchers("/v3/**", "/swagger-ui/**").permitAll()
                                 .anyRequest().authenticated()
 
@@ -61,7 +58,6 @@ public class AuthConfig {
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
-
 
         return http.build();
     }
