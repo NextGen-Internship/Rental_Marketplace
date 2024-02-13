@@ -1,9 +1,13 @@
 import React, { useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
+import axios from "axios";
 
 const ResetPassword = () => {
   const navigate = useNavigate();
-  const { email, token } = useParams();
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const token = searchParams.get("token");
+
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
     password: "",
@@ -13,6 +17,8 @@ const ResetPassword = () => {
     password: "",
     confirmPassword: "",
   });
+  const [errorResponse, setErrorResponse] = useState("");
+
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -47,7 +53,7 @@ const ResetPassword = () => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (formData.password !== formData.confirmPassword) {
@@ -60,11 +66,20 @@ const ResetPassword = () => {
         password: "",
         confirmPassword: "",
       });
-      // Continue with form submission or other actions
 
+      try {
+        const backendUrl = `http://localhost:8080/rentify/password/reset-confirm?token=${token}`;
+        const response = await axios.post(backendUrl, { password: formData.password });
 
-
-      navigate("/login");
+        setErrorResponse("");
+        navigate("/login");
+      } catch (error) {
+        if (error.response && error.response.status === 404) {
+          setErrorResponse(error.response.data.error);
+        } else {
+          setErrorResponse("An error occurred. Please try again later.");
+        }
+      }
     }
   };
 
@@ -130,6 +145,12 @@ const ResetPassword = () => {
                     Reset Password
                   </button>
                 </div>
+
+                {errorResponse && (
+                <div className="alert alert-danger" role="alert">
+                  {errorResponse}
+                </div>
+              )}
               </form>
             </div>
           </div>
