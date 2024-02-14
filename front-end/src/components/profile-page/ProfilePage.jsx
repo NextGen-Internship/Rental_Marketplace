@@ -7,6 +7,11 @@ import { Link, useParams } from "react-router-dom";
 import noImage from "../../assets/no-image.avif";
 import { jwtDecode } from 'jwt-decode';
 
+
+import { useDispatch, useSelector } from "react-redux"; 
+import { updateUser } from "../../features/userSlice";
+
+
 const ProfilePage = () => {
     const [userItems, setuserItems] = useState([]);
     const [errorFoInputs, setErrorForInputs] = useState(false);
@@ -18,22 +23,46 @@ const ProfilePage = () => {
     const decoded = jwtDecode(token);
     const userId = decoded.jti;
 
-    const [userInfo, setUserInfo] = useState({
-        firstName: '',
-        lastName: '',
-        email: '',
-        phoneNumber: '',
-        address: {
-            city: '',
-            postCode: '',
-            street: '',
-            streetNumber: '',
-        }
-        , profilePicture: ''
+
+
+    const userInfo = useSelector((state) => state.user.values);
+
+  
+    // const userInfo = useSelector((state) => ({
+    //     firstName: state.user.firstName || '',
+    //     lastName: state.user.lastName || '',
+    //     email: state.user.email || '',
+    //     phoneNumber: state.user.phoneNumber || '',
+    //     address: state.user.address || {
+    //       city: '',
+    //       postCode: '',
+    //       street: '',
+    //       streetNumber: '',
+    //     },
+    //     profilePicture: state.user.profilePicture || '',
+    // }));
+    
+
+     const dispatch = useDispatch();
+    
+
+
+    // const [userInfo, setUserInfo] = useState({
+    //     firstName: '',
+    //     lastName: '',
+    //     email: '',
+    //     phoneNumber: '',
+    //     address: {
+    //         city: '',
+    //         postCode: '',
+    //         street: '',
+    //         streetNumber: '',
+    //     }
+    //     , profilePicture: ''
 
 
 
-    });
+    // });
 
     const [imageFile, setimageFile] = useState('');
 
@@ -62,7 +91,11 @@ const ProfilePage = () => {
                 }
             });
 
-            setUserInfo(response.data);
+            // setUserInfo(response.data);
+
+            console.log("responsaa v profilaa")
+            console.log(response.data);
+            dispatch(updateUser(response.data));
             setEditPictureMode(false);
             setErrorForProfilePicture(false);
             } catch (error) {
@@ -116,7 +149,9 @@ const ProfilePage = () => {
 
 
 
-            setUserInfo(response.data);
+            // setUserInfo(response.data);
+            dispatch(updateUser(response.data));
+
             setEditMode(false);
             setErrorForInputs(false);
 
@@ -182,7 +217,11 @@ const ProfilePage = () => {
 
             try {
                 const response = await axios.get(`http://localhost:8080/rentify/users/${userId}`);
-                setUserInfo(response.data);
+                // setUserInfo(response.data);
+               
+                console.log("fetchaaaaaaa")
+                console.log(response.data);
+                dispatch(updateUser(response.data))
 
             }
             catch (error) {
@@ -196,6 +235,8 @@ const ProfilePage = () => {
         fetchUserInfo();
     }, []);
 
+    console.log("usersss infooooooooooooo maik");
+    console.log(userInfo.firstName+ "" + userInfo.lastName)
 
     return (
         <div className="container">

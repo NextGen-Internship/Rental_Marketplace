@@ -3,7 +3,7 @@ import ReactDOM from "react-dom/client";
 import App from "./App";
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import 'bootstrap/dist/css/bootstrap.css';
-import {store} from './app/store'
+import store from './app/store'
 import {Provider} from 'react-redux'
 
 const root = ReactDOM.createRoot(document.getElementById("root"));

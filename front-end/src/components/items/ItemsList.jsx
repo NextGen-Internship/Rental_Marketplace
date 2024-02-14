@@ -22,7 +22,7 @@ const endpointItems = "items";
 
 const ItemsList = () => {
 
-const likedItems = useSelector((state) => new Set(state.likedItems.values));
+  const likedItems = useSelector((state) => new Set(state.likedItems.values));
 
 
 
@@ -145,12 +145,11 @@ const likedItems = useSelector((state) => new Set(state.likedItems.values));
 
           if (response.ok) {
             const likedItemsFromDB = await response.json();
-            const likedItemsSet = new Set(likedItemsFromDB);
-            const likedItemsArray = Array.from(likedItemsSet);
-dispatch(like(likedItemsArray));
+            const likedItemsArray = Array.from(new Set(likedItemsFromDB));
+            dispatch(like(likedItemsArray));
 
             console.log("predii dispachaaa");
-            console.log(likedItemsSet);
+            // console.log(likedItemsSet);
             // setLikedItems(likedItemsSet);
             // dispatch(like(likedItemsSet));
           } else {
