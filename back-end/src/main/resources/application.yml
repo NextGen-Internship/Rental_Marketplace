@@ -20,17 +20,17 @@ spring:
       properties:
         hibernate:
           format_sql: true
-#  mail:
-#    host: smtp.gmail.com
-#    port: 587
-#    username: rrentify@gmail.com
-#    password: rrentify123
-#    properties:
-#      mail:
-#        smtp:
-#          auth: true
-#          starttls:
-#            enable: true
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ${EMAIL}
+    password: ${MAIL_SENDER_PASSWORD}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
   servlet:
     multipart:
       enabled: true

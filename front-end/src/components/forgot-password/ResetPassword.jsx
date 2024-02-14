@@ -19,7 +19,6 @@ const ResetPassword = () => {
   });
   const [errorResponse, setErrorResponse] = useState("");
 
-
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData({
@@ -69,7 +68,11 @@ const ResetPassword = () => {
 
       try {
         const backendUrl = `http://localhost:8080/rentify/password/reset-confirm?token=${token}`;
-        const response = await axios.post(backendUrl, { password: formData.password });
+        const response = await axios.post(backendUrl, formData.password, {
+          headers: {
+            "Content-Type": "text/plain",
+          },
+        });
 
         setErrorResponse("");
         navigate("/login");
@@ -147,10 +150,10 @@ const ResetPassword = () => {
                 </div>
 
                 {errorResponse && (
-                <div className="alert alert-danger" role="alert">
-                  {errorResponse}
-                </div>
-              )}
+                  <div className="alert alert-danger" role="alert">
+                    {errorResponse}
+                  </div>
+                )}
               </form>
             </div>
           </div>
