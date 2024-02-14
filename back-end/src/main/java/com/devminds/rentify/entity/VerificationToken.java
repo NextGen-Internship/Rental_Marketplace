@@ -11,10 +11,10 @@ import lombok.Data;
 
 import java.time.LocalDateTime;
 
-@Entity
-@Table(name = "reset_token")
 @Data
-public class PasswordResetToken {
+@Entity
+@Table(name = "verification_token")
+public class VerificationToken {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -26,5 +26,4 @@ public class PasswordResetToken {
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
     private User user;
-
 }

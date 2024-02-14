@@ -58,6 +58,9 @@ public class User implements UserDetails {
     @Column(name = "profile_picture")
     private String profilePicture;
 
+    @Column(name = "is_verified")
+    private boolean isVerified;
+
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "address_id")
@@ -70,7 +73,6 @@ public class User implements UserDetails {
     @ManyToOne
     @JoinColumn(name = "role_id")
     private Role role;
-
 
     @OneToMany
     private List<Payment> payments;
