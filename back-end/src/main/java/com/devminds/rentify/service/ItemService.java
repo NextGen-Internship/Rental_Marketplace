@@ -12,16 +12,17 @@ import com.devminds.rentify.repository.AddressRepository;
 import com.devminds.rentify.repository.CategoryRepository;
 import com.devminds.rentify.repository.ItemRepository;
 import com.devminds.rentify.repository.PictureRepository;
+import com.stripe.exception.StripeException;
 import jakarta.persistence.criteria.Predicate;
+import jakarta.servlet.http.HttpServletRequest;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-
 import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDateTime;
@@ -31,6 +32,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class ItemService {
     private static final String ITEM_NOT_FOUND_MESSAGE = "Item with %d id not found.";
     private final ItemRepository itemRepository;
@@ -39,18 +41,11 @@ public class ItemService {
     private final StorageService storageService;
     private final PictureRepository pictureRepository;
     private final CategoryRepository categoryRepository;
+    private final StripeService stripeService;
 
-    @Autowired
-    public ItemService(ItemRepository itemRepository, ModelMapper modelMapper, AddressRepository addressRepository, StorageService storageService, PictureRepository pictureRepository, CategoryRepository categoryRepository) {
-        this.itemRepository = itemRepository;
-        this.modelMapper = modelMapper;
-        this.addressRepository = addressRepository;
-        this.storageService = storageService;
-        this.pictureRepository = pictureRepository;
-        this.categoryRepository = categoryRepository;
-    }
 
-    public Item saveItem(CreateItemDto createItemDto) throws IOException {
+
+    public Item saveItem(CreateItemDto createItemDto,HttpServletRequest httpServletRequest) throws IOException, StripeException {
         User principal = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         Address addressToAdd = new Address();
@@ -87,6 +82,7 @@ public class ItemService {
         }
         savedItem.setPictures(picturesToAdd);
 
+        stripeService.createStripeAccount(httpServletRequest,savedItem.getUser().getId());
         return this.itemRepository.getReferenceById(savedItem.getId());
     }
 
@@ -125,12 +121,6 @@ public class ItemService {
     private Item mapItemDtoToItem(ItemDto itemDto) {
         return modelMapper.map(itemDto, Item.class);
     }
-
-//    public Page<ItemDto> getFilteredItems(String categoryId, Float priceFrom, Float priceTo, String cityName,
-//                                          String searchTerm, Pageable pageable) {
-//
-//
-//    }
 
     public List<ItemDto> getPublishedItemsByUserId(Long userId) {
          return  itemRepository.findByUserId(userId).stream()

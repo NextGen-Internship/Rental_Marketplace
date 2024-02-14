@@ -4,6 +4,7 @@ import com.devminds.rentify.entity.Address;
 import com.devminds.rentify.entity.Role;
 import lombok.Data;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 

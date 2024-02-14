@@ -50,13 +50,12 @@ public class AuthConfig {
                                 .requestMatchers("/rentify/likes/**").permitAll()
                                 .requestMatchers("/rentify/pictures").permitAll()
                                 .requestMatchers("/rentify/pictures/**").permitAll()
-
                                 .requestMatchers("/rentify/**").permitAll()
                                 .requestMatchers("/static/profilePicture.jpg").permitAll()
-
                                 .requestMatchers("/v3/**", "/swagger-ui/**").permitAll()
                                 .requestMatchers("/create/stripe").permitAll()
                                 .requestMatchers("/stripe/checkout").permitAll()
+                                .requestMatchers("stripe/item").permitAll()
                                 .anyRequest().authenticated()
 
                 )

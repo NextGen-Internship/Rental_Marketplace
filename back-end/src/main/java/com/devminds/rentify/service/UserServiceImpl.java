@@ -164,6 +164,9 @@ public class UserServiceImpl implements UserService {
         if (updatedUserInfoDto.getPhoneNumber() != null) {
             existingUser.setPhoneNumber(updatedUserInfoDto.getPhoneNumber());
         }
+        if (updatedUserInfoDto.getIban() != null) {
+            existingUser.setIban(updatedUserInfoDto.getIban());
+        }
 
 
 

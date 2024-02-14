@@ -19,11 +19,13 @@ CREATE TABLE IF NOT EXISTS user (
     password VARCHAR(255),
     email VARCHAR(100) UNIQUE NOT NULL,
     address_id INT,
+    iban VARCHAR(255),
+    stripe_account_id VARCHAR(255),
     FOREIGN KEY (address_id) REFERENCES address(id),
     profile_picture VARCHAR(512),
     role_id INT,
     FOREIGN KEY (role_id) REFERENCES user_role(id),
-    phone VARCHAR(10)
+    phone VARCHAR(13)
 );
 
 CREATE TABLE IF NOT EXISTS item_category (

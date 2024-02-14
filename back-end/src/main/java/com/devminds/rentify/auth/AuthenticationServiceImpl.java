@@ -33,7 +33,7 @@ public class AuthenticationServiceImpl implements AuthService {
     private final RoleRepository roleRepository;
 
     @Override
-    public AuthenticationRespone register(UserRegisterDto userRegisterDto) throws StripeException {
+    public AuthenticationRespone register(UserRegisterDto userRegisterDto)  {
 
         User user = userMapper.mapToUser(userRegisterDto);
         user.setRole(roleRepository.findUserRole());

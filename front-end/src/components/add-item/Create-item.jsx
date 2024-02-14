@@ -4,6 +4,7 @@ import CategoryModal from "./CategoryModal";
 import axios from "axios";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import { useNavigate } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
 
 function CreateItem() {
   const [title, setTitle] = useState("");
@@ -19,8 +20,8 @@ function CreateItem() {
     streetNumber: "",
   });
   const navigate = useNavigate();
-
   const jwt_token = localStorage.getItem('token');
+ 
 
   const handleChange = (event) => {
     const inputValue = event.target.value;
@@ -111,6 +112,7 @@ function CreateItem() {
     } catch (error) {
       console.error("Error adding item:", error.message);
     }
+    
   };
 
   return (
