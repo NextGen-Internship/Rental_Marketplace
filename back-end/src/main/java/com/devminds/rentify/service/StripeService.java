@@ -126,6 +126,7 @@ public class StripeService {
             Account account = Account.create(params);
             principal.setStripeAccountId(account.getIndividual().getAccount());
             account.setPayoutsEnabled(true);
+            userRepository.save(principal);
             return account;
         }
 
