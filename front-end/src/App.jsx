@@ -12,8 +12,10 @@ import FilterComponent from "./components/filter/FilterComponent";
 import Views from "./components/views/Views";
 import LikedItemsPage from "./components/items/LikedItemsPage";
 import ProfilePage from "./components/profile-page/ProfilePage";
+import ForgotPassword from "./components/forgot-password/ForgotPassword";
+import ResetPassword from "./components/forgot-password/ResetPassword";
+import AccountVerification from "./components/account-verification/AccountVerification";
 import EditItem from "./components/profile-page/EditItem";
-import "./App.css";
 
 
 function App() {
@@ -29,14 +31,17 @@ function App() {
           <Route path="items/:id" element={<ItemDetails />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="*" element={<NotFound />} />
+          <Route path="/notfound" element={<NotFound />} />
           <Route path="/filter" element={<FilterComponent />} />
           <Route path="/items/create" element={<CreateItem />} />
           <Route path="/views" element={<Views />} />
           <Route exact path="/likes" element={<LikedItemsPage />} />
-          <Route path = "/settings" element = {<ProfilePage/>}/>
+          <Route path="/settings" element={<ProfilePage />} />
           <Route path = "/edit/:id" element = {<EditItem/>}/>
-          <Route path="/notfound" element={<NotFound />} />
-          <Route path="*" element={<NotFound />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
+          <Route path="/account-verification" element={<AccountVerification />} />
         </Routes>
         <Footer />
       </div>

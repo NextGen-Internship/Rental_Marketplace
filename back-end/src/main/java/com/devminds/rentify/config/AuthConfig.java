@@ -49,11 +49,10 @@ public class AuthConfig {
                                 .requestMatchers("/rentify/likes/**").permitAll()
                                 .requestMatchers("/rentify/pictures").permitAll()
                                 .requestMatchers("/rentify/pictures/**").permitAll()
-                                .requestMatchers("/rentify/**").permitAll()
                                 .requestMatchers("/static/profilePicture.jpg").permitAll()
+                                .requestMatchers("/rentify/password/**").permitAll()
+                                .requestMatchers("/rentify/verification/**").permitAll()
                                 .requestMatchers("/rentify/**").permitAll()
-                                .requestMatchers("/static/profilePicture.jpg").permitAll()
-
                                 .requestMatchers("/v3/**", "/swagger-ui/**").permitAll()
                                 .anyRequest().authenticated()
 
