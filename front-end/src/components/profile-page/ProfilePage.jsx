@@ -176,7 +176,6 @@ const ProfilePage = () => {
           `http://localhost:8080/rentify/users/${userId}`
         );
         setUserInfo(response.data);
-        console.log(response.data)
       } catch (error) {
         console.error("Error fetching user Info ", error);
       }
