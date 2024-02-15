@@ -1,12 +1,6 @@
 package com.devminds.rentify.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
@@ -16,23 +10,24 @@ import lombok.Data;
 @Entity
 @Table(name = "review")
 public class Review {
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
-    private long id;
+    private Long id;
 
-    @NotEmpty
+
     @Positive
     @Column(name = "rating")
     private int rating;
 
-    @NotEmpty
+
     @Size(max = 255)
-    @Column(name = "comments")
+    @Column(name = "comment")
     private String comments;
 
-    @ManyToOne
+  @ManyToOne(fetch = FetchType.EAGER)
     private Item item;
 
-    @ManyToOne
+
+    @ManyToOne(fetch = FetchType.EAGER)
     private User user;
 }

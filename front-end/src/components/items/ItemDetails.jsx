@@ -4,14 +4,28 @@ import { useParams, useNavigate } from "react-router-dom";
 import Carousel from "./carousel/Carousel";
 import "./ItemDetails.css";
 import { jwtDecode } from "jwt-decode";
+import ReviewsItems from "../reviews-items/ReviewsItems";
+import ShowReviews from "../reviews-items/ShowReviews";
+import axios from 'axios';
+
+
 
 const endpoint = "items/";
+
 
 const ItemDetails = () => {
   const [item, setItem] = useState(null);
   const { id } = useParams();
   const navigate = useNavigate();
+  const [showReviews, setShowReviews] = useState(false);
+  const [averageRating , setAverageRating] = useState(0);
+
+
+
   let userId = "";
+
+
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -19,27 +33,61 @@ const ItemDetails = () => {
     if (token !== null) {
       const decoded = jwtDecode(token);
       userId = decoded.jti;
+      setIsLoggedIn(true);
     }
 
     const fetchItem = async () => {
       try {
         const result = await fetchData(endpoint + id);
-        console.log(result);
         setItem(result);
       } catch (error) {
         navigate("/notfound");
       }
     };
 
+    const fetchRating = async () => {
+      
+    
+      
+      try {
+          const response = await axios.get(`http://localhost:8080/rentify/reviews/rating/${id}`);
+          setAverageRating(response.data)
+
+      }
+      catch (error) {
+          console.error("Error fetching user Info ", error);
+      }
+
+  };
+
     if (!item) {
       fetchItem();
     }
+
+
+    fetchRating();
 
     if (item && !item.isActive && item.user.id != userId) {
       navigate("/notfound");
     }
     
+    
   }, [item, id, navigate]);
+
+
+  const handleButtonClick = () => {
+   
+    if (isLoggedIn) {
+   
+      setShowReviews(true);
+
+    } else {
+
+      navigate("/login");
+    }
+
+
+  };
 
   return (
     <div className="item-details-container">
@@ -59,16 +107,36 @@ const ItemDetails = () => {
               }
             </p>
           </div>
-
+          
           <div className="price-deposit-box">
+           
+           <div class="row justify-content-between">
+    <div class="col-md-4 text-center">
+        <div>
             <h3>Price</h3>
             <p>{"$" + item.price}</p>
             <h3>Deposit</h3>
             <p>{"$" + item.deposit}</p>
-
+        </div>
+    </div>
+    <div class="col-md-4 text-center">
+        <div class="ratingBox">
+            <h1 class="pt-4">{averageRating}</h1>
+            <p>out of 5</p>
+        </div>
+        <div>
+            <span class="fa fa-star star-active"></span>
+            <span class="fa fa-star star-active"></span>
+            <span class="fa fa-star star-active"></span>
+            <span class="fa fa-star star-active"></span>
+            <span class="fa fa-star star-inactive"></span>
+        </div>
+    </div>
+</div>        
             <button className="rent-button">Rent</button>
-          </div>
-
+      
+       <ShowReviews  itemId={id}/>
+        </div>
           <div className="user-details">
             <h3>Posted on</h3>
             <p>
@@ -83,7 +151,13 @@ const ItemDetails = () => {
             </p>
             <h3>Posted by</h3>
             <p>{item.user.firstName + " " + item.user.lastName}</p>
-            <button className="message-button">Message</button>
+            <button className="message-button" onClick={handleButtonClick}>
+              Add Review
+            </button>
+
+
+            {showReviews && <ReviewsItems itemId={id} />}
+
           </div>
         </div>
       )}
