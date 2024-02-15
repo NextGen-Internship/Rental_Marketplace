@@ -341,7 +341,7 @@ const ItemsList = () => {
     </div>
 
       <div className="items-list">
-        { 
+        {
           items &&
             items.map((item) => (
               <div className="items-list-item" key={item.id}>
@@ -358,7 +358,7 @@ const ItemsList = () => {
                     <div className="card-body">
                       <h3 className="card-title">{item.name}</h3>
                       <p className="card-text">{"$" + item.price}</p>
-                      <p className="card-text">{item.address.city}</p>
+                      <p className="card-text">{item.addresses}</p>
                     </div>
                   </div>
                 </Link>
