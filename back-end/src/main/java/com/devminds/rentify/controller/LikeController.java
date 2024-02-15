@@ -28,7 +28,6 @@ public class LikeController {
     private final ItemService itemService;
 
 
-
     private final ItemService itemRepository;
 
     @PostMapping("/liked")
@@ -38,7 +37,7 @@ public class LikeController {
             Optional<User> userOptional = userService.findById(likeDto.getUserId());
             User user = userOptional.orElse(null);
 
-            Item  item = itemService.findById(likeDto.getItemId());
+            Item item = itemService.findById(likeDto.getItemId());
             if (likeDto.isLiked()) {
                 likeService.saveLike(user, item);
             } else {
@@ -60,9 +59,6 @@ public class LikeController {
         Set<Long> likedItems = likeService.getLikedItemsByUserId(userId);
         return ResponseEntity.ok(likedItems);
     }
-
-
-
 
 
 }

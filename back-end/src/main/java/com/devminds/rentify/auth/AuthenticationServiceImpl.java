@@ -31,34 +31,31 @@ public class AuthenticationServiceImpl implements AuthService {
     private final RoleRepository roleRepository;
 
     @Override
-    public AuthenticationRespone register(UserRegisterDto userRegisterDto)  {
+    public AuthenticationResponse register(UserRegisterDto userRegisterDto) {
 
         User user = userMapper.mapToUser(userRegisterDto);
         user.setRole(roleRepository.findUserRole());
         user.setPassword(passwordEncoder.encode(userRegisterDto.getPassword()));
         user.setProfilePicture(defaultPicture);
         userService.saveUser(user);
-        return AuthenticationRespone.builder()
+        return AuthenticationResponse.builder()
                 .email(user.getEmail()).build();
     }
 
     @Override
-    public AuthenticationRespone login(LoginDto loginDto)  {
+    public AuthenticationResponse login(LoginDto loginDto) {
 
-            authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(loginDto.getEmail(), loginDto.getPassword())
-            );
+        authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(loginDto.getEmail(), loginDto.getPassword())
+        );
 
-            var user = userService.findByEmail(loginDto.getEmail())
-                    .orElseThrow(() -> new UserNotFoundException("User not found"));
+        var user = userService.findByEmail(loginDto.getEmail())
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
 
-            var token = jwtService.generateToken(user);
-            return AuthenticationRespone.builder()
-                    .token(token)
-                    .email(user.getEmail())
-                    .build();
-
-
-
+        var token = jwtService.generateToken(user);
+        return AuthenticationResponse.builder()
+                .token(token)
+                .email(user.getEmail())
+                .build();
     }
 }

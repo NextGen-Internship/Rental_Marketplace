@@ -1,5 +1,6 @@
 package com.devminds.rentify.dto;
 
+import com.devminds.rentify.entity.Address;
 import com.devminds.rentify.entity.Category;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -18,7 +19,7 @@ public class ItemDto {
     @Size(max = 100)
     private String name;
 
-    @Size(max = 255)
+    @Size(max = 1024)
     private String description;
 
     @NotEmpty
@@ -36,6 +37,10 @@ public class ItemDto {
 
     private String thumbnail;
 
+    private Boolean isActive;
+
     @NotNull
     private PlainUserDto user;
+
+    private Address address;
 }

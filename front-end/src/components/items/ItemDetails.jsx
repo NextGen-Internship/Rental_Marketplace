@@ -64,7 +64,14 @@ const ItemDetails = () => {
       fetchItem();
     }
 
+
     fetchRating();
+
+    if (item && !item.isActive && item.user.id != userId) {
+      navigate("/notfound");
+    }
+    
+    
   }, [item, id, navigate]);
 
 
@@ -93,8 +100,11 @@ const ItemDetails = () => {
           <div className="description-box">
             <h2>Description</h2>
             <p>
-              {item.description +
-                "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum"}
+              {item.description}
+              <br />
+              {
+                "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum"
+              }
             </p>
           </div>
           

@@ -6,7 +6,7 @@ import com.devminds.rentify.dto.UserRegisterDto;
 import java.io.IOException;
 
 public interface AuthService {
-    AuthenticationRespone register(UserRegisterDto userRegisterDto) throws IOException;
+    AuthenticationResponse register(UserRegisterDto userRegisterDto) throws IOException;
 
-    AuthenticationRespone login(LoginDto loginDto);
+    AuthenticationResponse login(LoginDto loginDto);
 }
