@@ -9,11 +9,32 @@ import SearchIcon from "@mui/icons-material/Search";
 import MonetizationOnIcon from "@mui/icons-material/MonetizationOn";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux"; 
+import { like } from "../../features/likedItems";
+
+
+
+
+
 
 const endpointItems = "items";
 
+
 const ItemsList = () => {
-  const [likedItems, setLikedItems] = useState(new Set());
+
+  const likedItems = useSelector((state) => new Set(state.likedItems.values));
+
+
+
+
+
+  const dispatch = useDispatch();
+
+
+
+
+
+  // const [likedItems, setLikedItems] = useState(new Set());
   const [items, setItems] = useState([]);
   const [userId, setUserId] = useState(null);
   const { id: categoryId } = useParams();
@@ -107,7 +128,8 @@ const ItemsList = () => {
         const token = localStorage.getItem("token");
 
         if (token === null) {
-         setLikedItems(  new Set());
+        //  setLikedItems(  new Set());
+        dispatch(like(new Set()))
         
         }
         else{
@@ -123,8 +145,13 @@ const ItemsList = () => {
 
           if (response.ok) {
             const likedItemsFromDB = await response.json();
-            const likedItemsSet = new Set(likedItemsFromDB);
-            setLikedItems(likedItemsSet);
+            const likedItemsArray = Array.from(new Set(likedItemsFromDB));
+            dispatch(like(likedItemsArray));
+
+            console.log("predii dispachaaa");
+            // console.log(likedItemsSet);
+            // setLikedItems(likedItemsSet);
+            // dispatch(like(likedItemsSet));
           } else {
             throw new Error(`HTTP error! Status: ${response.status}`);
           }
@@ -156,7 +183,8 @@ const ItemsList = () => {
     }
 
     const isLiked = !likedItems.has(itemId);
-    setLikedItems(updatedLikedItems);
+    // setLikedItems(updatedLikedItems);
+    dispatch(like(updatedLikedItems));
     const requestBody = {
       itemId: itemId,
       userId: parseInt(userId, 10),
@@ -183,6 +211,8 @@ const ItemsList = () => {
       }
     } catch (error) {
       console.error("Error in handleLikeClick:", error.message);
+      dispatch(like(isLiked ? likedItems : updatedLikedItems));
+
     }
   }
   else{

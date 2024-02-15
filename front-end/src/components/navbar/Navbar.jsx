@@ -8,16 +8,32 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import "./Navbar.css";
 import { jwtDecode } from "jwt-decode";
 import axios from 'axios';
+import { useDispatch, useSelector } from "react-redux"; 
+import { like } from "../../features/likedItems";
+import {updateUser} from "../../features/userSlice"
+
 
 
 const Navbar = () => {
   const location = useLocation();
+  const dispatch = useDispatch();
 
-  const [userProfile, setUserProfile] = useState({
 
-    name: '',
-    picture: '',
-  })
+    const userProfile = useSelector((state) => state.user.values);
+
+
+
+
+  // const [userProfile, setUserProfile] = useState({
+
+  //   name: '',
+  //   picture: '',
+  // })
+
+
+
+  console.log("useerrrrr profilaaa");
+  console.log(userProfile.profilePicture)
 
   const [isLoggedIn, setIsLoggedIn] = useState(localStorage.getItem('token') !== null ? true : false);
 
@@ -34,11 +50,18 @@ const Navbar = () => {
         try {
           const response = await axios.get(`http://localhost:8080/rentify/users/${userId}`);
 
+          console.log("responsaaa v navbaraa userrrr")
+          console.log(response.data);
 
-          setUserProfile({
-            name: response.data.name,
-            picture: response.data.profilePicture,
-          });
+
+          dispatch(updateUser(response.data))
+
+          console.log("dipachaaa v nav baraa")
+          console.log();
+          // setUserProfile({
+          //   name: response.data.name,
+          //   picture: response.data.profilePicture,
+          // });
 
         }
         catch (error) {
@@ -50,14 +73,15 @@ const Navbar = () => {
       fetchUserInfo();
     }
     
-  }, [location , userProfile.picture]);
+  }, [location , userProfile.profilePicture ]);
 
 
 
   const handleLogout = () => {
     Object.keys(localStorage).forEach(key => { localStorage.removeItem(key); });
-    setIsLoggedIn(false);
 
+    dispatch(like([]));
+    setIsLoggedIn(false);
   };
 
 
@@ -73,9 +97,9 @@ const Navbar = () => {
 <Link to="/items/create">Add Item</Link>
             <Link to="/likes"> <FavoriteBorderIcon /> </Link>
             <Link to="/views"><VisibilityIcon /> </Link>
-            {userProfile.picture ? (
+            {userProfile.profilePicture ? (
               <Link to="/settings">  <img
-                src={userProfile.picture}
+                src={userProfile.profilePicture}
                 alt="Profile"
                 className="profile-picture"
               /> </Link>

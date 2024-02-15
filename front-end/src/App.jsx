@@ -15,6 +15,7 @@ import ProfilePage from "./components/profile-page/ProfilePage";
 import EditItem from "./components/profile-page/EditItem";
 import "./App.css";
 
+
 function App() {
   return (
     <Router>
@@ -22,6 +23,7 @@ function App() {
         <Navbar />
 
         <Routes>
+          
           <Route path="/" element={<Home />} />
           <Route path="/items/category/:id" element={<CategoryDetails />} />
           <Route path="items/:id" element={<ItemDetails />} />

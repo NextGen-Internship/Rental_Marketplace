@@ -4,12 +4,12 @@ import { Link } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 import noImage from "../../assets/no-image.avif";
 import "./LIkedItemsPage.css" 
-
-import FilterComponent from "../filter/FilterComponent"; 
+import {useDispatch, useSelector} from 'react-redux'
+import { UseDispatch } from "react-redux";
+import { like } from "../../features/likedItems";
 
 const LikedItemsPage = () => {
   const [likedItems, setLikedItems] = useState([]);
-
 
 
   useEffect(() => {
