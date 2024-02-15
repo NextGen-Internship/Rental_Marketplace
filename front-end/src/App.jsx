@@ -15,6 +15,7 @@ import LikedItemsPage from "./components/items/LikedItemsPage";
 import ProfilePage from "./components/profile-page/ProfilePage";
 import ForgotPassword from "./components/forgot-password/ForgotPassword";
 import ResetPassword from "./components/forgot-password/ResetPassword";
+import AccountVerification from "./components/account-verification/AccountVerification";
 
 function App() {
   return (
@@ -37,6 +38,7 @@ function App() {
           <Route path="/settings" element={<ProfilePage />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/reset-password" element={<ResetPassword />} />
+          <Route path="/account-verification" element={<AccountVerification />} />
         </Routes>
 
         <Footer />

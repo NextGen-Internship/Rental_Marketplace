@@ -37,7 +37,40 @@ function Login() {
 
       navigate("/");
     } catch (error) {
-      setErrorMessage("Email or Password are incorrect");
+      if (
+        error.response &&
+        error.response.status === 403 &&
+        error.response.data.error === "Account has not been confirmed yet."
+      ) {
+        setErrorMessage(
+          <span>
+            {error.response.data.error}{" "}
+            <span className="resend-email" onClick={handleResendEmail}>Click here to get confirmation email</span>
+          </span>
+        );
+      } else {
+        setErrorMessage("Email or Password are incorrect");
+      }
+    }
+  };
+
+  const handleResendEmail = async () => {
+    try {
+      const backendUrl = "http://localhost:8080/rentify/verification";
+      const response = await axios.post(backendUrl, null, {
+        params: {
+          email: email,
+        },
+      });
+
+      setErrorMessage(
+        <div className="text-center">
+          <p>Please check your email inbox for further instructions.</p>
+        </div>
+      );
+    } catch (error) {
+      console.error("Error resending email:", error);
+      setErrorMessage("Error resending email.");
     }
   };
 
@@ -82,7 +115,7 @@ function Login() {
               onChange={(e) => setPassword(e.target.value)}
             />
           </label>
-          {errorMessage && <p className="error-message">{errorMessage}</p>}
+          {errorMessage && <div className="error-message">{errorMessage}</div>}
           <div className="password-btn">
             <button
               type="button"

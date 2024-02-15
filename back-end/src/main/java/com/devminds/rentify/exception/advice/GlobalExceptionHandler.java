@@ -14,11 +14,15 @@ public class GlobalExceptionHandler {
     private static final String ERROR_MESSAGE_TEMPLATE = "{ \"error\": \"%s\" }";
 
     @ExceptionHandler(value = {ObjectNotFoundException.class, PasswordResetTokenExpired.class,
-            VerificationTokenExpired.class, UserAccountNotConfirmedException.class})
+            VerificationTokenExpired.class})
     public ResponseEntity<String> handleNotFound(RuntimeException e) {
         String bodyOfResponse = String.format(ERROR_MESSAGE_TEMPLATE, e.getMessage());
         return new ResponseEntity<>(bodyOfResponse, HttpStatus.NOT_FOUND);
     }
 
-    // todo fix error codes
+    @ExceptionHandler(value = {UserAccountNotConfirmedException.class})
+    public ResponseEntity<String> handleAccountNotConfirmed(RuntimeException e) {
+        String bodyOfResponse = String.format(ERROR_MESSAGE_TEMPLATE, e.getMessage());
+        return new ResponseEntity<>(bodyOfResponse, HttpStatus.FORBIDDEN);
+    }
 }

@@ -29,7 +29,8 @@ public class VerificationTokenService {
     private final VerificationTokenRepository verificationTokenRepository;
 
     @Autowired
-    public VerificationTokenService(EmailService emailService, UserRepository userRepository, VerificationTokenRepository verificationTokenRepository) {
+    public VerificationTokenService(EmailService emailService, UserRepository userRepository,
+                                    VerificationTokenRepository verificationTokenRepository) {
         this.emailService = emailService;
         this.userRepository = userRepository;
         this.verificationTokenRepository = verificationTokenRepository;

@@ -9,6 +9,7 @@ import com.devminds.rentify.exception.UserAccountNotConfirmedException;
 import com.devminds.rentify.exception.UserNotFoundException;
 import com.devminds.rentify.repository.RoleRepository;
 import com.devminds.rentify.service.UserService;
+import com.devminds.rentify.service.VerificationTokenService;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -19,7 +20,6 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-
 public class AuthenticationServiceImpl implements AuthService {
     private static final String ACCOUNT_NOT_CONFIRMED_MESSAGE = "Account has not been confirmed yet.";
 
@@ -31,39 +31,43 @@ public class AuthenticationServiceImpl implements AuthService {
     private final AuthenticationManager authenticationManager;
     private final UserMapper userMapper;
     private final RoleRepository roleRepository;
+    private final VerificationTokenService verificationTokenService;
 
     @Override
-    public AuthenticationRespone register(UserRegisterDto userRegisterDto)  {
+    public AuthenticationRespone register(UserRegisterDto userRegisterDto) {
 
         User user = userMapper.mapToUser(userRegisterDto);
         user.setRole(roleRepository.findUserRole());
         user.setPassword(passwordEncoder.encode(userRegisterDto.getPassword()));
         user.setProfilePicture(defaultPicture);
+        user.setVerified(false);
         userService.saveUser(user);
+
+        verificationTokenService.sendVerificationEmail(user.getEmail());
+
         return AuthenticationRespone.builder()
                 .email(user.getEmail()).build();
     }
 
     @Override
-    public AuthenticationRespone login(LoginDto loginDto)  {
+    public AuthenticationRespone login(LoginDto loginDto) {
 
-            authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(loginDto.getEmail(), loginDto.getPassword())
-            );
+        authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(loginDto.getEmail(), loginDto.getPassword())
+        );
 
-            var user = userService.findByEmail(loginDto.getEmail())
-                    .orElseThrow(() -> new UserNotFoundException("User not found"));
+        var user = userService.findByEmail(loginDto.getEmail())
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
 
-            if (!user.isVerified()) {
-                throw new UserAccountNotConfirmedException(ACCOUNT_NOT_CONFIRMED_MESSAGE);
-            }
+        if (!user.isVerified()) {
+            throw new UserAccountNotConfirmedException(ACCOUNT_NOT_CONFIRMED_MESSAGE);
+        }
 
-            var token = jwtService.generateToken(user);
-            return AuthenticationRespone.builder()
-                    .token(token)
-                    .email(user.getEmail())
-                    .build();
-
+        var token = jwtService.generateToken(user);
+        return AuthenticationRespone.builder()
+                .token(token)
+                .email(user.getEmail())
+                .build();
 
 
     }
