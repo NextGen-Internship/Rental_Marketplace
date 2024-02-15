@@ -8,22 +8,13 @@ import { useState } from "react";
 
 const ShowReviews = ({itemId , loggedInUserId }) => { 
 
-
-
     const [reviews, setReviews] = useState([]);
     const [showAllReviews, setShowAllReviews] = useState(false);
     console.log("idiito na itemaa v show review")
     console.log(itemId);
 
     useEffect(() => {
-
-      
-
-        //http://localhost:8080/rentify/reviews/4
-
         const fetchReviews = async () => {
-
-
             try {
                 const response = await axios.get(`http://localhost:8080/rentify/reviews/${itemId}`);
 
@@ -55,6 +46,9 @@ const ShowReviews = ({itemId , loggedInUserId }) => {
         <div class="col-xl-7 col-lg-8 col-md-10 col-12 text-center mb-5">
             <div>
             <h2>Reviews</h2>
+          
+            { displayedReviews.length > 0 ? ( 
+                <>
             {displayedReviews.map((review, index) => (
                 <div className="cardProfileReview" key={index}>
                     <div className="row d-flex">
@@ -84,6 +78,12 @@ const ShowReviews = ({itemId , loggedInUserId }) => {
                 </button>
 
 
+            )} 
+             </> 
+            ):( 
+
+                
+                <h4>Dont have reviews yet.</h4>
             )}
         </div>
         </div>
