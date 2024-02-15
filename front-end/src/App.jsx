@@ -17,6 +17,7 @@ import ResetPassword from "./components/forgot-password/ResetPassword";
 import AccountVerification from "./components/account-verification/AccountVerification";
 import EditItem from "./components/profile-page/EditItem";
 
+
 function App() {
   return (
     <Router>
@@ -24,6 +25,7 @@ function App() {
         <Navbar />
 
         <Routes>
+          
           <Route path="/" element={<Home />} />
           <Route path="/items/category/:id" element={<CategoryDetails />} />
           <Route path="items/:id" element={<ItemDetails />} />
@@ -41,7 +43,6 @@ function App() {
           <Route path="/reset-password" element={<ResetPassword />} />
           <Route path="/account-verification" element={<AccountVerification />} />
         </Routes>
-
         <Footer />
       </div>
     </Router>
