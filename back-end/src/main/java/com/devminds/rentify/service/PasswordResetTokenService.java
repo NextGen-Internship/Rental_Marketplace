@@ -68,7 +68,7 @@ public class PasswordResetTokenService {
         if (user == null) {
             throw new UserNotFoundException(USER_NOT_FOUND_MESSAGE);
         }
-        
+
         user.setPassword(passwordEncoder.encode(password));
         userRepository.saveAndFlush(user);
     }
