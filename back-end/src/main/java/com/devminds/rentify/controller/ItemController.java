@@ -1,6 +1,7 @@
 package com.devminds.rentify.controller;
 
 import com.devminds.rentify.dto.CreateItemDto;
+import com.devminds.rentify.dto.EditItemDto;
 import com.devminds.rentify.dto.ItemDto;
 import com.devminds.rentify.service.ItemService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -47,7 +49,7 @@ public class ItemController {
 
         Sort.Direction sortOrder = sortDirection.equalsIgnoreCase(DEFAULT_SORTING_ORDER) ?
                 Sort.Direction.ASC : Sort.Direction.DESC;
-        Page<ItemDto> items = itemService.getAllItems(
+        Page<ItemDto> items = itemService.getAllActiveItems(
                 PageRequest.of(page, size, Sort.by(sortOrder, SORT_CRITERIA_PRICE)));
 
         return ResponseEntity.ok(items);
@@ -72,18 +74,16 @@ public class ItemController {
         Sort.Direction direction = sortDirection.equalsIgnoreCase(DEFAULT_SORTING_ORDER) ?
                 Sort.Direction.ASC : Sort.Direction.DESC;
         Sort sort = Sort.by(direction, SORT_CRITERIA_PRICE);
-
         Pageable pageable = PageRequest.of(page, size, sort);
 
         return ResponseEntity.ok(
                 itemService.getFilteredItems(String.valueOf(id), priceFrom, priceTo, address, searchTerm, pageable));
     }
 
-
     @GetMapping("/user/published/{userId}")
     public ResponseEntity<List<ItemDto>> getPublishedItemsByUserId(@PathVariable Long userId) {
         return ResponseEntity.ok(itemService.getPublishedItemsByUserId(userId));
-}
+    }
 
     @GetMapping("/filter")
     public ResponseEntity<Page<ItemDto>> getFilteredItems(
@@ -99,11 +99,20 @@ public class ItemController {
         Sort.Direction direction = sortDirection.equalsIgnoreCase(DEFAULT_SORTING_ORDER) ?
                 Sort.Direction.ASC : Sort.Direction.DESC;
         Sort sort = Sort.by(direction, SORT_CRITERIA_PRICE);
-
         Pageable pageable = PageRequest.of(page, size, sort);
 
         return ResponseEntity.ok(
                 itemService.getFilteredItems(category, priceFrom, priceTo, address, searchTerm, pageable));
+    }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<ItemDto> updateItem(@PathVariable Long id,
+                                              @ModelAttribute EditItemDto editItemDto) throws IOException {
+        return ResponseEntity.ok(itemService.updateItem(id, editItemDto));
+    }
+
+    @PutMapping("/status/{id}")
+    public ResponseEntity<ItemDto> changeStatusOfItem(@PathVariable Long id) {
+        return ResponseEntity.ok(itemService.changeStatusOfItem(id));
     }
 }

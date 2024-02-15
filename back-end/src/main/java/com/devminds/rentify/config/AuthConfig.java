@@ -60,7 +60,6 @@ public class AuthConfig {
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
-
         return http.build();
     }
 }

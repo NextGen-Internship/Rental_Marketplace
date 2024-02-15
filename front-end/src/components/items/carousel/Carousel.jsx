@@ -50,16 +50,20 @@ const Carousel = () => {
     <div className="carousel">
       {pictures && pictures.length > 0 && (
         <div>
-          <button className="arrow-button prev" onClick={prevSlide}>
-            <ArrowBackIosIcon className="arrow-icon" />
-          </button>
+          {pictures.length > 1 && (
+            <button className="arrow-button prev" onClick={prevSlide}>
+              <ArrowBackIosIcon className="arrow-icon" />
+            </button>
+          )}
           <img
             src={pictures[currentIndex].url}
             alt={`slide ${currentIndex + 1}`}
           />
-          <button className="arrow-button next" onClick={nextSlide}>
-            <ArrowForwardIosIcon className="arrow-icon" />
-          </button>
+          {pictures.length > 1 && (
+            <button className="arrow-button next" onClick={nextSlide}>
+              <ArrowForwardIosIcon className="arrow-icon" />
+            </button>
+          )}
         </div>
       )}
     </div>

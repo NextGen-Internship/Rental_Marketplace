@@ -1,6 +1,5 @@
 package com.devminds.rentify.dto;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data

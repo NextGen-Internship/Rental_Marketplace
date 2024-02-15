@@ -34,8 +34,7 @@ public class AuthenticationServiceImpl implements AuthService {
     private final VerificationTokenService verificationTokenService;
 
     @Override
-    public AuthenticationRespone register(UserRegisterDto userRegisterDto) {
-
+    public AuthenticationResponse register(UserRegisterDto userRegisterDto) {
         User user = userMapper.mapToUser(userRegisterDto);
         user.setRole(roleRepository.findUserRole());
         user.setPassword(passwordEncoder.encode(userRegisterDto.getPassword()));
@@ -45,12 +44,12 @@ public class AuthenticationServiceImpl implements AuthService {
 
         verificationTokenService.sendVerificationEmail(user.getEmail());
 
-        return AuthenticationRespone.builder()
+        return AuthenticationResponse.builder()
                 .email(user.getEmail()).build();
     }
 
     @Override
-    public AuthenticationRespone login(LoginDto loginDto) {
+    public AuthenticationResponse login(LoginDto loginDto) {
 
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginDto.getEmail(), loginDto.getPassword())
@@ -64,11 +63,9 @@ public class AuthenticationServiceImpl implements AuthService {
         }
 
         var token = jwtService.generateToken(user);
-        return AuthenticationRespone.builder()
+        return AuthenticationResponse.builder()
                 .token(token)
                 .email(user.getEmail())
                 .build();
-
-
     }
 }
