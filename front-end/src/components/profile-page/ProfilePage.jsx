@@ -21,48 +21,22 @@ const ProfilePage = () => {
 
 
     const decoded = jwtDecode(token);
-    const userId = decoded.jti;
+    // const userId = decoded.jti;
+
+
+    const userId = useSelector((state) => state.userToken.value.id);
+
+    console.log(userId)
 
 
 
     const userInfo = useSelector((state) => state.user.values);
 
-  
-    // const userInfo = useSelector((state) => ({
-    //     firstName: state.user.firstName || '',
-    //     lastName: state.user.lastName || '',
-    //     email: state.user.email || '',
-    //     phoneNumber: state.user.phoneNumber || '',
-    //     address: state.user.address || {
-    //       city: '',
-    //       postCode: '',
-    //       street: '',
-    //       streetNumber: '',
-    //     },
-    //     profilePicture: state.user.profilePicture || '',
-    // }));
-    
 
      const dispatch = useDispatch();
     
 
 
-    // const [userInfo, setUserInfo] = useState({
-    //     firstName: '',
-    //     lastName: '',
-    //     email: '',
-    //     phoneNumber: '',
-    //     address: {
-    //         city: '',
-    //         postCode: '',
-    //         street: '',
-    //         streetNumber: '',
-    //     }
-    //     , profilePicture: ''
-
-
-
-    // });
 
     const [imageFile, setimageFile] = useState('');
 
@@ -197,7 +171,7 @@ const ProfilePage = () => {
 
 
         const decoded = jwtDecode(token);
-        const userId = decoded.jti;
+        // const userId = decoded.jti;
 
 
         const fetchUserItems = async () => {

@@ -3,7 +3,9 @@ import { GoogleLogin } from "@react-oauth/google";
 import "./Login.css";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-
+import { jwtDecode } from 'jwt-decode';
+import { useDispatch } from "react-redux"; 
+import { updateUserToken } from "../../features/userTokenSlice.js";
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -13,6 +15,10 @@ function Login() {
   const navigate = useNavigate();
 
   const {REACT_APP_GOOGLE_CLIENT_ID} = process.env;
+
+
+
+   const dispatch = useDispatch();
 
   const handleTogglePassword = () => {
     setShowPassword(!showPassword);
@@ -35,7 +41,13 @@ function Login() {
       const { token } = response.data;
       localStorage.setItem("token", token);
       console.log("Login successful:", response.data);
+      const decoded = jwtDecode(token);
+      const userId = decoded.jti;
 
+      console.log("loginaaaaaaaaa")
+      console.log(userId);
+      dispatch(updateUserToken({id: userId}));
+      
       navigate("/");
     } catch (error) {
       setErrorMessage("Email or Password are incorrect");

@@ -5,16 +5,51 @@ import { jwtDecode } from 'jwt-decode';
 import { useEffect } from 'react';
 
 
+import { useDispatch, useSelector } from "react-redux"; 
+import { updateUserReview } from "../../features/userReviewSlice";
+
+
 const ReviewsItems = ({ itemId }) => {
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState('');
 
   const [addedReview, setAddedReview] = useState(false);
-  const [review, setReviews] = useState('');
+  // const [review, setReviews] = useState('');
 
   const [editReview, setEditedReview] = useState(false);
 
   const [showForm, setShowForm] = useState(false);
+
+
+
+
+
+  
+  // const userInfo = useSelector((state) => ({
+  //     firstName: state.user.firstName || '',
+  //     lastName: state.user.lastName || '',
+  //     email: state.user.email || '',
+  //     phoneNumber: state.user.phoneNumber || '',
+  //     address: state.user.address || {
+  //       city: '',
+  //       postCode: '',
+  //       street: '',
+  //       streetNumber: '',
+  //     },
+  //     profilePicture: state.user.profilePicture || '',
+  // }));
+  
+
+  //    const userInfo = useSelector((state) => state.user.values);
+  
+
+ 
+
+  //userReview
+
+
+
+
 
   const [userInfo, setUserInfo] = useState({
     firstName: '',
@@ -32,6 +67,9 @@ const ReviewsItems = ({ itemId }) => {
 
 
   });
+
+  const dispatch = useDispatch();
+  const review = useSelector((state) => state.userReview.values);
 
   useEffect(() => {
 
@@ -75,7 +113,10 @@ const ReviewsItems = ({ itemId }) => {
       try {
         const response = await axios.get(`http://localhost:8080/rentify/reviews/userReview/${userId}/${itemId}`);
 
-        setReviews(response.data);
+        console.log("reviewww fetchhh")
+        console.log(response.data)
+        // setReviews(response.data);
+        dispatch(updateUserReview(response.data));
       } catch (error) {
         console.error('Error fetching reviews:', error);
         return [];
@@ -85,7 +126,10 @@ const ReviewsItems = ({ itemId }) => {
     fetchUserInfo();
     fetchReviewUserAdd();
     fetchReview();
-  }, []);
+  }, [review]);
+
+
+
 
   const handleRatingChange = (event) => {
     setRating(parseInt(event.target.value));
@@ -210,7 +254,7 @@ const ReviewsItems = ({ itemId }) => {
                     </p>
                     <p className="text-center">
                       
-                      <h4 className="blue-text mt-3">{review.comment}</h4>
+                      <p className="blue-text mt-3">{review.comment}</p>
                       
                     </p>
                     <div className="row text-center">
