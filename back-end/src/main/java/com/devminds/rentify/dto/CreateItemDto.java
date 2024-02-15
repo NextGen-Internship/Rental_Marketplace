@@ -13,7 +13,6 @@ import java.util.List;
 public class CreateItemDto {
 
 
-
     private String name;
 
     private String description;

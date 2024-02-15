@@ -1,7 +1,8 @@
 package com.devminds.rentify.service;
 
-import com.devminds.rentify.dto.CreateItemDto;
+import com.devminds.rentify.entity.Item;
 import com.devminds.rentify.entity.User;
+import com.devminds.rentify.repository.ItemRepository;
 import com.devminds.rentify.repository.UserRepository;
 import com.stripe.Stripe;
 import com.stripe.exception.StripeException;
@@ -17,8 +18,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import jakarta.servlet.http.HttpServletRequest;
-import java.io.IOException;
+import java.net.URL;
 import java.util.Date;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -28,6 +30,7 @@ public class StripeService {
     private String key;
 
     private final UserRepository userRepository;
+    private final ItemRepository itemRepository;
 
     private static final String[] HEADERS_TO_TRY = {
             "X-Forwarded-For",
@@ -136,30 +139,37 @@ public class StripeService {
     }
 
 
-    public Product createProduct(CreateItemDto createItemDto) throws StripeException, IOException {
+    public Product createProduct(Item item, List<URL> pictureUrls) throws StripeException {
         Stripe.apiKey = key;
 
         ProductCreateParams params =
-                ProductCreateParams.builder().setName(createItemDto.getName())
-                        .setDefaultPriceData(ProductCreateParams.DefaultPriceData.builder().setUnitAmount(createItemDto.getPrice().longValueExact() * 100L).setCurrency("usd").build())
-                        .addImage(createItemDto.getPictures().get(0).getResource().getURL().toString()).build();
+                ProductCreateParams.builder().setName(item.getName())
+                        .setDefaultPriceData(ProductCreateParams.DefaultPriceData.builder().setUnitAmount(item.getPrice().longValueExact() * 100L).setCurrency("usd").build())
+                        .addImage(pictureUrls.get(0).toString()).build();
 
 
         Product product = Product.create(params);
-        product.getDefaultPriceObject().getBillingScheme();
+
+        item.setItemStripeId(product.getDefaultPrice());
+        itemRepository.save(item);
+
         return product;
     }
 
 
-    public Session createCheckoutSession(Product product,Account account) throws StripeException {
+    public String createCheckoutSession(Long itemId) throws StripeException {
         Stripe.apiKey = key;
+
+        Item item = itemRepository.findById(itemId).orElse(null);
+
+        User user = userRepository.findById(item.getUser().getId()).orElse(null);
 
         SessionCreateParams params =
                 SessionCreateParams.builder()
                         .setMode(SessionCreateParams.Mode.PAYMENT)
                         .addLineItem(
                                 SessionCreateParams.LineItem.builder()
-                                        .setPrice(product.getDefaultPrice())
+                                        .setPrice(item.getItemStripeId())
                                         .setQuantity(1L)
                                         .build()
                         )
@@ -168,18 +178,17 @@ public class StripeService {
                                         .setApplicationFeeAmount(1230L)
                                         .setTransferData(
                                                 SessionCreateParams.PaymentIntentData.TransferData.builder()
-                                                        .setDestination(account.getId())
+                                                        .setDestination(user.getStripeAccountId())
                                                         .build()
                                         )
                                         .build()
                         )
-                        .setSuccessUrl("https://example.com/success")
+                        .setSuccessUrl("http://localhost:3000/")
                         .setCancelUrl("https://example.com/cancel")
                         .build();
 
         Session session = Session.create(params);
-        System.out.println();
-        return session;
+        return session.getUrl();
     }
 
 }

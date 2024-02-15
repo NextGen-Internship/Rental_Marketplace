@@ -4,7 +4,6 @@ import CategoryModal from "./CategoryModal";
 import axios from "axios";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import { useNavigate } from "react-router-dom";
-import { jwtDecode } from "jwt-decode";
 
 function CreateItem() {
   const [title, setTitle] = useState("");

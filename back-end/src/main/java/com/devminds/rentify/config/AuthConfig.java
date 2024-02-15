@@ -39,7 +39,6 @@ public class AuthConfig {
                                 .requestMatchers("/rentify/addresses/**").permitAll()
                                 .requestMatchers("/rentify/favourites/**").permitAll()
                                 .requestMatchers("/rentify/favourites/userFavourites/**").permitAll()
-
                                 .requestMatchers("/rentify/users").permitAll()
                                 .requestMatchers("/rentify/users/**").permitAll()
                                 .requestMatchers("/rentify/images").permitAll()
@@ -53,9 +52,7 @@ public class AuthConfig {
                                 .requestMatchers("/rentify/**").permitAll()
                                 .requestMatchers("/static/profilePicture.jpg").permitAll()
                                 .requestMatchers("/v3/**", "/swagger-ui/**").permitAll()
-                                .requestMatchers("/create/stripe").permitAll()
-                                .requestMatchers("/stripe/checkout").permitAll()
-                                .requestMatchers("stripe/item").permitAll()
+                                .requestMatchers("/rentify/stripe/checkout/{id}").permitAll()
                                 .anyRequest().authenticated()
 
                 )

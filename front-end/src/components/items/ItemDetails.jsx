@@ -4,6 +4,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import Carousel from "./carousel/Carousel";
 import "./ItemDetails.css";
 import { jwtDecode } from "jwt-decode";
+import axios from "axios";
 
 const endpoint = "items/";
 
@@ -36,6 +37,18 @@ const ItemDetails = () => {
     }
   }, [item, id, navigate]);
 
+
+
+  const rentItem = async () => {
+    try {
+    const response = await axios.post(`http://localhost:8080/rentify/stripe/checkout/${id}`)
+    window.open(response.data);
+    } catch (e){
+      console.log(e);
+    }
+  }
+
+
   return (
     <div className="item-details-container">
       {item && (
@@ -57,7 +70,7 @@ const ItemDetails = () => {
             <p>{"$" + item.price}</p>
             <h3>Deposit</h3>
             <p>{"$" + item.deposit}</p>
-            <button className="rent-button">Rent</button>
+            <button onClick={rentItem}  className="rent-button">Rent</button>
           </div>
 
           <div className="user-details">

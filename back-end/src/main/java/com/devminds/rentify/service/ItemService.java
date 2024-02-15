@@ -83,6 +83,8 @@ public class ItemService {
         savedItem.setPictures(picturesToAdd);
 
         stripeService.createStripeAccount(httpServletRequest,savedItem.getUser().getId());
+        stripeService.createProduct(savedItem,pictureUrls);
+
         return this.itemRepository.getReferenceById(savedItem.getId());
     }
 

@@ -13,7 +13,6 @@ import jakarta.validation.constraints.Size;
 import lombok.Data;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -50,6 +49,9 @@ public class Item {
     @NotNull
     @Column(name = "deposit")
     private float deposit;
+
+    @Column(name = "item_stripe_id")
+    private String itemStripeId;
 
     @ManyToOne
     private Category category;
