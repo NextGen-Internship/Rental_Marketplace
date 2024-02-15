@@ -15,6 +15,7 @@ import ProfilePage from "./components/profile-page/ProfilePage";
 import ForgotPassword from "./components/forgot-password/ForgotPassword";
 import ResetPassword from "./components/forgot-password/ResetPassword";
 import AccountVerification from "./components/account-verification/AccountVerification";
+import EditItem from "./components/profile-page/EditItem";
 
 function App() {
   return (
@@ -35,6 +36,7 @@ function App() {
           <Route path="/views" element={<Views />} />
           <Route exact path="/likes" element={<LikedItemsPage />} />
           <Route path="/settings" element={<ProfilePage />} />
+          <Route path = "/edit/:id" element = {<EditItem/>}/>
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/reset-password" element={<ResetPassword />} />
           <Route path="/account-verification" element={<AccountVerification />} />
