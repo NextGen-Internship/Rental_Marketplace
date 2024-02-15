@@ -20,37 +20,6 @@ const ReviewsItems = ({ itemId }) => {
 
   const [showForm, setShowForm] = useState(false);
 
-
-
-
-
-  
-  // const userInfo = useSelector((state) => ({
-  //     firstName: state.user.firstName || '',
-  //     lastName: state.user.lastName || '',
-  //     email: state.user.email || '',
-  //     phoneNumber: state.user.phoneNumber || '',
-  //     address: state.user.address || {
-  //       city: '',
-  //       postCode: '',
-  //       street: '',
-  //       streetNumber: '',
-  //     },
-  //     profilePicture: state.user.profilePicture || '',
-  // }));
-  
-
-  //    const userInfo = useSelector((state) => state.user.values);
-  
-
- 
-
-  //userReview
-
-
-
-
-
   const [userInfo, setUserInfo] = useState({
     firstName: '',
     lastName: '',
@@ -119,7 +88,7 @@ const ReviewsItems = ({ itemId }) => {
         dispatch(updateUserReview(response.data));
       } catch (error) {
         console.error('Error fetching reviews:', error);
-        return [];
+        
       }
     };
 
@@ -162,6 +131,8 @@ const ReviewsItems = ({ itemId }) => {
       setAddedReview(true);
       setRating(0);
       setComment('');
+      dispatch(updateUserReview(response.data));
+
 
     } catch (error) {
       console.error(error);
@@ -259,7 +230,6 @@ const ReviewsItems = ({ itemId }) => {
                     </p>
                     <div className="row text-center">
                       <button className="rent-button"  onClick={handleEditReview}>Edit Review</button>
-                     
                     </div> 
                   </div>
                 </div>

@@ -8,6 +8,9 @@ import ReviewsItems from "../reviews-items/ReviewsItems";
 import ShowReviews from "../reviews-items/ShowReviews";
 import axios from 'axios';
 
+import { useDispatch, useSelector } from "react-redux"; 
+import { updateRating } from "../../features/ratingReview.js";
+
 
 
 const endpoint = "items/";
@@ -18,7 +21,12 @@ const ItemDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [showReviews, setShowReviews] = useState(false);
-  const [averageRating , setAverageRating] = useState(0);
+  // const [averageRating , setAverageRating] = useState(0);
+
+  const   averageRating = useSelector((state) => state.ratingReview.values);
+
+
+  const dispatch = useDispatch();
 
 
 
@@ -47,11 +55,10 @@ const ItemDetails = () => {
 
     const fetchRating = async () => {
       
-    
-      
       try {
           const response = await axios.get(`http://localhost:8080/rentify/reviews/rating/${id}`);
-          setAverageRating(response.data)
+          // setAverageRating(response.data);
+          dispatch(updateRating(response.data));
 
       }
       catch (error) {
@@ -65,14 +72,14 @@ const ItemDetails = () => {
     }
 
 
-    fetchRating();
+   
 
     if (item && !item.isActive && item.user.id != userId) {
       navigate("/notfound");
     }
     
-    
-  }, [item, id, navigate]);
+    fetchRating();
+  }, [averageRating,item, id,]);
 
 
   const handleButtonClick = () => {
