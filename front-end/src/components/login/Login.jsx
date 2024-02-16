@@ -15,9 +15,6 @@ function Login() {
   const navigate = useNavigate();
 
   const {REACT_APP_GOOGLE_CLIENT_ID} = process.env;
-
-
-
    const dispatch = useDispatch();
 
   const handleTogglePassword = () => {
@@ -47,7 +44,7 @@ function Login() {
       console.log("loginaaaaaaaaa")
       console.log(userId);
       dispatch(updateUserToken({id: userId}));
-      
+
       navigate("/");
     } catch (error) {
       setErrorMessage("Email or Password are incorrect");
@@ -68,7 +65,6 @@ function Login() {
           
         }
       );
-      console.log(backendResponse);
       const newToken = backendResponse.data;
 
       localStorage.setItem("token",newToken);

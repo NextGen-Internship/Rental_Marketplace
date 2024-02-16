@@ -23,18 +23,7 @@ const endpointItems = "items";
 const ItemsList = () => {
 
   const likedItems = useSelector((state) => new Set(state.likedItems.values));
-
-
-
-
-
   const dispatch = useDispatch();
-
-
-
-
-
-  // const [likedItems, setLikedItems] = useState(new Set());
   const [items, setItems] = useState([]);
   const [userId, setUserId] = useState(null);
   const { id: categoryId } = useParams();
@@ -53,7 +42,6 @@ const ItemsList = () => {
   const navigate = useNavigate();
 
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -112,7 +100,6 @@ const ItemsList = () => {
           }?page=${currentPage}&sortDirection=${sortOrder}&category=${selectedCategory}&priceFrom=${priceFrom}&priceTo=${priceTo}&address=${selectedAddress}&searchTerm=${searchTerm}`
         );
 
-        console.log("rrr", result );
         setItems(result.content);
         setTotalPages(result.totalPages);
 
@@ -128,7 +115,6 @@ const ItemsList = () => {
         const token = localStorage.getItem("token");
 
         if (token === null) {
-        //  setLikedItems(  new Set());
         dispatch(like(new Set()))
         
         }
@@ -147,11 +133,6 @@ const ItemsList = () => {
             const likedItemsFromDB = await response.json();
             const likedItemsArray = Array.from(new Set(likedItemsFromDB));
             dispatch(like(likedItemsArray));
-
-            console.log("predii dispachaaa");
-            // console.log(likedItemsSet);
-            // setLikedItems(likedItemsSet);
-            // dispatch(like(likedItemsSet));
           } else {
             throw new Error(`HTTP error! Status: ${response.status}`);
           }
@@ -183,7 +164,6 @@ const ItemsList = () => {
     }
 
     const isLiked = !likedItems.has(itemId);
-    // setLikedItems(updatedLikedItems);
     dispatch(like(updatedLikedItems));
     const requestBody = {
       itemId: itemId,
@@ -203,8 +183,7 @@ const ItemsList = () => {
         }
       );
 
-      console.log("isLike");
-      console.log(JSON.stringify(requestBody));
+
 
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);

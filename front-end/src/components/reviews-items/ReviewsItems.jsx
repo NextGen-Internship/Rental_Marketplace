@@ -14,7 +14,7 @@ const ReviewsItems = ({ itemId }) => {
   const [comment, setComment] = useState('');
 
   const [addedReview, setAddedReview] = useState(false);
-  // const [review, setReviews] = useState('');
+
 
   const [editReview, setEditedReview] = useState(false);
 
@@ -81,10 +81,6 @@ const ReviewsItems = ({ itemId }) => {
     const fetchReview = async () => {
       try {
         const response = await axios.get(`http://localhost:8080/rentify/reviews/userReview/${userId}/${itemId}`);
-
-        console.log("reviewww fetchhh")
-        console.log(response.data)
-        // setReviews(response.data);
         dispatch(updateUserReview(response.data));
       } catch (error) {
         console.error('Error fetching reviews:', error);

@@ -21,7 +21,6 @@ const ItemDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [showReviews, setShowReviews] = useState(false);
-  // const [averageRating , setAverageRating] = useState(0);
 
   const   averageRating = useSelector((state) => state.ratingReview.values);
 
@@ -57,7 +56,6 @@ const ItemDetails = () => {
       
       try {
           const response = await axios.get(`http://localhost:8080/rentify/reviews/rating/${id}`);
-          // setAverageRating(response.data);
           dispatch(updateRating(response.data));
 
       }
@@ -118,7 +116,7 @@ const ItemDetails = () => {
           <div className="price-deposit-box">
            
            <div class="row justify-content-between">
-    <div class="col-md-4 text-center">
+    <div class="col-md-4 text-left">
         <div>
             <h3>Price</h3>
             <p>{"$" + item.price}</p>

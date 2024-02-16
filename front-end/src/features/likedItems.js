@@ -15,23 +15,3 @@ export const likedItemsSlice = createSlice({
 export const { like } = likedItemsSlice.actions;
 export default likedItemsSlice.reducer;
 
-
-/*
-
-    const [userInfo, setUserInfo] = useState({
-        firstName: '',
-        lastName: '',
-        email: '',
-        phoneNumber: '',
-        address: {
-            city: '',
-            postCode: '',
-            street: '',
-            streetNumber: '',
-        }
-        , profilePicture: ''
-
-
-
-    });
-*/
