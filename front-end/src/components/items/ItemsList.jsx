@@ -316,8 +316,8 @@ const ItemsList = () => {
                 onChange={(e) => setSelectedAddress(e.target.value)}
               >
                 <option value="">City...</option>
-                {addresses.map((address) => (
-                  <option key={address.id} value={address.name}>
+                {addresses.map((address, index) => (
+                  <option key={index} value={address.name}>
                     {address.city}
                   </option>
                 ))}
@@ -358,7 +358,7 @@ const ItemsList = () => {
                     <div className="card-body">
                       <h3 className="card-title">{item.name}</h3>
                       <p className="card-text">{"$" + item.price}</p>
-                      <p className="card-text">{item.addresses}</p>
+                      <p className="card-text">{item.address.city}</p>
                     </div>
                   </div>
                 </Link>

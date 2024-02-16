@@ -17,7 +17,7 @@ import jakarta.validation.constraints.Positive;
 import lombok.Data;
 
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.LocalDate;
 
 @Data
 @Entity
@@ -36,7 +36,7 @@ public class Payment {
     private PaymentStatus status;
 
     @NotEmpty
-    private Date date;
+    private LocalDate date;
 
     @ManyToOne
     private User owner;
@@ -45,6 +45,7 @@ public class Payment {
     private User receiver;
 
     @Enumerated(EnumType.STRING)
+    @Column(name = "method")
     private PaymentMethod paymentMethod;
 
     @OneToOne
