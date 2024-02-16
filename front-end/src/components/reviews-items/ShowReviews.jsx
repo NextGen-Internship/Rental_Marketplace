@@ -5,6 +5,7 @@ import axios from 'axios';
 import { useState } from "react";
 
 
+
 import { useDispatch, useSelector } from "react-redux"; 
 import { updateAllReviews } from "../../features/allReviewsSlice";
 
@@ -16,11 +17,14 @@ const ShowReviews = ({itemId , loggedInUserId }) => {
     const dispatch = useDispatch();
     const reviews = useSelector((state) => state.allReviews.values);
 
+
     useEffect(() => {
         const fetchReviews = async () => {
             try {
                 const response = await axios.get(`http://localhost:8080/rentify/reviews/${itemId}`);
+
                 dispatch(updateAllReviews(response.data));
+
             } catch (error) {
                 console.error('Error fetching reviews:', error);
                 return [];
@@ -30,13 +34,14 @@ const ShowReviews = ({itemId , loggedInUserId }) => {
       
         
         fetchReviews();
+
       }, [reviews]);
+
       
 
 
 
       const displayedReviews = showAllReviews ? reviews : reviews.slice(0, 2);
-
   return (
 
 <div class="container-fluid px-1 py-5 mx-auto">

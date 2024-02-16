@@ -23,7 +23,9 @@ const endpointItems = "items";
 const ItemsList = () => {
 
   const likedItems = useSelector((state) => new Set(state.likedItems.values));
+
   const dispatch = useDispatch();
+
   const [items, setItems] = useState([]);
   const [userId, setUserId] = useState(null);
   const { id: categoryId } = useParams();
@@ -115,6 +117,8 @@ const ItemsList = () => {
         const token = localStorage.getItem("token");
 
         if (token === null) {
+
+
         dispatch(like(new Set()))
         
         }
@@ -133,6 +137,7 @@ const ItemsList = () => {
             const likedItemsFromDB = await response.json();
             const likedItemsArray = Array.from(new Set(likedItemsFromDB));
             dispatch(like(likedItemsArray));
+
           } else {
             throw new Error(`HTTP error! Status: ${response.status}`);
           }
@@ -164,6 +169,8 @@ const ItemsList = () => {
     }
 
     const isLiked = !likedItems.has(itemId);
+
+
     dispatch(like(updatedLikedItems));
     const requestBody = {
       itemId: itemId,

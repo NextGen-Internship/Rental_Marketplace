@@ -15,3 +15,5 @@ export const likedItemsSlice = createSlice({
 export const { like } = likedItemsSlice.actions;
 export default likedItemsSlice.reducer;
 
+
+

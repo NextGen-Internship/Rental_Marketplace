@@ -1,11 +1,14 @@
 import axios from "axios";
 import { GoogleLogin } from "@react-oauth/google";
+import { Link, useNavigate } from "react-router-dom";
 import "./Login.css";
 import { useState } from "react";
+
 import { useNavigate } from "react-router-dom";
 import { jwtDecode } from 'jwt-decode';
 import { useDispatch } from "react-redux"; 
 import { updateUserToken } from "../../features/userTokenSlice.js";
+v
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -14,8 +17,10 @@ function Login() {
   const [errorMessage, setErrorMessage] = useState("");
   const navigate = useNavigate();
 
+
   const {REACT_APP_GOOGLE_CLIENT_ID} = process.env;
    const dispatch = useDispatch();
+
 
   const handleTogglePassword = () => {
     setShowPassword(!showPassword);
@@ -34,7 +39,7 @@ function Login() {
         email,
         password,
       });
-    
+
       const { token } = response.data;
       localStorage.setItem("token", token);
       console.log("Login successful:", response.data);
@@ -47,7 +52,40 @@ function Login() {
 
       navigate("/");
     } catch (error) {
-      setErrorMessage("Email or Password are incorrect");
+      if (
+        error.response &&
+        error.response.status === 403 &&
+        error.response.data.error === "Account has not been confirmed yet."
+      ) {
+        setErrorMessage(
+          <span>
+            {error.response.data.error}{" "}
+            <span className="resend-email" onClick={handleResendEmail}>Click here to get confirmation email</span>
+          </span>
+        );
+      } else {
+        setErrorMessage("Email or Password are incorrect");
+      }
+    }
+  };
+
+  const handleResendEmail = async () => {
+    try {
+      const backendUrl = "http://localhost:8080/rentify/verification";
+      const response = await axios.post(backendUrl, null, {
+        params: {
+          email: email,
+        },
+      });
+
+      setErrorMessage(
+        <div className="text-center">
+          <p>Please check your email inbox for further instructions.</p>
+        </div>
+      );
+    } catch (error) {
+      console.error("Error resending email:", error);
+      setErrorMessage("Error resending email.");
     }
   };
 
@@ -62,13 +100,12 @@ function Login() {
             "Content-Type": "application/json",
             Authorization: jwt,
           },
-          
         }
       );
       const newToken = backendResponse.data;
 
-      localStorage.setItem("token",newToken);
-      
+      localStorage.setItem("token", newToken);
+
       navigate("/");
     } catch (error) {
       console.log("Error during Google login");
@@ -92,7 +129,7 @@ function Login() {
               onChange={(e) => setPassword(e.target.value)}
             />
           </label>
-          {errorMessage && <p className="error-message">{errorMessage}</p>}
+          {errorMessage && <div className="error-message">{errorMessage}</div>}
           <div className="password-btn">
             <button
               type="button"
@@ -102,7 +139,8 @@ function Login() {
               {showPassword ? "Hide" : "Show"}
             </button>
           </div>
-          <button type="submit"> Submit</button>
+          <button type="submit">Submit</button>
+          <Link to="/forgot-password">Forgot Password?</Link>
         </form>
 
         <GoogleLogin
@@ -110,7 +148,6 @@ function Login() {
           clientId={REACT_APP_GOOGLE_CLIENT_ID}
         />
       </div>
-      
     </div>
   );
 }

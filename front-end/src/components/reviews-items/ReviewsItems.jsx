@@ -5,8 +5,10 @@ import { jwtDecode } from 'jwt-decode';
 import { useEffect } from 'react';
 
 
+
 import { useDispatch, useSelector } from "react-redux"; 
 import { updateUserReview } from "../../features/userReviewSlice";
+
 
 
 const ReviewsItems = ({ itemId }) => {
@@ -37,8 +39,10 @@ const ReviewsItems = ({ itemId }) => {
 
   });
 
+
   const dispatch = useDispatch();
   const review = useSelector((state) => state.userReview.values);
+
 
   useEffect(() => {
 
@@ -81,20 +85,20 @@ const ReviewsItems = ({ itemId }) => {
     const fetchReview = async () => {
       try {
         const response = await axios.get(`http://localhost:8080/rentify/reviews/userReview/${userId}/${itemId}`);
+
         dispatch(updateUserReview(response.data));
       } catch (error) {
         console.error('Error fetching reviews:', error);
         
+
       }
     };
 
     fetchUserInfo();
     fetchReviewUserAdd();
     fetchReview();
+
   }, [review]);
-
-
-
 
   const handleRatingChange = (event) => {
     setRating(parseInt(event.target.value));
@@ -128,8 +132,6 @@ const ReviewsItems = ({ itemId }) => {
       setRating(0);
       setComment('');
       dispatch(updateUserReview(response.data));
-
-
     } catch (error) {
       console.error(error);
 
@@ -221,7 +223,9 @@ const ReviewsItems = ({ itemId }) => {
                     </p>
                     <p className="text-center">
                       
+
                       <p className="blue-text mt-3">{review.comment}</p>
+
                       
                     </p>
                     <div className="row text-center">
@@ -278,4 +282,6 @@ const ReviewsItems = ({ itemId }) => {
   );
 };
 
+
 export default ReviewsItems;
+

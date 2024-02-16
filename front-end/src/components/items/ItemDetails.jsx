@@ -8,8 +8,10 @@ import ReviewsItems from "../reviews-items/ReviewsItems";
 import ShowReviews from "../reviews-items/ShowReviews";
 import axios from 'axios';
 
+
 import { useDispatch, useSelector } from "react-redux"; 
 import { updateRating } from "../../features/ratingReview.js";
+
 
 
 
@@ -22,10 +24,12 @@ const ItemDetails = () => {
   const navigate = useNavigate();
   const [showReviews, setShowReviews] = useState(false);
 
+
   const   averageRating = useSelector((state) => state.ratingReview.values);
 
 
   const dispatch = useDispatch();
+
 
 
 
@@ -54,9 +58,11 @@ const ItemDetails = () => {
 
     const fetchRating = async () => {
       
+
       try {
           const response = await axios.get(`http://localhost:8080/rentify/reviews/rating/${id}`);
           dispatch(updateRating(response.data));
+
 
       }
       catch (error) {
@@ -70,14 +76,33 @@ const ItemDetails = () => {
     }
 
 
+
    
+
 
     if (item && !item.isActive && item.user.id != userId) {
       navigate("/notfound");
     }
     
+
     fetchRating();
   }, [averageRating,item, id,]);
+
+
+  const handleButtonClick = () => {
+   
+    if (isLoggedIn) {
+   
+      setShowReviews(true);
+
+    } else {
+
+      navigate("/login");
+    }
+
+
+  };
+
 
 
   const handleButtonClick = () => {
@@ -116,7 +141,9 @@ const ItemDetails = () => {
           <div className="price-deposit-box">
            
            <div class="row justify-content-between">
+
     <div class="col-md-4 text-left">
+
         <div>
             <h3>Price</h3>
             <p>{"$" + item.price}</p>
