@@ -7,6 +7,7 @@ import com.devminds.rentify.repository.UserRepository;
 import com.stripe.Stripe;
 import com.stripe.exception.StripeException;
 import com.stripe.model.Account;
+import com.stripe.model.Capability;
 import com.stripe.model.Product;
 import com.stripe.model.Token;
 import com.stripe.model.checkout.Session;
@@ -14,6 +15,7 @@ import com.stripe.param.AccountCreateParams;
 import com.stripe.param.ProductCreateParams;
 import com.stripe.param.TokenCreateParams;
 import com.stripe.param.checkout.SessionCreateParams;
+import com.stripe.param.issuing.CardholderCreateParams;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -82,7 +84,6 @@ public class StripeService {
                         .setType(AccountCreateParams.Type.CUSTOM)
                         .setCountry("BG")
                         .setEmail(principal.getEmail())
-
                         .setBusinessType(AccountCreateParams.BusinessType.INDIVIDUAL)
                         .setBusinessProfile(AccountCreateParams.BusinessProfile.builder()
                                 .setMcc("5931")
@@ -161,8 +162,7 @@ public class StripeService {
         Stripe.apiKey = key;
 
         Item item = itemRepository.findById(itemId).orElse(null);
-
-        User user = userRepository.findById(item.getUser().getId()).orElse(null);
+        User itemOwner = userRepository.findById(item.getUser().getId()).orElse(null);
 
         SessionCreateParams params =
                 SessionCreateParams.builder()
@@ -178,7 +178,7 @@ public class StripeService {
                                         .setApplicationFeeAmount(1230L)
                                         .setTransferData(
                                                 SessionCreateParams.PaymentIntentData.TransferData.builder()
-                                                        .setDestination(user.getStripeAccountId())
+                                                        .setDestination(itemOwner.getStripeAccountId())
                                                         .build()
                                         )
                                         .build()
