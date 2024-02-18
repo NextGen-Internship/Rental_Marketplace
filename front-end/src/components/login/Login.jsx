@@ -4,12 +4,6 @@ import { Link, useNavigate } from "react-router-dom";
 import "./Login.css";
 import { useState } from "react";
 
-import { useNavigate } from "react-router-dom";
-import { jwtDecode } from 'jwt-decode';
-import { useDispatch } from "react-redux"; 
-import { updateUserToken } from "../../features/userTokenSlice.js";
-v
-
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -17,10 +11,7 @@ function Login() {
   const [errorMessage, setErrorMessage] = useState("");
   const navigate = useNavigate();
 
-
-  const {REACT_APP_GOOGLE_CLIENT_ID} = process.env;
-   const dispatch = useDispatch();
-
+  const { REACT_APP_GOOGLE_CLIENT_ID } = process.env;
 
   const handleTogglePassword = () => {
     setShowPassword(!showPassword);
@@ -43,12 +34,6 @@ function Login() {
       const { token } = response.data;
       localStorage.setItem("token", token);
       console.log("Login successful:", response.data);
-      const decoded = jwtDecode(token);
-      const userId = decoded.jti;
-
-      console.log("loginaaaaaaaaa")
-      console.log(userId);
-      dispatch(updateUserToken({id: userId}));
 
       navigate("/");
     } catch (error) {
@@ -102,6 +87,7 @@ function Login() {
           },
         }
       );
+      console.log(backendResponse);
       const newToken = backendResponse.data;
 
       localStorage.setItem("token", newToken);

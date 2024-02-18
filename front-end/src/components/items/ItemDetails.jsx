@@ -84,9 +84,14 @@ const ItemDetails = () => {
       navigate("/notfound");
     }
     
-
     fetchRating();
-  }, [averageRating,item, id,]);
+
+    const intervalId = setInterval(fetchRating, 1); // Poll rating every 5 seconds (adjust as needed)
+
+    return () => clearInterval(intervalId);
+  
+  
+  }, [dispatch,item, id,]);
 
 
   const handleButtonClick = () => {
@@ -105,19 +110,7 @@ const ItemDetails = () => {
 
 
 
-  const handleButtonClick = () => {
-   
-    if (isLoggedIn) {
-   
-      setShowReviews(true);
 
-    } else {
-
-      navigate("/login");
-    }
-
-
-  };
 
   return (
     <div className="item-details-container">

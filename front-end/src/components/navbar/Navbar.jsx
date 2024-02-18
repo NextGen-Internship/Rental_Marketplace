@@ -21,20 +21,6 @@ const Navbar = () => {
 
     const userProfile = useSelector((state) => state.user.values);
 
-
-
-
-  // const [userProfile, setUserProfile] = useState({
-
-  //   name: '',
-  //   picture: '',
-  // })
-
-
-
-  console.log("useerrrrr profilaaa");
-  console.log(userProfile.profilePicture)
-
   const [isLoggedIn, setIsLoggedIn] = useState(localStorage.getItem('token') !== null ? true : false);
 
   useEffect(() => {
@@ -50,18 +36,8 @@ const Navbar = () => {
         try {
           const response = await axios.get(`http://localhost:8080/rentify/users/${userId}`);
 
-          console.log("responsaaa v navbaraa userrrr")
-          console.log(response.data);
+          dispatch(updateUser(response.data));
 
-
-          dispatch(updateUser(response.data))
-
-          console.log("dipachaaa v nav baraa")
-          console.log();
-          // setUserProfile({
-          //   name: response.data.name,
-          //   picture: response.data.profilePicture,
-          // });
 
         }
         catch (error) {
