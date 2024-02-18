@@ -69,8 +69,8 @@ CREATE TABLE IF NOT EXISTS rent (
     FOREIGN KEY (item_id) REFERENCES item(id),
     user_id INT,
     FOREIGN KEY (user_id) REFERENCES user(id),
-    start_date DATETIME NOT NULL,
-    end_date DATETIME NOT NULL
+    start_date DATE NOT NULL,
+    end_date DATE NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS payment (

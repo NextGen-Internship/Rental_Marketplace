@@ -11,7 +11,8 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;
 
-import java.util.Date;
+import java.time.LocalDate;
+
 
 @Data
 @Entity
@@ -29,11 +30,11 @@ public class Rent {
 
     @NotEmpty
     @Column(name = "start_date")
-    private Date startDate;
+    private LocalDate startDate;
 
     @NotEmpty
     @Column(name = "end_date")
-    private Date endDate;
+    private LocalDate endDate;
 
     @OneToOne(mappedBy = "rent")
     private Payment payment;

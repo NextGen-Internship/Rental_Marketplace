@@ -83,7 +83,9 @@ const ItemDetails = () => {
             </p>
             <h3>Posted by</h3>
             <p>{item.user.firstName + " " + item.user.lastName}</p>
-            <button className="message-button">Message</button>
+            {/* <button className="message-button">Message</button> */}
+            <h3>Address</h3>
+            <p>{item.address.city}</p>
           </div>
         </div>
       )}
