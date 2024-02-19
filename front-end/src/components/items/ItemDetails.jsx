@@ -29,11 +29,9 @@ const ItemDetails = () => {
 
   const dispatch = useDispatch();
   const userId = useSelector((state) => state.userToken.id);
-  // const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const isLoggedIn = useSelector((state) => state.userToken.isLoggedIn);
 
-  console.log("lognatt detailss " + isLoggedIn )
 
   useEffect(() => {
 

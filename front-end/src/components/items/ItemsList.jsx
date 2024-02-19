@@ -27,7 +27,6 @@ const ItemsList = () => {
   const dispatch = useDispatch();
 
   const [items, setItems] = useState([]);
-  // const [userId, setUserId] = useState(null);
   const { id: categoryId } = useParams();
   const [currentPage, setCurrentPage] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
@@ -43,15 +42,7 @@ const ItemsList = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const navigate = useNavigate();
 
-  // const [isLoggedIn, setIsLoggedIn] = useState(false);
-  
-
-
-
-
   const userId = useSelector((state) => state.userToken.id);
-  console.log("iditooo v itemlist " + userId)
-
   const isLoggedIn = useSelector((state) => state.userToken.isLoggedIn);
 
   useEffect(() => {

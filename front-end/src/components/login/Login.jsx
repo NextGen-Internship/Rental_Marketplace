@@ -39,7 +39,7 @@ function Login() {
 
       const { token } = response.data;
       localStorage.setItem("token", token);
-      console.log("Login successful:", response.data);
+      
 
       
       const decodedToken = jwtDecode(token);
@@ -99,23 +99,17 @@ function Login() {
           },
         }
       );
-      console.log(backendResponse);
+   
       const newToken = backendResponse.data;
-
       localStorage.setItem("token", newToken);
-
-
       const decodedToken = jwtDecode(jwt);
       const id = decodedToken.jti;
 
-      console.log("logiin  " + id );
-
       dispatch(updateUserToken({ id }));
-
 
       navigate("/");
     } catch (error) {
-      console.log("Error during Google login");
+      console.error("Error during Google login");
     }
   };
 

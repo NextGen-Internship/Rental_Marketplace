@@ -16,8 +16,6 @@ const ReviewsItems = ({ itemId }) => {
   const [comment, setComment] = useState('');
 
   const [addedReview, setAddedReview] = useState(false);
-
-
   const [editReview, setEditedReview] = useState(false);
 
   const [showForm, setShowForm] = useState(false);
@@ -40,20 +38,11 @@ const ReviewsItems = ({ itemId }) => {
   });
 
   const userId = useSelector((state) => state.userToken.id);
-
-  console.log("iditoo")
-
-
   const dispatch = useDispatch();
   const review = useSelector((state) => state.userReview.values);
 
 
   useEffect(() => {
-
-
-  
-
-
 
     const fetchUserInfo = async () => {
 
@@ -91,7 +80,6 @@ const ReviewsItems = ({ itemId }) => {
       } catch (error) {
         console.error('Error fetching reviews:', error);
         
-
       }
     };
 
@@ -116,10 +104,6 @@ const ReviewsItems = ({ itemId }) => {
 
   const handleSend = async () => {
     try {
-   
-
-
-
       const response = await axios.post(`http://localhost:8080/rentify/reviews/addReview/${userId}/${itemId}`, {
         ratingStars: rating,
         comments: comment
@@ -144,8 +128,7 @@ const ReviewsItems = ({ itemId }) => {
   const handleUpdateSend = async () => {
 
     try {
-     
-
+    
       const response = await axios.put(`http://localhost:8080/rentify/reviews/updateReview/${userId}/${itemId}`, {
         ratingStars: rating,
         comments: comment

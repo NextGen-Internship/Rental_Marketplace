@@ -12,13 +12,7 @@ const ProfilePage = () => {
   const [userItems, setuserItems] = useState([]);
   const [errorFoInputs, setErrorForInputs] = useState(false);
   const [errorForProfilePicture, setErrorForProfilePicture] = useState(false);
-
-
   const userId = useSelector((state) => state.userToken.id);
-
-
-  console.log("idiiii v profilaa " + userId)
-
   const userInfo = useSelector((state) => state.user.values);
   const dispatch = useDispatch();
 
@@ -171,8 +165,6 @@ const ProfilePage = () => {
     fetchUserItems();
     fetchUserInfo();
   }, []);
-
-  console.log(userInfo.profilePicture)
 
   return (
     <div className="container">

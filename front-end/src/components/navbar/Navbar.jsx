@@ -6,7 +6,6 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import PersonIcon from '@mui/icons-material/Person';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import "./Navbar.css";
-import { jwtDecode } from "jwt-decode";
 import axios from 'axios';
 import { useDispatch, useSelector } from "react-redux"; 
 import { like } from "../../features/likedItems";
@@ -19,27 +18,17 @@ import {updateUserToken} from "../../features/userTokenSlice.js";
 const Navbar = () => {
   const location = useLocation();
   const dispatch = useDispatch();
-
-
-    const userProfile = useSelector((state) => state.user.values);
-    const userId = useSelector((state) => state.userToken.id);
-
-
-    console.log(userId + " idiiiito")
-
-    const isLoggedIn = useSelector((state) => state.userToken.isLoggedIn);
-
-    console.log("lognat li eee " + isLoggedIn)
-
+  const userProfile = useSelector((state) => state.user.values);
+  const userId = useSelector((state) => state.userToken.id);
+  const isLoggedIn = useSelector((state) => state.userToken.isLoggedIn);
 
   useEffect(() => {
 
     if (userId !== null) {
-           dispatch(updateIsLoggedIn({ isLoggedIn: true }));
+     dispatch(updateIsLoggedIn({ isLoggedIn: true }));
 
      
       const fetchUserInfo = async () => {
-
 
         try {
           const response = await axios.get(`http://localhost:8080/rentify/users/${userId}`);
@@ -58,7 +47,6 @@ const Navbar = () => {
     }
     
   }, [location , userProfile.profilePicture , isLoggedIn , userId]);
-
 
 
   const handleLogout = () => {
