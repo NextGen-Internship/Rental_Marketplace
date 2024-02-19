@@ -27,7 +27,11 @@ public class RentService {
     }
 
     public List<RentDto> getAllRentsByItemId(Long id) {
-        return rentRepository.findByUserId(id)
+        if (itemRepository.findById(id).isEmpty()) {
+            throw new ItemNotFoundException(String.format(ITEM_NOT_FOUND_MESSAGE, id));
+        }
+
+        return rentRepository.findByItemId(id)
                 .stream()
                 .filter(rent -> rent.getEndDate().isAfter(LocalDate.now().minusDays(1)))
                 .map(this::mapRentToRentDto)

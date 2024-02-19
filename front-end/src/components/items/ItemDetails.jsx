@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { fetchData } from "../fetchData";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, Link } from "react-router-dom";
 import Carousel from "./carousel/Carousel";
 import "./ItemDetails.css";
 import { jwtDecode } from "jwt-decode";
@@ -38,7 +38,6 @@ const ItemDetails = () => {
     if (item && !item.isActive && item.user.id != userId) {
       navigate("/notfound");
     }
-    
   }, [item, id, navigate]);
 
   return (
@@ -66,7 +65,9 @@ const ItemDetails = () => {
             <h3>Deposit</h3>
             <p>{"$" + item.deposit}</p>
 
-            <button className="rent-button">Rent</button>
+            <Link to={`/rent-item/${item.id}`}>
+              <button className="rent-button">Rent</button>
+            </Link>
           </div>
 
           <div className="user-details">
