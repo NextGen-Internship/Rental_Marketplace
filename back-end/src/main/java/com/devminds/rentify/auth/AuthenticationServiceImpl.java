@@ -41,7 +41,6 @@ public class AuthenticationServiceImpl implements AuthService {
         user.setProfilePicture(defaultPicture);
         user.setVerified(false);
         userService.saveUser(user);
-
         verificationTokenService.sendVerificationEmail(user.getEmail());
 
         return AuthenticationResponse.builder()

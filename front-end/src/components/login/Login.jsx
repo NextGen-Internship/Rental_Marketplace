@@ -4,11 +4,10 @@ import { Link, useNavigate } from "react-router-dom";
 import "./Login.css";
 import { useState } from "react";
 import { jwtDecode } from "jwt-decode";
-
 import { useDispatch } from "react-redux";
 import { updateUserToken } from "../../features/userTokenSlice";
 
-//"../../features/userSlice";
+
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -105,12 +104,14 @@ function Login() {
 
       localStorage.setItem("token", newToken);
 
+
       const decodedToken = jwtDecode(jwt);
       const id = decodedToken.jti;
 
       console.log("logiin  " + id );
 
       dispatch(updateUserToken({ id }));
+
 
       navigate("/");
     } catch (error) {
