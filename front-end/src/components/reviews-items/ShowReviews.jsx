@@ -31,16 +31,9 @@ const ShowReviews = ({itemId , loggedInUserId }) => {
             }
         };
       
-      
-        
         fetchReviews();
 
       }, [reviews]);
-
-      
-
-
-
       const displayedReviews = showAllReviews ? reviews : reviews.slice(0, 2);
   return (
 

@@ -3,6 +3,12 @@ import { GoogleLogin } from "@react-oauth/google";
 import { Link, useNavigate } from "react-router-dom";
 import "./Login.css";
 import { useState } from "react";
+import { jwtDecode } from "jwt-decode";
+
+import { useDispatch } from "react-redux";
+import { updateUserToken } from "../../features/userTokenSlice";
+
+//"../../features/userSlice";
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -10,6 +16,7 @@ function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const { REACT_APP_GOOGLE_CLIENT_ID } = process.env;
 
@@ -34,6 +41,12 @@ function Login() {
       const { token } = response.data;
       localStorage.setItem("token", token);
       console.log("Login successful:", response.data);
+
+      
+      const decodedToken = jwtDecode(token);
+      const id = decodedToken.jti;
+
+      dispatch(updateUserToken({ id }));
 
       navigate("/");
     } catch (error) {
@@ -91,6 +104,13 @@ function Login() {
       const newToken = backendResponse.data;
 
       localStorage.setItem("token", newToken);
+
+      const decodedToken = jwtDecode(jwt);
+      const id = decodedToken.jti;
+
+      console.log("logiin  " + id );
+
+      dispatch(updateUserToken({ id }));
 
       navigate("/");
     } catch (error) {

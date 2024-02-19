@@ -13,8 +13,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { like } from "../../features/likedItems";
 
 
-
-
+import { updateUser } from "../../features/userSlice";
+import {updateIsLoggedIn} from "../../features/userTokenSlice.js"
 
 
 const endpointItems = "items";
@@ -27,7 +27,7 @@ const ItemsList = () => {
   const dispatch = useDispatch();
 
   const [items, setItems] = useState([]);
-  const [userId, setUserId] = useState(null);
+  // const [userId, setUserId] = useState(null);
   const { id: categoryId } = useParams();
   const [currentPage, setCurrentPage] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
@@ -43,18 +43,22 @@ const ItemsList = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const navigate = useNavigate();
 
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  // const [isLoggedIn, setIsLoggedIn] = useState(false);
+  
+
+
+
+
+  const userId = useSelector((state) => state.userToken.id);
+  console.log("iditooo v itemlist " + userId)
+
+  const isLoggedIn = useSelector((state) => state.userToken.isLoggedIn);
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
+   
 
-    if (token !== null) {
-      const decoded = jwtDecode(token);
-      setUserId(decoded.jti);
-    }
-    else{
-     setIsLoggedIn(false)
-
+    if (userId === null) {
+      dispatch(updateIsLoggedIn({ isLoggedIn: false }));
     }
     
 

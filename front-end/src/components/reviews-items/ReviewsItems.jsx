@@ -39,6 +39,10 @@ const ReviewsItems = ({ itemId }) => {
 
   });
 
+  const userId = useSelector((state) => state.userToken.id);
+
+  console.log("iditoo")
+
 
   const dispatch = useDispatch();
   const review = useSelector((state) => state.userReview.values);
@@ -47,10 +51,7 @@ const ReviewsItems = ({ itemId }) => {
   useEffect(() => {
 
 
-    const token = localStorage.getItem('token');
-
-    const decoded = jwtDecode(token);
-    const userId = decoded.jti;
+  
 
 
 
@@ -115,11 +116,7 @@ const ReviewsItems = ({ itemId }) => {
 
   const handleSend = async () => {
     try {
-      const token = localStorage.getItem("token");
-
-
-      const decoded = jwtDecode(token);
-      const userId = decoded.jti;
+   
 
 
 
@@ -147,11 +144,7 @@ const ReviewsItems = ({ itemId }) => {
   const handleUpdateSend = async () => {
 
     try {
-      const token = localStorage.getItem("token");
-
-
-      const decoded = jwtDecode(token);
-      const userId = decoded.jti;
+     
 
       const response = await axios.put(`http://localhost:8080/rentify/reviews/updateReview/${userId}/${itemId}`, {
         ratingStars: rating,

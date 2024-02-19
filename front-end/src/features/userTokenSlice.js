@@ -1,20 +1,23 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-
 export const userTokenSlice = createSlice({
   name: "userToken",
   initialState: {
-   value : {
-    id : 0
-   }
- 
+    id: null,
+    isLoggedIn: false
   },
   reducers: {
-    updateUserToken : (state, action) => {
-        state.value= action.payload;
+    updateUserToken: (state, action) => {
+      state.id = action.payload.id; 
+    },
+    updateIsLoggedIn: (state, action) => {
+      state.isLoggedIn = action.payload.isLoggedIn; 
     }
   }
 });
-export const {updateUserToken} = userTokenSlice.actions;
-export default userTokenSlice.reducer;
 
+
+export const { updateUserToken, updateIsLoggedIn } = userTokenSlice.actions;
+
+
+export default userTokenSlice.reducer;

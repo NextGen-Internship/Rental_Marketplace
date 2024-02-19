@@ -8,6 +8,7 @@ import userReducer from "../features/userSlice.js";
 import userReviewReducer from "../features/userReviewSlice.js"
 import allReviewsReducer from "../features/allReviewsSlice.js"
 import ratingReviewReducer from "../features/ratingReview.js"
+import userTokenReducer from "../features/userTokenSlice.js"
 
 
 const store = configureStore({
@@ -16,9 +17,9 @@ const store = configureStore({
     user: userReducer,
     userReview : userReviewReducer,
     allReviews : allReviewsReducer,
-    ratingReview: ratingReviewReducer
+    ratingReview: ratingReviewReducer,
+    userToken : userTokenReducer
     
-
   },
 });
 

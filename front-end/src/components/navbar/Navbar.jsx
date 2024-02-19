@@ -11,6 +11,7 @@ import axios from 'axios';
 import { useDispatch, useSelector } from "react-redux"; 
 import { like } from "../../features/likedItems";
 import {updateUser} from "../../features/userSlice"
+import {updateIsLoggedIn} from "../../features/userTokenSlice.js"
 
 
 
@@ -20,16 +21,22 @@ const Navbar = () => {
 
 
     const userProfile = useSelector((state) => state.user.values);
+    const userId = useSelector((state) => state.userToken.id);
 
-  const [isLoggedIn, setIsLoggedIn] = useState(localStorage.getItem('token') !== null ? true : false);
+
+    console.log(userId + " idiiiito")
+
+    const isLoggedIn = useSelector((state) => state.userToken.isLoggedIn);
+
+    console.log("lognat li eee " + isLoggedIn)
+
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
 
-    if (token !== null) {
-      setIsLoggedIn(true);
-      const decoded = jwtDecode(token);
-      const userId = decoded.jti;
+    if (userId !== null) {
+           dispatch(updateIsLoggedIn({ isLoggedIn: true }));
+
+     
       const fetchUserInfo = async () => {
 
 
@@ -57,7 +64,7 @@ const Navbar = () => {
     Object.keys(localStorage).forEach(key => { localStorage.removeItem(key); });
 
     dispatch(like([]));
-    setIsLoggedIn(false);
+    dispatch(updateIsLoggedIn({ isLoggedIn: false }));
   };
 
 

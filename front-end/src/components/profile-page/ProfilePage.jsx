@@ -13,11 +13,11 @@ const ProfilePage = () => {
   const [errorFoInputs, setErrorForInputs] = useState(false);
   const [errorForProfilePicture, setErrorForProfilePicture] = useState(false);
 
-  const token = localStorage.getItem("token");
 
-  const decoded = jwtDecode(token);
-  const userId = decoded.jti;
+  const userId = useSelector((state) => state.userToken.id);
 
+
+  console.log("idiiii v profilaa " + userId)
 
   const userInfo = useSelector((state) => state.user.values);
   const dispatch = useDispatch();

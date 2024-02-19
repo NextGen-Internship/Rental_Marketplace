@@ -12,6 +12,8 @@ import axios from 'axios';
 import { useDispatch, useSelector } from "react-redux"; 
 import { updateRating } from "../../features/ratingReview.js";
 
+import {updateIsLoggedIn} from "../../features/userTokenSlice.js"
+
 
 
 
@@ -23,28 +25,21 @@ const ItemDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [showReviews, setShowReviews] = useState(false);
-
-
   const   averageRating = useSelector((state) => state.ratingReview.values);
 
-
   const dispatch = useDispatch();
+  const userId = useSelector((state) => state.userToken.id);
+  // const [isLoggedIn, setIsLoggedIn] = useState(false);
 
+  const isLoggedIn = useSelector((state) => state.userToken.isLoggedIn);
 
-
-
-  let userId = "";
-
-
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  console.log("lognatt detailss " + isLoggedIn )
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
 
-    if (token !== null) {
-      const decoded = jwtDecode(token);
-      userId = decoded.jti;
-      setIsLoggedIn(true);
+    if (userId !== null) {
+
+      dispatch(updateIsLoggedIn({ isLoggedIn: true }));
     }
 
     const fetchItem = async () => {
@@ -77,16 +72,13 @@ const ItemDetails = () => {
 
 
 
-   
-
-
     if (item && !item.isActive && item.user.id != userId) {
       navigate("/notfound");
     }
     
     fetchRating();
 
-    const intervalId = setInterval(fetchRating, 1); // Poll rating every 5 seconds (adjust as needed)
+    const intervalId = setInterval(fetchRating, 1);
 
     return () => clearInterval(intervalId);
   
@@ -107,10 +99,6 @@ const ItemDetails = () => {
 
 
   };
-
-
-
-
 
   return (
     <div className="item-details-container">

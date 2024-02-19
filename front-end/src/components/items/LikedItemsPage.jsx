@@ -5,21 +5,23 @@ import { jwtDecode } from "jwt-decode";
 import noImage from "../../assets/no-image.avif";
 import "./LIkedItemsPage.css" 
 import {useDispatch, useSelector} from 'react-redux'
-import { UseDispatch } from "react-redux";
+
 import { like } from "../../features/likedItems";
 
 const LikedItemsPage = () => {
   const [likedItems, setLikedItems] = useState([]);
 
+  const userId = useSelector((state) => state.userToken.id);
 
   useEffect(() => {
+
+
+
     const fetchLikedItemsFromDB = async () => {
       try {
-        const token = localStorage.getItem("token");
+     
 
-        if (token) {
-          const decoded = jwtDecode(token);
-          const userId = decoded.jti;
+        if (userId !== null) {
 
           const response = await fetch(
             `http://localhost:8080/rentify/favourites/userFavourites/${userId}`,
@@ -59,9 +61,7 @@ const LikedItemsPage = () => {
   }, []);
 
   const handleLikeClick = async (itemId) => {
-    const token = localStorage.getItem("token");
-    const decoded = jwtDecode(token);
-    const userId = decoded.jti;
+
 
     const updatedLikedItems = likedItems.includes(itemId)
       ? likedItems.filter((id) => id !== itemId)
