@@ -12,6 +12,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { like } from "../../features/likedItems";
 import {updateUser} from "../../features/userSlice"
 import {updateIsLoggedIn} from "../../features/userTokenSlice.js"
+import {updateUserToken} from "../../features/userTokenSlice.js";
 
 
 
@@ -56,7 +57,7 @@ const Navbar = () => {
       fetchUserInfo();
     }
     
-  }, [location , userProfile.profilePicture ]);
+  }, [location , userProfile.profilePicture , isLoggedIn , userId]);
 
 
 
@@ -65,6 +66,7 @@ const Navbar = () => {
 
     dispatch(like([]));
     dispatch(updateIsLoggedIn({ isLoggedIn: false }));
+    dispatch(updateUserToken({id : null}))
   };
 
 
