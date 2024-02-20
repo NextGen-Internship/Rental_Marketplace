@@ -3,6 +3,8 @@ package com.devminds.rentify.controller;
 import com.devminds.rentify.dto.UpdatedUserInfoDto;
 import com.devminds.rentify.dto.UserDto;
 import com.devminds.rentify.service.UserServiceImpl;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,15 +14,13 @@ import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.List;
 
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("/rentify")
 public class UserController {
 
     private final UserServiceImpl userService;
 
-    public UserController(UserServiceImpl userService) {
-        this.userService = userService;
-    }
 
     private static String INVALID_TOKEN_MESSAGE = "Invalid token";
 
@@ -36,6 +36,11 @@ public class UserController {
     @GetMapping("/users")
     public ResponseEntity<List<UserDto>> getAllUsers() {
         return new ResponseEntity<>(userService.getAllUsers(), HttpStatus.OK);
+    }
+
+    @GetMapping("/users/admin/{userId}")
+    public ResponseEntity<List<UserDto>> getAllUsersExpectAdmin(@PathVariable Long userId) {
+        return new ResponseEntity<>(userService.getAllUsersExpectAdmin(userId), HttpStatus.OK);
     }
 
     @GetMapping("/users/{id}")
@@ -58,4 +63,13 @@ public class UserController {
         return new ResponseEntity<>(userService.updateProfilePicture(userId, file), HttpStatus.OK);
 
     }
+    //        `http://localhost:8080/rentify/users/admin/updateRole/${userId}`
+
+
+    @PutMapping("/users/admin/updateRole/{userId}")
+    public ResponseEntity<UserDto> updateUserRole(@PathVariable Long userId){
+        return new ResponseEntity<>(userService.updateUserRole(userId) , HttpStatus.OK);
+
+    }
+
 }

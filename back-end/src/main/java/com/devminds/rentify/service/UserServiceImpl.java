@@ -6,7 +6,9 @@ import com.devminds.rentify.dto.AddressDto;
 import com.devminds.rentify.dto.UpdatedUserInfoDto;
 import com.devminds.rentify.dto.UserDto;
 import com.devminds.rentify.entity.Address;
+import com.devminds.rentify.entity.Role;
 import com.devminds.rentify.entity.User;
+import com.devminds.rentify.enums.UserRole;
 import com.devminds.rentify.exception.AddressNotFoundException;
 import com.devminds.rentify.exception.DuplicateEntityException;
 import com.devminds.rentify.repository.AddressRepository;
@@ -30,6 +32,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.security.GeneralSecurityException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -208,5 +211,35 @@ public class UserServiceImpl implements UserService {
 
         return mapUserToUserDto(existingUser);
     }
+
+    public List<UserDto> getAllUsersExpectAdmin(Long userId) {
+        List<User> allUsers = userRepository.findAll();
+        return allUsers.stream()
+                .filter(user -> !user.getId().equals(userId))
+                .map(this::mapUserToUserDto)
+                .collect(Collectors.toList());
+    }
+
+    public UserDto updateUserRole(Long userId) {
+        User existingUser = userRepository.findById(userId)
+                .orElseThrow(() -> new UsernameNotFoundException(String.format(USER_NOT_FOUND_MESSAGE, userId)));
+
+        Role currentRole = existingUser.getRole();
+        Role newRole;
+
+        if (currentRole.getId() == 1) {
+            newRole = roleRepository.findById(currentRole.getId() + 1)
+                    .orElseThrow(() -> new RuntimeException("Role not found"));
+        } else {
+            newRole = roleRepository.findById(currentRole.getId() - 1)
+                    .orElseThrow(() -> new RuntimeException("Role not found"));
+        }
+
+        existingUser.setRole(newRole);
+        userRepository.save(existingUser);
+
+        return mapUserToUserDto(existingUser);
+    }
+
 }
 

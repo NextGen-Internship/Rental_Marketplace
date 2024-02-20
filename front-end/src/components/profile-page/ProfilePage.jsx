@@ -360,7 +360,7 @@ const ProfilePage = () => {
                     </div>
                     <hr />
                     <div className="row">
-                      <div className="col-sm-12">
+                      <div className="col-sm-12" >
                         {editMode ? (
                           <>
                             <button
