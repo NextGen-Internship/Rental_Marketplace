@@ -20,6 +20,8 @@ const RentItem = () => {
     if (token !== null) {
       const decoded = jwtDecode(token);
       setUserId(decoded.jti);
+    } else {
+      navigate("/login")
     }
 
     const fetchItem = async () => {
