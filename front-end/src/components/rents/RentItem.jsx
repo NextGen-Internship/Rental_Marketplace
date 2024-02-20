@@ -13,6 +13,7 @@ const RentItem = () => {
   const [dateRange, setDateRange] = useState([new Date(), new Date()]);
   const [reservedDays, setReservedDays] = useState([]);
   const [isIntervalSelected, setIsIntervalSelected] = useState(false);
+  const [agreedToTerms, setAgreedToTerms] = useState(false);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -21,7 +22,7 @@ const RentItem = () => {
       const decoded = jwtDecode(token);
       setUserId(decoded.jti);
     } else {
-      navigate("/login")
+      navigate("/login");
     }
 
     const fetchItem = async () => {
@@ -127,6 +128,10 @@ const RentItem = () => {
     }
   };
 
+  const handleCheckboxChange = () => {
+    setAgreedToTerms(!agreedToTerms);
+  };
+
   return (
     <div>
       <div className="container d-flex flex-column">
@@ -145,11 +150,23 @@ const RentItem = () => {
 
             <br />
             <br />
+            <div style={{ display: "flex", alignItems: "center" }}>
+              <input
+                type="checkbox"
+                checked={agreedToTerms}
+                onChange={handleCheckboxChange}
+                required
+                style={{ width: "auto" }}
+              />
+              <div style={{ marginLeft: "5px" }}>
+                I agree with terms and conditions
+              </div>
+            </div>
             <br />
             <div className="mb-3 d-grid">
               <button
                 onClick={handleSubmit}
-                disabled={!isIntervalSelected}
+                disabled={!isIntervalSelected || !agreedToTerms}
                 className="btn btn-primary"
               >
                 Submit
