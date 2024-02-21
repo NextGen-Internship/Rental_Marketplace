@@ -1,10 +1,21 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
+import noImage from "../../assets/no-image.avif";
+
 const AdminPanel = () => {
   const [users, setUsers] = useState([]);
 
+  const [recentItems, setRecentItems] = useState([]);
+
   const [userDetails, setUserDetails] = useState({});
+
+  const [blockedUsers, setBlockedUsers] = useState([]);
+
+
+  const [showAllReviews, setShowAllReviews] = useState(false);
+
+
   useEffect(() => {
     const fetchUsers = async () => {
       try {
@@ -19,30 +30,86 @@ const AdminPanel = () => {
         const response = await axios.get(
           `http://localhost:8080/rentify/users/admin/${userId}`
         );
-
-        console.log("responsaaaa na admina")
-        console.log(response.data);
         setUsers(response.data);
       } catch (error) {
         console.error("Error fetching user items:", error);
       }
     }
+
+    const fetchLastAddedItems = async () => {
+
+      try {
+
+
+        const response = await axios.get(
+          `http://localhost:8080/rentify/items/recentItems`
+        );
+
+
+        setRecentItems(response.data);
+
+      } catch (error) {
+        console.error("Error fetching itmes " + error)
+      }
+    }
+
+    const fetchBlockedUsers = async () => {
+
+      try {
+
+        //localhost:8080/rentify/users/blocked
+
+        const response = await axios.get(
+          `http://localhost:8080/rentify/users/blocked`
+        );
+
+        console.log("blokiranitee ")
+        console.log(response.data);
+        setBlockedUsers(response.data);
+
+      } catch (error) {
+        console.error("Error fetching blockedUsers " + error);
+      }
+    }
+
     fetchUsers();
-  }, []);
+    fetchLastAddedItems();
+    fetchBlockedUsers();
+  }, [users ,recentItems, blockedUsers ]);
 
 
   const updateRole = async (userId) => {
-    try{
+    try {
 
       const response = await axios.put(
         `http://localhost:8080/rentify/users/admin/updateRole/${userId}`
       );
 
-    }catch(error)
-    {
+    } catch (error) {
       console.error("Error updating role " + error)
     }
   };
+
+  console.log("poslednite dobaveni aitemii")
+  console.log(recentItems);
+
+  const updateBlockUser = async (userId) => {
+    try {
+
+      const response = await axios.put(
+        `http://localhost:8080/rentify/users/admin/blockUser/${userId}`
+      );
+
+    } catch (error) {
+      console.error("Error updating role " + error)
+    }
+  };
+
+
+  const displayedItems = showAllReviews ? recentItems : recentItems.slice(0, 3);
+  const displayUsers = showAllReviews ? users : users.slice(0, 2);
+
+  const displayBlocked = showAllReviews ? blockedUsers : blockedUsers.slice(0, 2);
 
   console.log(userDetails.email)
   return (
@@ -64,7 +131,9 @@ const AdminPanel = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {users.map(user => (
+                { displayUsers.length > 0 ? ( 
+                  <> 
+                  {displayUsers.map(user => (
                     <tr key={user.id}>
                       <td>
 
@@ -86,8 +155,8 @@ const AdminPanel = () => {
                       </td>
                       <td>
                         <div class="d-flex justify-content-between align-items-center mb-1 max-width-progress-wrap" style={{ marginTop: '30px' }}>
-                          <button   onClick={() => updateRole(user.id)}
-                            class={`btn btn-lg text-white mb-0 me-0 ${user.role.role === 'USER' ?   'btn-primary' : 'btn-danger'}`}
+                          <button onClick={() => updateRole(user.id)}
+                            class={`btn btn-lg text-white mb-0 me-0 ${user.role.role === 'USER' ? 'btn-primary' : 'btn-danger'}`}
                             type="button"
                           >
                             <i class="mdi mdi-account-plus"></i>
@@ -98,12 +167,37 @@ const AdminPanel = () => {
                       </td>
                       <td>
                         <div class="badge badge-opacity-warning" style={{ marginTop: '30px' }}>
-                          <button class="btn btn-danger btn-lg text-white mb-0 me-0" type="button"><i class="mdi mdi-account-plus"></i>Block user</button>
+                          <button onClick={() => updateBlockUser(user.id)}
+                            class={`btn btn-lg text-white mb-0 me-0 ${user.blocked ? 'btn-primary' : 'btn-danger'}`}
+                            type="button"
+
+                          >
+                            <i class="mdi mdi-account-plus"></i>
+                            {user.blocked ?
+                              'Unblock User' : 'Block User'}
+                          </button>
                         </div>
 
                       </td>
                     </tr>
                   ))}
+                   {users.length > 2 && (
+                <div className="list align-items-center pt-3">
+                <div className="wrapper w-100">
+                  <p className="mb-0">
+                    <a href="#" className="fw-bold text-primary" onClick={() => setShowAllReviews(!showAllReviews)}>
+                      {showAllReviews ? 'Show Less' : 'Show More'} <i className="mdi mdi-arrow-right ms-2"></i>
+                    </a>
+                  </p>
+                </div>
+              </div>
+
+
+            )} 
+              </> 
+            ):( 
+                <h4>Dont have Users</h4>
+            )}
                 </tbody>
               </table>
             </div>
@@ -112,77 +206,130 @@ const AdminPanel = () => {
       </div>
 
 
-
+    
       <div class="row flex-grow">
         <div class="col-md-6 col-lg-6 grid-margin stretch-card">
           <div class="card card-rounded">
             <div class="card-body card-rounded">
-              <h4 class="card-title  card-title-dash">pOSLEDNI KACHENI OBQVI</h4>
-              <div class="list align-items-center border-bottom py-2">
-                <div class="wrapper w-100">
-                  <p class="mb-2 font-weight-medium">
-                    Change in Directors
-                  </p>
-                  <div class="d-flex justify-content-between align-items-center">
-                    <div class="d-flex align-items-center">
-                      <i class="mdi mdi-calendar text-muted me-1"></i>
-                      <p class="mb-0 text-small text-muted">Mar 14, 2019</p>
+              <h4 class="card-title  card-title-dash">Last Recent Items</h4>
+              { displayedItems.length > 0 ? ( 
+                <>
+              {displayedItems.map((item, index) => (
+                <div key={index} className="list align-items-center border-bottom py-2">
+                  <div className="wrapper w-100">
+                    <div className="d-flex justify-content-between align-items-center">
+                      <div className="d-flex align-items-center">
+                        <img
+                          src={item.thumbnail || noImage}
+                          className="img-sm rounded-10 me-3"
+
+                          style={{
+                            width: '140px',
+                            height: '100px',
+                          }}
+                        />
+                        <div style={{ marginLeft: '100px' }}>
+                          <div>
+                          <a href={`/items/${item.id}`} style={{ color: 'orange', textDecoration: 'none' }}>
+
+                            <h5 className="mb-0 font-weight-medium">{item.name}</h5>
+
+                            <p className="mb-0 text-small text-muted">  {item.postedDate[2]}/{item.postedDate[1]}/{item.postedDate[0]}</p>
+                            <p className="mb-0 text-small text-muted">  {item.postedDate[3]}:{item.postedDate[4]}</p>
+                          </a>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-              <div class="list align-items-center border-bottom py-2">
-                <div class="wrapper w-100">
-                  <p class="mb-2 font-weight-medium">
-                    Other Events
-                  </p>
-                  <div class="d-flex justify-content-between align-items-center">
-                    <div class="d-flex align-items-center">
-                      <i class="mdi mdi-calendar text-muted me-1"></i>
-                      <p class="mb-0 text-small text-muted">Mar 14, 2019</p>
-                    </div>
-                  </div>
                 </div>
-              </div>
-              <div class="list align-items-center border-bottom py-2">
-                <div class="wrapper w-100">
-                  <p class="mb-2 font-weight-medium">
-                    Quarterly Report
-                  </p>
-                  <div class="d-flex justify-content-between align-items-center">
-                    <div class="d-flex align-items-center">
-                      <i class="mdi mdi-calendar text-muted me-1"></i>
-                      <p class="mb-0 text-small text-muted">Mar 14, 2019</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="list align-items-center border-bottom py-2">
-                <div class="wrapper w-100">
-                  <p class="mb-2 font-weight-medium">
-                    Change in Directors
-                  </p>
-                  <div class="d-flex justify-content-between align-items-center">
-                    <div class="d-flex align-items-center">
-                      <i class="mdi mdi-calendar text-muted me-1"></i>
-                      <p class="mb-0 text-small text-muted">Mar 14, 2019</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="list align-items-center pt-3">
-                <div class="wrapper w-100">
-                  <p class="mb-0">
-                    <a href="#" class="fw-bold text-primary">Show all <i
-                      class="mdi mdi-arrow-right ms-2"></i></a>
+
+              ))}
+               {recentItems.length > 2 && (
+                <div className="list align-items-center pt-3">
+                <div className="wrapper w-100">
+                  <p className="mb-0">
+                    <a href="#" className="fw-bold text-primary" onClick={() => setShowAllReviews(!showAllReviews)}>
+                      {showAllReviews ? 'Show Less' : 'Show More'} <i className="mdi mdi-arrow-right ms-2"></i>
+                    </a>
                   </p>
                 </div>
+              </div>
+
+
+            )} 
+             </> 
+            ):( 
+
+                
+                <h4>Dont have reviews yet.</h4>
+            )}
+
+          
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-6 col-lg-6 grid-margin stretch-card">
+        <div class="card card-rounded">
+          <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <div>
+                <h4 class="card-title card-title-dash">Blocked Users</h4>
               </div>
             </div>
+            { displayBlocked.length > 0 ? (  
+              <> 
+            {displayBlocked.map((blockedUser, index) => (
+              <div key={index} class="mt-3">
+                <div class="wrapper d-flex align-items-center justify-content-between py-2 border-bottom">
+                  <div class="d-flex">
+                    <img class="img-sm rounded-10" src={blockedUser.profilePicture} style={{ width: '100px', height: '100px', borderRadius: '50%', marginTop: '10px' }} alt="profile" />
+                    <div class="wrapper ms-3">
+                      <p class="ms-1 mb-1 fw-bold">{blockedUser.firstName} {blockedUser.lastName}</p>
+                      <small class="text-muted mb-0">{blockedUser.email}</small>
+                    </div>
+                  </div>
+                  <div class="text-muted text-small">
+                    <button onClick={() => updateBlockUser(blockedUser.id)}
+                      class={`btn btn-lg text-white mb-0 me-0 ${blockedUser.blocked ? 'btn-primary' : 'btn-danger'}`}
+                      type="button"
+
+                    >
+                      <i class="mdi mdi-account-plus"></i>
+                      {blockedUser.blocked ?
+                        'Unblock User' : 'Block User'}
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ))}
+              {blockedUsers.length > 2 && (
+                <div className="list align-items-center pt-3">
+                <div className="wrapper w-100">
+                  <p className="mb-0">
+                    <a href="#" className="fw-bold text-primary" onClick={() => setShowAllReviews(!showAllReviews)}>
+                      {showAllReviews ? 'Show Less' : 'Show More'} <i className="mdi mdi-arrow-right ms-2"></i>
+                    </a>
+                  </p>
+                </div>
+              </div>
+
+
+            )} 
+               </> 
+            ):( 
+
+                
+                <h4>Dont have Blocked Users.</h4>
+            )}
+
           </div>
         </div>
       </div>
     </div>
+    </div >
+
   );
 };
 export default AdminPanel;

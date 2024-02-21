@@ -241,5 +241,24 @@ public class UserServiceImpl implements UserService {
         return mapUserToUserDto(existingUser);
     }
 
+    public UserDto blockUser(Long userId) {
+        User existingUser = userRepository.findById(userId)
+                .orElseThrow(() -> new UsernameNotFoundException(String.format(USER_NOT_FOUND_MESSAGE, userId)));
+
+        existingUser.setBlocked(!existingUser.isBlocked());
+
+        userRepository.save(existingUser);
+
+        return mapUserToUserDto(existingUser);
+    }
+
+    public List<UserDto> getAllBlockedUsers() {
+
+        List<User> blockedUsers = userRepository.findByIsBlockedTrue();
+        return blockedUsers.stream()
+                .map(this::mapUserToUserDto)
+                .collect(Collectors.toList());
+
+    }
 }
 

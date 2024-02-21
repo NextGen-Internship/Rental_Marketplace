@@ -48,6 +48,11 @@ public class UserController {
         return new ResponseEntity<>(userService.getUserById(id), HttpStatus.OK);
     }
 
+    @GetMapping("/users/blocked")
+    public ResponseEntity<List<UserDto>> getAllBlockedUsers() {
+        return new ResponseEntity<>(userService.getAllBlockedUsers(), HttpStatus.OK);
+    }
+
     @PutMapping("/update/{id}")
     public ResponseEntity<UserDto> updateUser(@PathVariable Long id,
                                               @RequestBody UpdatedUserInfoDto updatedUserInfoDto) {
@@ -63,12 +68,18 @@ public class UserController {
         return new ResponseEntity<>(userService.updateProfilePicture(userId, file), HttpStatus.OK);
 
     }
-    //        `http://localhost:8080/rentify/users/admin/updateRole/${userId}`
+
 
 
     @PutMapping("/users/admin/updateRole/{userId}")
     public ResponseEntity<UserDto> updateUserRole(@PathVariable Long userId){
         return new ResponseEntity<>(userService.updateUserRole(userId) , HttpStatus.OK);
+
+    }
+
+    @PutMapping("/users/admin/blockUser/{userId}")
+    public ResponseEntity<UserDto> blockUser(@PathVariable Long userId){
+        return new ResponseEntity<>(userService.blockUser(userId) , HttpStatus.OK);
 
     }
 

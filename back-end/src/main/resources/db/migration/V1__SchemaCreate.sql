@@ -23,7 +23,8 @@ CREATE TABLE IF NOT EXISTS user (
     profile_picture VARCHAR(512),
     role_id INT,
     FOREIGN KEY (role_id) REFERENCES user_role(id),
-    phone VARCHAR(10)
+    phone VARCHAR(10),
+    is_blocked BOOLEAN NOT NULL DEFAULT FALSE
 );
 
 CREATE TABLE IF NOT EXISTS item_category (

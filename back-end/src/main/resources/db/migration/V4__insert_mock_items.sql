@@ -7,9 +7,9 @@ VALUES
 
 INSERT INTO user (first_name, last_name, password, email, address_id, profile_picture, role_id, phone)
 VALUES
-    ('John', 'Doe', 'password123', 'john.doe@example.com', 1, 'profile1.jpg', 1, '1234567890'),
-    ('Jane', 'Doe', 'pass456', 'jane.doe@example.com', 2, 'profile2.jpg', 2, '9876543210'),
-    ('Alice', 'Smith', 'secret123', 'alice.smith@example.com', 3, 'profile3.jpg', 1, '5551234567');
+    ('John', 'Doe', 'password123', 'john.doe@example.com', 1, 'http://localhost:8080/static/profilePicture.jpg', 1, '1234567890'),
+    ('Jane', 'Doe', 'pass456', 'jane.doe@example.com', 2, 'http://localhost:8080/static/profilePicture.jpg', 2, '9876543210'),
+    ('Alice', 'Smith', 'secret123', 'alice.smith@example.com', 3, 'http://localhost:8080/static/profilePicture.jpg', 1, '5551234567');
 
 INSERT INTO item (name, description, price, category_id, user_id, posted_date, deposit, address_id)
 VALUES

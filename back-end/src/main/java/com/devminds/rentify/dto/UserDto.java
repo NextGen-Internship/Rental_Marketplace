@@ -20,4 +20,5 @@ public class UserDto {
     private Address address;
     private List<PlainItemDto> items = new ArrayList<>();
     private Role role;
+    private boolean isBlocked ;
 }

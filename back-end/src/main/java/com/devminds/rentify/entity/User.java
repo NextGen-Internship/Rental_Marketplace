@@ -61,6 +61,8 @@ public class User implements UserDetails {
     @Column(name = "is_verified")
     private boolean isVerified;
 
+    @Column(name = "is_blocked")
+    private boolean isBlocked;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "address_id")
