@@ -9,5 +9,5 @@ import java.io.IOException;
 public interface AuthService {
     AuthenticationRespone register(UserRegisterDto userRegisterDto) throws IOException, StripeException;
 
-    AuthenticationRespone login(LoginDto loginDto);
+    AuthenticationResponse login(LoginDto loginDto);
 }

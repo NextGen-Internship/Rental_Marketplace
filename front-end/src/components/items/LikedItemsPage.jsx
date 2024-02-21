@@ -133,7 +133,7 @@ const LikedItemsPage = () => {
               <div className="card-body">
                 <h3 className="card-title">{item.name}</h3>
                 <p className="card-text">{"$" + item.price}</p>
-                <p className="card-text">{item.address}</p>
+                <p className="card-text">{item.address.city}</p>
               </div>
             </div>
             <button

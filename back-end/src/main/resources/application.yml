@@ -13,17 +13,24 @@ spring:
     dialect: org.hibernate.dialect.MySQL8Dialect
     ddl-auto: validate
     show-sql: true
-
-    spring:
-      jpa:
+    jpa:
+      hibernate:
+        ddl-auto: update
+      show-sql: true
+      properties:
         hibernate:
-          ddl-auto: update
-        show-sql: true
-        properties:
-          hibernate:
-
-            format_sql: true
-
+          format_sql: true
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ${EMAIL}
+    password: ${MAIL_SENDER_PASSWORD}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
   servlet:
     multipart:
       enabled: true
@@ -31,11 +38,9 @@ spring:
       max-file-size: 5MB
       max-request-size: 10MB
 
-
 myapp:
- secretKey: ${SECRET_KEY_JWT}
- validation: ${VALIDATION_JWT}
-
+  secretKey: ${SECRET_KEY_JWT}
+  validation: ${VALIDATION_JWT}
 
 cloud:
   aws:
@@ -46,7 +51,6 @@ cloud:
       static: ${S3_REGION}
     stack:
       auto: false
-
 application:
   bucket:
     name: ${S3_BUCKET_NAME}
@@ -56,4 +60,3 @@ google-client-key: ${GOOGLE_CLIENT_ID}
 stripe-key: ${STRIPE_SECRET_KEY}
 
 active-profile: ${DEFAULT_PROFILE_PICTURE}
-

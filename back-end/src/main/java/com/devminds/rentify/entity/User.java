@@ -2,7 +2,17 @@ package com.devminds.rentify.entity;
 
 
 import com.devminds.rentify.enums.UserRole;
-import jakarta.persistence.*;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
@@ -47,6 +57,9 @@ public class User implements UserDetails {
     @Column(name = "profile_picture")
     private String profilePicture;
 
+    @Column(name = "is_verified")
+    private boolean isVerified;
+
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "address_id")
@@ -59,13 +72,11 @@ public class User implements UserDetails {
     private String stripeAccountId;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
-
     private List<Item> items = new ArrayList<>();
 
     @ManyToOne
     @JoinColumn(name = "role_id")
     private Role role;
-
 
     @OneToMany
     private List<Payment> payments;
@@ -77,6 +88,8 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "user")
     private List<History> histories = new ArrayList<>();
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<PasswordResetToken> resetToken;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -118,6 +131,6 @@ public class User implements UserDetails {
     public String toString() {
         return "User{" +
                 "id=" + id +
-                ", email='" + email + '\'' ;
+                ", email='" + email + '\'';
     }
 }

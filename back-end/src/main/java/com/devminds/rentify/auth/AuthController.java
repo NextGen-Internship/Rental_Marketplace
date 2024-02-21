@@ -22,13 +22,13 @@ public class AuthController {
 
 
     @PostMapping("/register")
-    public ResponseEntity<AuthenticationRespone> register(@RequestBody UserRegisterDto userRegisterDto) {
+    public ResponseEntity<AuthenticationResponse> register(@RequestBody UserRegisterDto userRegisterDto) {
 
         try {
-            AuthenticationRespone authenticationResponse = authService.register(userRegisterDto);
+            AuthenticationResponse authenticationResponse = authService.register(userRegisterDto);
             return ResponseEntity.ok(authenticationResponse);
         } catch (DuplicateEntityException e) {
-            AuthenticationRespone errorResponse = AuthenticationRespone.builder()
+            AuthenticationResponse errorResponse = AuthenticationResponse.builder()
                     .errorMessage(e.getMessage())
                     .build();
             return ResponseEntity.badRequest().body(errorResponse);
@@ -42,7 +42,7 @@ public class AuthController {
 
     @PostMapping("/login")
 
-    public ResponseEntity<AuthenticationRespone> login(@RequestBody LoginDto request) {
+    public ResponseEntity<AuthenticationResponse> login(@RequestBody LoginDto request) {
 
         return ResponseEntity.ok(authService.login(request));
     }

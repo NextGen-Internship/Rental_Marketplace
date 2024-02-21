@@ -11,7 +11,7 @@ import lombok.Data;
 @Builder
 @AllArgsConstructor
 
-public class UserRegisterDto  {
+public class UserRegisterDto {
 
     @NotEmpty(message = "firstName is required")
     private String firstName;

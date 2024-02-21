@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+
 import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
@@ -30,10 +31,11 @@ public class JwtService {
     public String generateToken(User userDetails) {
         return generateToken(new HashMap<>(), userDetails);
     }
+
     public String generateToken(Map<String, Object> extraClaims, User userDetails) {
-      return Jwts.builder()
+        return Jwts.builder()
                 .setClaims(extraClaims)
-                .claim("picture",userDetails.getProfilePicture())
+                .claim("picture", userDetails.getProfilePicture())
                 .setId(String.valueOf(userDetails.getId()))
                 .setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
@@ -45,7 +47,6 @@ public class JwtService {
     }
 
 
-
     private Date extractExpiration(String token) {
         return extractClaim(token, Claims::getExpiration);
     }
@@ -53,11 +54,11 @@ public class JwtService {
 
     public String extractUsername(String token) {
 
-            return extractClaim(token, Claims::getSubject);
+        return extractClaim(token, Claims::getSubject);
     }
 
     private Claims extractAllClaims(String token) {
-            return Jwts.parserBuilder().setSigningKey(signInKey).build().parseClaimsJws(token).getBody();
+        return Jwts.parserBuilder().setSigningKey(signInKey).build().parseClaimsJws(token).getBody();
     }
 
 }

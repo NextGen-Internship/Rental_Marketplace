@@ -31,7 +31,7 @@ public class Rent {
     @Column(name = "start_date")
     private LocalDate startDate;
 
-   @NotNull
+    @NotNull
     @Column(name = "end_date")
     private LocalDate endDate;
 

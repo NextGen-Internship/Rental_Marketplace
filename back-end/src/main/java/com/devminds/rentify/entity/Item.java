@@ -5,12 +5,21 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
+
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -30,16 +39,14 @@ public class Item {
     private String name;
 
     @NotEmpty
-    @Size(max = 255)
+    @Size(max = 1024)
     @Column(name = "description")
     private String description;
-
 
     @NotNull
     @Positive
     @Column(name = "price")
     private BigDecimal price;
-
 
     @NotNull
     @Column(name = "posted_date")
@@ -58,28 +65,28 @@ public class Item {
 
     private String thumbnail;
 
+    private Boolean isActive;
 
     @ManyToOne
     @JsonIgnore
     private User user;
 
-
     @JsonIgnore
     @ManyToOne
     private Address address;
 
-//    @OneToMany
-//    private List<History> histories;
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "item")
+    private List<History> histories;
 
-    @OneToMany(fetch = FetchType.LAZY , mappedBy = "item")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "item")
     private List<Picture> pictures;
 
-    @OneToMany(fetch = FetchType.LAZY , mappedBy = "item")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "item")
     private List<LikedItem> likedItems;
 
-    @OneToMany
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "item")
     private List<Rent> rents;
 
-    @OneToMany
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "item")
     private List<Review> reviews;
 }

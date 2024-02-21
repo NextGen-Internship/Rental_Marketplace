@@ -16,7 +16,7 @@ public class UserDto {
     private String email;
     private String phoneNumber;
     private String profilePicture;
-    private Address  address;
+    private Address address;
     private List<PlainItemDto> items = new ArrayList<>();
     private Role role;
     private String iban;
