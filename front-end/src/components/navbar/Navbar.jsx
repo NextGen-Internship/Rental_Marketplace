@@ -17,6 +17,7 @@ const Navbar = () => {
 
     name: '',
     picture: '',
+    role : ''
   })
 
   const [isLoggedIn, setIsLoggedIn] = useState(localStorage.getItem('token') !== null ? true : false);
@@ -38,6 +39,7 @@ const Navbar = () => {
           setUserProfile({
             name: response.data.name,
             picture: response.data.profilePicture,
+            role : response.data.role,
           });
 
         }
@@ -66,31 +68,53 @@ const Navbar = () => {
       <Link to="/"> <img src={logo} width={"200px"} alt="Logo" /> </Link>
       <div className="links">
         <Link to="/">Home</Link>
-       
-        {isLoggedIn ? (
-          <>
+        {isLoggedIn && userProfile.role.role === 'ADMIN' ? (
+  <>
+   <Link to="/admin">Admin Panel</Link>
+    <Link to="/items/create">Add Item</Link>
+   
+
+    <Link to="/likes"> <FavoriteBorderIcon /> </Link>
+    <Link to="/views"><VisibilityIcon /> </Link>
+    {userProfile.picture ? (
+      <Link to="/settings">  <img
+        src={userProfile.picture}
+        alt="Profile"
+        className="profile-picture"
+      /> </Link>
+    ) : (
+      <Link to="/settings"> <PersonIcon /> </Link>
+    )}
+    <Link to="/" onClick={handleLogout}> <LogoutIcon /> </Link>
+  </>
+) : (
+  <>
+    {isLoggedIn ? (
+      <>
 
 <Link to="/items/create">Add Item</Link>
-            <Link to="/likes"> <FavoriteBorderIcon /> </Link>
-            <Link to="/views"><VisibilityIcon /> </Link>
-            {userProfile.picture ? (
-              <Link to="/settings">  <img
-                src={userProfile.picture}
-                alt="Profile"
-                className="profile-picture"
-              /> </Link>
-            ) : (
-              <Link to="/settings"> <PersonIcon /> </Link>
-            )}
-            <Link to="/" onClick={handleLogout}> <LogoutIcon /> </Link>
-
-          </>
+        <Link to="/likes"> <FavoriteBorderIcon /> </Link>
+        <Link to="/views"><VisibilityIcon /> </Link>
+        {userProfile.picture ? (
+          <Link to="/settings">  <img
+            src={userProfile.picture}
+            alt="Profile"
+            className="profile-picture"
+          /> </Link>
         ) : (
-          <>
-            <Link to="/login">Login</Link>
-            <Link to="/register">Register</Link>
-          </>
+          <Link to="/settings"> <PersonIcon /> </Link>
         )}
+        <Link to="/" onClick={handleLogout}> <LogoutIcon /> </Link>
+      </>
+    ) : (
+      <>
+        <Link to="/login">Login</Link>
+        <Link to="/register">Register</Link>
+      </>
+    )}
+  </>
+)}
+
       </div>
     </nav>
   );

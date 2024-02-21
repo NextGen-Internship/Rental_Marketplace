@@ -129,6 +129,8 @@ public class User implements UserDetails {
     public String toString() {
         return "User{" +
                 "id=" + id +
-                ", email='" + email + '\'';
+                ", email='" + email
+                + ", role='" + role.getRole()
+                + '\'';
     }
 }

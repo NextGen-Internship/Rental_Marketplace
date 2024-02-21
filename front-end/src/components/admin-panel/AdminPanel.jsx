@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 import noImage from "../../assets/no-image.avif";
+import { useNavigate } from "react-router-dom";
+
 
 const AdminPanel = () => {
   const [users, setUsers] = useState([]);
@@ -15,6 +17,15 @@ const AdminPanel = () => {
 
   const [showAllReviews, setShowAllReviews] = useState(false);
 
+
+  const navigate = useNavigate();
+
+
+  console.log("useraaa");
+  console.log(userDetails)
+  // if (userDetails.role === "USER") {
+  //   navigate('/*');
+  // }
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -105,6 +116,23 @@ const AdminPanel = () => {
     }
   };
 
+  const updateActivity = async (itemId) => {
+    try {
+
+      const response = await axios.put(
+        `http://localhost:8080/rentify/items/status/${itemId}`
+      );
+
+      console.log("activitityy");
+      console.log(response.data)
+
+    } catch (error) {
+      console.error("Error updating role " + error)
+    }
+  }
+
+
+  //onClick={() => updateActivity(item.id)}
 
   const displayedItems = showAllReviews ? recentItems : recentItems.slice(0, 3);
   const displayUsers = showAllReviews ? users : users.slice(0, 2);
@@ -215,7 +243,9 @@ const AdminPanel = () => {
               { displayedItems.length > 0 ? ( 
                 <>
               {displayedItems.map((item, index) => (
-                <div key={index} className="list align-items-center border-bottom py-2">
+                <div key={index}  style={{
+                  backgroundColor: !item.isActive ?  "#C0C0C0" : "inherit",
+                }} className="list align-items-center border-bottom py-2">
                   <div className="wrapper w-100">
                     <div className="d-flex justify-content-between align-items-center">
                       <div className="d-flex align-items-center">
@@ -238,8 +268,19 @@ const AdminPanel = () => {
                             <p className="mb-0 text-small text-muted">  {item.postedDate[3]}:{item.postedDate[4]}</p>
                           </a>
                         </div>
+               
                       </div>
                     </div>
+                    <div style={{ marginRight: '1px' }}>                          
+                          <button onClick={() => updateActivity(item.id)}
+                           class={`btn btn-lg text-white mb-0 me-0 ${item.isActive === true ? 'btn-warning' : 'btn-primary'}`}
+                           type="button"
+                         >
+                           <i class="mdi mdi-account-plus"></i>
+                           {item.isActive === true ? 'Deactivate' : 'Activate'}
+                         </button>
+                         </div> 
+                    
                   </div>
                 </div>
                 </div>
