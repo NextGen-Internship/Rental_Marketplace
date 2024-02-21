@@ -43,14 +43,14 @@ const ItemDetails = () => {
 
 
 
-  const rentItem = async () => {
-    try {
-    const response = await axios.post(`http://localhost:8080/rentify/stripe/checkout/${id}`,userId)
-    window.open(response.data);
-    } catch (e){
-      console.log(e);
-    }
-  }
+  // const rentItem = async () => {
+  //   try {
+  //   const response = await axios.post(`http://localhost:8080/rentify/stripe/checkout/${id}`,userId)
+  //   window.open(response.data);
+  //   } catch (e){
+  //     console.log(e);
+  //   }
+  // }
 
 
   return (

@@ -1,5 +1,6 @@
 package com.devminds.rentify.service;
 
+import com.devminds.rentify.dto.StripeAdditionalInfoDto;
 import com.devminds.rentify.entity.Item;
 import com.devminds.rentify.entity.Payment;
 import com.devminds.rentify.entity.Rent;
@@ -35,9 +36,10 @@ import java.math.BigDecimal;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.Month;
+import java.time.Period;
 import java.util.Date;
 import java.util.List;
+
 import com.stripe.model.Event;
 
 @Service
@@ -176,22 +178,26 @@ public class StripeService {
     }
 
 
-    public String createCheckoutSession(Long itemId,String userId) throws StripeException {
+    public String createCheckoutSession(Long itemId, StripeAdditionalInfoDto stripeAdditionalInfoDto) throws StripeException {
         Stripe.apiKey = key;
+        Period period = Period.between(stripeAdditionalInfoDto.getStartDate(), stripeAdditionalInfoDto.getEndDate());
+        int rentDays = period.getDays() + 1;
 
         Item item = itemRepository.findById(itemId).orElse(null);
         User itemOwner = userRepository.findById(item.getUser().getId()).orElse(null);
-        User currentLoggedInUser = userRepository.findById(Long.parseLong(userId)).orElse(null);
+        User currentLoggedInUser = userRepository.findById(stripeAdditionalInfoDto.getUserId()).orElse(null);
 
         SessionCreateParams params =
                 SessionCreateParams.builder()
                         .setCustomerEmail(currentLoggedInUser.getEmail())
                         .putMetadata("item_id", itemId.toString())
+                        .putMetadata("start_date", stripeAdditionalInfoDto.getStartDate().toString())
+                        .putMetadata("end_date", stripeAdditionalInfoDto.getEndDate().toString())
                         .setMode(SessionCreateParams.Mode.PAYMENT)
                         .addLineItem(
                                 SessionCreateParams.LineItem.builder()
                                         .setPrice(item.getItemStripeId())
-                                        .setQuantity(1L)
+                                        .setQuantity((long) rentDays)
                                         .build()
                         )
                         .setPaymentIntentData(
@@ -228,11 +234,21 @@ public class StripeService {
             JsonElement metadata = data1.getAsJsonObject().get("metadata");
             JsonElement customerDetails = data1.getAsJsonObject().get("customer_details");
 
+
+            JsonElement startDateJson = metadata.getAsJsonObject().get("start_date");
+            JsonElement endDateJson = metadata.getAsJsonObject().get("end_date");
+
             JsonElement itemId = metadata.getAsJsonObject().get("item_id");
             JsonElement price = data1.getAsJsonObject().get("amount_total");
             JsonElement email = customerDetails.getAsJsonObject().get("email");
 
-            String emailToString = email.toString().replace("\"","");
+            String emailToString = email.toString().replace("\"", "");
+            String endDate = endDateJson.toString().replace("\"", "");
+            String startDate = startDateJson.toString().replace("\"", "");
+
+            LocalDate startDateToSave = LocalDate.parse(startDate);
+            LocalDate endDateToSave = LocalDate.parse(endDate);
+
 
             User buyer = userRepository.findByEmail(emailToString).orElse(null);
             Item item = itemRepository.findById(itemId.getAsLong()).orElse(null);
@@ -242,14 +258,14 @@ public class StripeService {
             Rent rent = new Rent();
             rent.setUser(buyer);
             rent.setItem(item);
-            rent.setStartDate(LocalDate.of(2024, Month.FEBRUARY,21));
-            rent.setEndDate(LocalDate.of(2024, Month.FEBRUARY,23));
+            rent.setStartDate(startDateToSave);
+            rent.setEndDate(endDateToSave);
             Rent rentToSave = rentRepository.save(rent);
 
             Payment payment = new Payment();
             payment.setAmount(price.getAsBigDecimal().divide(BigDecimal.valueOf(100)));
             payment.setStatus(PaymentStatus.ACCEPTED);
-            payment.setDate(LocalDate.now());
+            payment.setDate(LocalDateTime.now());
             payment.setOwner(buyer);
             payment.setReceiver(itemOwner);
             payment.setPaymentMethod(PaymentMethod.STRIPE);

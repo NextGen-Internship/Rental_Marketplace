@@ -18,6 +18,27 @@ const RentItem = () => {
   const [isIntervalSelected, setIsIntervalSelected] = useState(false);
   const [agreedToTerms, setAgreedToTerms] = useState(false);
 
+
+  const rentItem = async () => {
+    try {
+      const startDateString = dateRange[0];
+    const endDateString = dateRange[1];
+
+    const startDate = formatDate(startDateString);
+    const endDate = formatDate(endDateString);
+
+    const requestBody = {
+      userId: userId,
+      startDate: startDate,
+      endDate: endDate,
+    };
+    const response = await axios.post(`http://localhost:8080/rentify/stripe/checkout/${id}`,requestBody)
+    window.open(response.data);
+    } catch (e){
+      console.log(e);
+    }
+  }
+
   useEffect(() => {
     const token = localStorage.getItem("token");
 
@@ -176,7 +197,7 @@ const RentItem = () => {
             <br />
             <div className="mb-3 d-grid">
               <button
-                onClick={handleSubmit}
+                onClick={rentItem}
                 disabled={!isIntervalSelected || !agreedToTerms}
                 className="btn btn-primary"
               >

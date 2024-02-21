@@ -1,5 +1,6 @@
 package com.devminds.rentify.controller;
 
+import com.devminds.rentify.dto.StripeAdditionalInfoDto;
 import com.devminds.rentify.service.StripeService;
 import com.stripe.exception.SignatureVerificationException;
 import com.stripe.exception.StripeException;
@@ -18,8 +19,8 @@ public class StripeController {
     private final StripeService stripeService;
 
     @PostMapping("/rentify/stripe/checkout/{id}")
-    public ResponseEntity<String> createCheckout(@PathVariable Long id,@RequestBody String userId) throws StripeException {
-        String session = stripeService.createCheckoutSession(id,userId);
+    public ResponseEntity<String> createCheckout(@PathVariable Long id, @RequestBody StripeAdditionalInfoDto stripeAdditionalInfoDto) throws StripeException {
+        String session = stripeService.createCheckoutSession(id,stripeAdditionalInfoDto);
 
         return new ResponseEntity<>(session,HttpStatus.OK);
     }
