@@ -5,6 +5,9 @@ import "@wojtekmaj/react-daterange-picker/dist/DateRangePicker.css";
 import "react-calendar/dist/Calendar.css";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
+import PDF from "../../assets/terms.pdf";
+
+const termsPdfPath = "../../assets/terms.pdf";
 
 const RentItem = () => {
   const [userId, setUserId] = useState("");
@@ -159,7 +162,15 @@ const RentItem = () => {
                 style={{ width: "auto" }}
               />
               <div style={{ marginLeft: "5px" }}>
-                I agree with terms and conditions
+                I agree with
+                <a
+                  href={PDF}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{ color: "blue", marginLeft: "5px" }}
+                >
+                  terms and conditions
+                </a>
               </div>
             </div>
             <br />
