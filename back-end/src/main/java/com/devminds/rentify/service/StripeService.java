@@ -1,28 +1,44 @@
 package com.devminds.rentify.service;
 
 import com.devminds.rentify.entity.Item;
+import com.devminds.rentify.entity.Payment;
+import com.devminds.rentify.entity.Rent;
 import com.devminds.rentify.entity.User;
+import com.devminds.rentify.enums.PaymentMethod;
+import com.devminds.rentify.enums.PaymentStatus;
 import com.devminds.rentify.repository.ItemRepository;
+import com.devminds.rentify.repository.PaymentRepository;
+import com.devminds.rentify.repository.RentRepository;
 import com.devminds.rentify.repository.UserRepository;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.google.gson.JsonSyntaxException;
 import com.stripe.Stripe;
+import com.stripe.exception.SignatureVerificationException;
 import com.stripe.exception.StripeException;
 import com.stripe.model.Account;
-import com.stripe.model.Capability;
 import com.stripe.model.Product;
 import com.stripe.model.Token;
 import com.stripe.model.checkout.Session;
+import com.stripe.net.Webhook;
 import com.stripe.param.AccountCreateParams;
 import com.stripe.param.ProductCreateParams;
 import com.stripe.param.TokenCreateParams;
 import com.stripe.param.checkout.SessionCreateParams;
-import com.stripe.param.issuing.CardholderCreateParams;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import jakarta.servlet.http.HttpServletRequest;
+
+import java.math.BigDecimal;
 import java.net.URL;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.Month;
 import java.util.Date;
 import java.util.List;
+import com.stripe.model.Event;
 
 @Service
 @RequiredArgsConstructor
@@ -33,6 +49,8 @@ public class StripeService {
 
     private final UserRepository userRepository;
     private final ItemRepository itemRepository;
+    private final RentRepository rentRepository;
+    private final PaymentRepository paymentRepository;
 
     private static final String[] HEADERS_TO_TRY = {
             "X-Forwarded-For",
@@ -126,7 +144,7 @@ public class StripeService {
                         ).build();
 
 
-        if(principal.getStripeAccountId() == null){
+        if (principal.getStripeAccountId() == null) {
             Account account = Account.create(params);
             principal.setStripeAccountId(account.getIndividual().getAccount());
             account.setPayoutsEnabled(true);
@@ -158,14 +176,17 @@ public class StripeService {
     }
 
 
-    public String createCheckoutSession(Long itemId) throws StripeException {
+    public String createCheckoutSession(Long itemId,String userId) throws StripeException {
         Stripe.apiKey = key;
 
         Item item = itemRepository.findById(itemId).orElse(null);
         User itemOwner = userRepository.findById(item.getUser().getId()).orElse(null);
+        User currentLoggedInUser = userRepository.findById(Long.parseLong(userId)).orElse(null);
 
         SessionCreateParams params =
                 SessionCreateParams.builder()
+                        .setCustomerEmail(currentLoggedInUser.getEmail())
+                        .putMetadata("item_id", itemId.toString())
                         .setMode(SessionCreateParams.Mode.PAYMENT)
                         .addLineItem(
                                 SessionCreateParams.LineItem.builder()
@@ -182,7 +203,7 @@ public class StripeService {
                                                         .build()
                                         )
                                         .build()
-                        )
+                        ).putMetadata("item_id", itemId.toString())
                         .setSuccessUrl("http://localhost:3000/")
                         .setCancelUrl("https://example.com/cancel")
                         .build();
@@ -190,5 +211,54 @@ public class StripeService {
         Session session = Session.create(params);
         return session.getUrl();
     }
+
+
+    public void hook(String payload, String sigHeader) throws JsonSyntaxException, SignatureVerificationException {
+        Stripe.apiKey = key;
+        String endpointSecret = "whsec_2bc75bd6e9c43409a2f9ec5023d7aa92ab13e83612f764c83f5833cd49e9c766";
+
+        Event event = Webhook.constructEvent(payload, sigHeader, endpointSecret);
+
+
+        if (event.getType().equals("checkout.session.completed")) {
+            JsonObject test = JsonParser.parseString(payload).getAsJsonObject();
+
+            JsonElement data = test.get("data");
+            JsonElement data1 = data.getAsJsonObject().get("object");
+            JsonElement metadata = data1.getAsJsonObject().get("metadata");
+            JsonElement customerDetails = data1.getAsJsonObject().get("customer_details");
+
+            JsonElement itemId = metadata.getAsJsonObject().get("item_id");
+            JsonElement price = data1.getAsJsonObject().get("amount_total");
+            JsonElement email = customerDetails.getAsJsonObject().get("email");
+
+            String emailToString = email.toString().replace("\"","");
+
+            User buyer = userRepository.findByEmail(emailToString).orElse(null);
+            Item item = itemRepository.findById(itemId.getAsLong()).orElse(null);
+            User itemOwner = userRepository.findById(item.getUser().getId()).orElse(null);
+
+
+            Rent rent = new Rent();
+            rent.setUser(buyer);
+            rent.setItem(item);
+            rent.setStartDate(LocalDate.of(2024, Month.FEBRUARY,21));
+            rent.setEndDate(LocalDate.of(2024, Month.FEBRUARY,23));
+            Rent rentToSave = rentRepository.save(rent);
+
+            Payment payment = new Payment();
+            payment.setAmount(price.getAsBigDecimal().divide(BigDecimal.valueOf(100)));
+            payment.setStatus(PaymentStatus.ACCEPTED);
+            payment.setDate(LocalDate.now());
+            payment.setOwner(buyer);
+            payment.setReceiver(itemOwner);
+            payment.setPaymentMethod(PaymentMethod.STRIPE);
+            payment.setRent(rentToSave);
+            paymentRepository.save(payment);
+
+
+        }
+    }
+
 
 }

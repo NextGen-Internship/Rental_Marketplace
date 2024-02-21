@@ -53,6 +53,7 @@ public class AuthConfig {
                                 .requestMatchers("/static/profilePicture.jpg").permitAll()
                                 .requestMatchers("/v3/**", "/swagger-ui/**").permitAll()
                                 .requestMatchers("/rentify/stripe/checkout/{id}").permitAll()
+                                .requestMatchers("/rentify/stripe/checkout/webhook").permitAll()
                                 .anyRequest().authenticated()
 
                 )
