@@ -202,7 +202,7 @@ public class StripeService {
                         )
                         .setPaymentIntentData(
                                 SessionCreateParams.PaymentIntentData.builder()
-                                        .setApplicationFeeAmount(1230L)
+                                        .setApplicationFeeAmount(1000L)
                                         .setTransferData(
                                                 SessionCreateParams.PaymentIntentData.TransferData.builder()
                                                         .setDestination(itemOwner.getStripeAccountId())
