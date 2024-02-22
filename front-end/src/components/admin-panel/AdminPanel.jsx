@@ -15,28 +15,26 @@ const AdminPanel = () => {
   const [blockedUsers, setBlockedUsers] = useState([]);
 
 
+  const role = null;
+
   const [showAllReviews, setShowAllReviews] = useState(false);
 
 
   const navigate = useNavigate();
 
 
-  console.log("useraaa");
-  console.log(userDetails)
-  // if (userDetails.role === "USER") {
-  //   navigate('/*');
-  // }
+  const token = localStorage.getItem("token");
+
+  const decoded = jwtDecode(token);
+  const userId = decoded.jti;
+
 
   useEffect(() => {
     const fetchUsers = async () => {
       try {
 
-        const token = localStorage.getItem("token");
 
-        const decoded = jwtDecode(token);
-        const userId = decoded.jti;
-        const userEmail = decoded.email;
-        setUserDetails(decoded)
+
         //localhost:8080/rentify/users/admin/4
         const response = await axios.get(
           `http://localhost:8080/rentify/users/admin/${userId}`
@@ -46,6 +44,21 @@ const AdminPanel = () => {
         console.error("Error fetching user items:", error);
       }
     }
+
+
+    const fetchUserInfo = async () => {
+      try{
+
+        const response = await axios.get(
+          `http://localhost:8080/rentify/users/${userId}`
+        );
+
+        setUserDetails(response.data);
+      }catch(error) {
+
+      }
+    }
+
 
     const fetchLastAddedItems = async () => {
 
@@ -74,8 +87,7 @@ const AdminPanel = () => {
           `http://localhost:8080/rentify/users/blocked`
         );
 
-        console.log("blokiranitee ")
-        console.log(response.data);
+    
         setBlockedUsers(response.data);
 
       } catch (error) {
@@ -83,11 +95,21 @@ const AdminPanel = () => {
       }
     }
 
+
+
+    if (userDetails?.role?.role === "USER") {
+      navigate("/*");
+  } else {
+      console.error("User details or role is not defined properly:", userDetails);
+      // Optionally, you can handle this error more gracefully, or log it for further investigation
+  }
+
     fetchUsers();
     fetchLastAddedItems();
     fetchBlockedUsers();
-  }, [users ,recentItems, blockedUsers ]);
-
+    fetchUserInfo();
+   
+  }, [ userDetails]);
 
   const updateRole = async (userId) => {
     try {
@@ -101,8 +123,6 @@ const AdminPanel = () => {
     }
   };
 
-  console.log("poslednite dobaveni aitemii")
-  console.log(recentItems);
 
   const updateBlockUser = async (userId) => {
     try {
@@ -123,8 +143,6 @@ const AdminPanel = () => {
         `http://localhost:8080/rentify/items/status/${itemId}`
       );
 
-      console.log("activitityy");
-      console.log(response.data)
 
     } catch (error) {
       console.error("Error updating role " + error)
@@ -132,14 +150,18 @@ const AdminPanel = () => {
   }
 
 
-  //onClick={() => updateActivity(item.id)}
+  console.log(userDetails)
+
+
+
+
 
   const displayedItems = showAllReviews ? recentItems : recentItems.slice(0, 3);
   const displayUsers = showAllReviews ? users : users.slice(0, 2);
 
   const displayBlocked = showAllReviews ? blockedUsers : blockedUsers.slice(0, 2);
 
-  console.log(userDetails.email)
+
   return (
     <div class="row flex-grow">
       <div class="col-12 grid-margin stretch-card">

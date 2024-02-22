@@ -34,14 +34,10 @@ public class JwtService {
 
     public String generateToken(Map<String, Object> extraClaims, User userDetails) {
 
-        System.out.println( "rolqq " +userDetails.getRole().getRole());
-
-        System.out.println("useraaa" + userDetails);
-
         return Jwts.builder()
                 .setClaims(extraClaims)
                 .claim("picture", userDetails.getProfilePicture())
-                .claim("role", userDetails.getRole().getRole())
+                .claim("role" , userDetails.getRole())
                 .setId(String.valueOf(userDetails.getId()))
                 .setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
