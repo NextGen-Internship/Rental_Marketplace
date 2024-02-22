@@ -4,6 +4,8 @@ import CategoryModal from "./CategoryModal";
 import axios from "axios";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import { useNavigate } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
+import { useEffect } from "react";
 
 function CreateItem() {
   const [title, setTitle] = useState("");
@@ -20,6 +22,36 @@ function CreateItem() {
   });
   const navigate = useNavigate();
   const jwt_token = localStorage.getItem('token');
+  const [ userId, setUserId ] = useState(null);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+
+    if (token !== null) {
+      const decoded = jwtDecode(token);
+      setUserId(decoded.jti);
+    } else {
+      navigate("/login");
+    }
+
+    const fetchUser= async () => {
+      try {
+        const backendUrl = `http://localhost:8080/rentify/users/${jwtDecode(token).jti}`;
+        const result = await axios.get(backendUrl);
+
+        console.log(result.data);
+
+        if (result.data.phoneNumber == null || result.data.iban == null) {
+          navigate("/add-additional-info");
+        }
+        
+      } catch (error) {
+        navigate("/notfound");
+      }
+    };
+
+    fetchUser();
+  }, []);
  
 
   const handleChange = (event) => {
