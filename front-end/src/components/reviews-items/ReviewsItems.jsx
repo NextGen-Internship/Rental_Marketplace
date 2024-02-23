@@ -5,13 +5,17 @@ import { jwtDecode } from 'jwt-decode';
 import { useEffect } from 'react';
 
 
+
+import { useDispatch, useSelector } from "react-redux"; 
+import { updateUserReview } from "../../features/userReviewSlice";
+
+
+
 const ReviewsItems = ({ itemId }) => {
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState('');
 
   const [addedReview, setAddedReview] = useState(false);
-  const [review, setReviews] = useState('');
-
   const [editReview, setEditedReview] = useState(false);
 
   const [showForm, setShowForm] = useState(false);
@@ -33,15 +37,12 @@ const ReviewsItems = ({ itemId }) => {
 
   });
 
+  const userId = useSelector((state) => state.userToken.id);
+  const dispatch = useDispatch();
+  const review = useSelector((state) => state.userReview.values);
+
+
   useEffect(() => {
-
-
-    const token = localStorage.getItem('token');
-
-    const decoded = jwtDecode(token);
-    const userId = decoded.jti;
-
-
 
     const fetchUserInfo = async () => {
 
@@ -75,17 +76,18 @@ const ReviewsItems = ({ itemId }) => {
       try {
         const response = await axios.get(`http://localhost:8080/rentify/reviews/userReview/${userId}/${itemId}`);
 
-        setReviews(response.data);
+        dispatch(updateUserReview(response.data));
       } catch (error) {
         console.error('Error fetching reviews:', error);
-        return [];
+        
       }
     };
 
     fetchUserInfo();
     fetchReviewUserAdd();
     fetchReview();
-  }, []);
+
+  }, [review]);
 
   const handleRatingChange = (event) => {
     setRating(parseInt(event.target.value));
@@ -102,14 +104,6 @@ const ReviewsItems = ({ itemId }) => {
 
   const handleSend = async () => {
     try {
-      const token = localStorage.getItem("token");
-
-
-      const decoded = jwtDecode(token);
-      const userId = decoded.jti;
-
-
-
       const response = await axios.post(`http://localhost:8080/rentify/reviews/addReview/${userId}/${itemId}`, {
         ratingStars: rating,
         comments: comment
@@ -118,7 +112,7 @@ const ReviewsItems = ({ itemId }) => {
       setAddedReview(true);
       setRating(0);
       setComment('');
-
+      dispatch(updateUserReview(response.data));
     } catch (error) {
       console.error(error);
 
@@ -134,12 +128,7 @@ const ReviewsItems = ({ itemId }) => {
   const handleUpdateSend = async () => {
 
     try {
-      const token = localStorage.getItem("token");
-
-
-      const decoded = jwtDecode(token);
-      const userId = decoded.jti;
-
+    
       const response = await axios.put(`http://localhost:8080/rentify/reviews/updateReview/${userId}/${itemId}`, {
         ratingStars: rating,
         comments: comment
@@ -210,12 +199,13 @@ const ReviewsItems = ({ itemId }) => {
                     </p>
                     <p className="text-center">
                       
-                      <h4 className="blue-text mt-3">{review.comment}</h4>
+
+                      <p className="blue-text mt-3">{review.comment}</p>
+
                       
                     </p>
                     <div className="row text-center">
                       <button className="rent-button"  onClick={handleEditReview}>Edit Review</button>
-                     
                     </div> 
                   </div>
                 </div>
@@ -267,5 +257,6 @@ const ReviewsItems = ({ itemId }) => {
     </>
   );
 };
+
 
 export default ReviewsItems;

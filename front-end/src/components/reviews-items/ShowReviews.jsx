@@ -6,39 +6,35 @@ import { useState } from "react";
 
 
 
+import { useDispatch, useSelector } from "react-redux"; 
+import { updateAllReviews } from "../../features/allReviewsSlice";
+
+
 const ShowReviews = ({itemId , loggedInUserId }) => { 
 
-    const [reviews, setReviews] = useState([]);
     const [showAllReviews, setShowAllReviews] = useState(false);
-    console.log("idiito na itemaa v show review")
-    console.log(itemId);
+
+    const dispatch = useDispatch();
+    const reviews = useSelector((state) => state.allReviews.values);
+
 
     useEffect(() => {
         const fetchReviews = async () => {
             try {
                 const response = await axios.get(`http://localhost:8080/rentify/reviews/${itemId}`);
 
-                setReviews(response.data);
+                dispatch(updateAllReviews(response.data));
 
-                console.log("responsaa na revutatat ")
-                console.log(response.data);
             } catch (error) {
                 console.error('Error fetching reviews:', error);
                 return [];
             }
         };
       
-      
-        
         fetchReviews();
-      }, []);
-      
 
-
-
+      }, [reviews]);
       const displayedReviews = showAllReviews ? reviews : reviews.slice(0, 2);
-
-
   return (
 
 <div class="container-fluid px-1 py-5 mx-auto">

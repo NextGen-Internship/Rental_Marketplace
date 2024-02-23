@@ -9,6 +9,13 @@ import ShowReviews from "../reviews-items/ShowReviews";
 import axios from 'axios';
 
 
+import { useDispatch, useSelector } from "react-redux"; 
+import { updateRating } from "../../features/ratingReview.js";
+
+import {updateIsLoggedIn} from "../../features/userTokenSlice.js"
+
+
+
 
 const endpoint = "items/";
 
@@ -18,22 +25,19 @@ const ItemDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [showReviews, setShowReviews] = useState(false);
-  const [averageRating , setAverageRating] = useState(0);
+  const   averageRating = useSelector((state) => state.ratingReview.values);
 
+  const dispatch = useDispatch();
+  const userId = useSelector((state) => state.userToken.id);
 
+  const isLoggedIn = useSelector((state) => state.userToken.isLoggedIn);
 
-  let userId = "";
-
-
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
 
-    if (token !== null) {
-      const decoded = jwtDecode(token);
-      userId = decoded.jti;
-      setIsLoggedIn(true);
+    if (userId !== null) {
+
+      dispatch(updateIsLoggedIn({ isLoggedIn: true }));
     }
 
     const fetchItem = async () => {
@@ -47,11 +51,11 @@ const ItemDetails = () => {
 
     const fetchRating = async () => {
       
-    
-      
+
       try {
           const response = await axios.get(`http://localhost:8080/rentify/reviews/rating/${id}`);
-          setAverageRating(response.data)
+          dispatch(updateRating(response.data));
+
 
       }
       catch (error) {
@@ -65,14 +69,19 @@ const ItemDetails = () => {
     }
 
 
-    fetchRating();
 
     if (item && !item.isActive && item.user.id != userId) {
       navigate("/notfound");
     }
     
-    
-  }, [item, id, navigate]);
+    fetchRating();
+
+    const intervalId = setInterval(fetchRating, 1);
+
+    return () => clearInterval(intervalId);
+  
+  
+  }, [dispatch,item, id,]);
 
 
   const handleButtonClick = () => {
@@ -111,7 +120,9 @@ const ItemDetails = () => {
           <div className="price-deposit-box">
            
            <div class="row justify-content-between">
-    <div class="col-md-4 text-center">
+
+    <div class="col-md-4 text-left">
+
         <div>
             <h3>Price</h3>
             <p>{"$" + item.price}</p>
