@@ -14,12 +14,10 @@ import LikedItemsPage from "./components/items/LikedItemsPage";
 import ProfilePage from "./components/profile-page/ProfilePage";
 
 import "./App.css";
-
 import ForgotPassword from "./components/forgot-password/ForgotPassword";
 import ResetPassword from "./components/forgot-password/ResetPassword";
 import AccountVerification from "./components/account-verification/AccountVerification";
 import EditItem from "./components/profile-page/EditItem";
-
 
 function App() {
   return (

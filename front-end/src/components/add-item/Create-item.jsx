@@ -18,6 +18,19 @@ function CreateItem() {
     postCode: "",
     streetNumber: "",
   });
+
+  const [errors, setErrors] = useState({
+    title: "",
+    price: "",
+    deposit: "",
+    city: "",
+    street: "",
+    description: "",
+    postCode: "",
+    streetNumber: "",
+  });
+
+
   const navigate = useNavigate();
 
   const jwt_token = localStorage.getItem('token');
@@ -75,6 +88,24 @@ function CreateItem() {
   };
 
   const handleAddItem = async () => {
+
+    const newErrors = {
+      title: title ? "" : "Title cannot be empty",
+      price: price ? "" : "Price cannot be empty",
+      deposit: deposit ? "" : "Deposit cannot be empty",
+      city: address.city ? "" : "City cannot be empty",
+      street: address.street ? "" : "Street cannot be empty",
+      description: description ? "" : "Description cannot be empty",
+      postCode: address.postCode ? "" : "Postcode cannot be empty",
+      streetNumber: address.streetNumber ? "" : "Street Number cannot be empty",
+    };
+    setErrors(newErrors);
+
+    if (Object.values(newErrors).some((error) => error !== "")) {
+      return;
+    }
+
+
     try {
       const backendUrl = "http://localhost:8080/rentify/items/create";
       const formData = new FormData();
@@ -128,6 +159,7 @@ function CreateItem() {
           maxLength={70}
         />
         <p className="character-count">{title.length}/70</p>
+        <p className="error">{errors.title}</p>
 
         <div className="modal-button">
           <CategoryModal onSelectCategory={handleSelectCategory} />
@@ -148,6 +180,7 @@ function CreateItem() {
             value={price}
             onChange={handleSelectPrice}
           />
+          <p className="error">{errors.price}</p>
           <input
             className="price-field"
             type="text"
@@ -155,6 +188,7 @@ function CreateItem() {
             value={deposit}
             onChange={handleSelectDeposit}
           />
+          <p className="error">{errors.deposit}</p>
         </div>
       </section>
 
@@ -208,6 +242,7 @@ function CreateItem() {
           maxLength={500}
         </textarea>
         <p className="character-count">{description.length}/500</p>
+        <p className="error">{errors.description}</p>
       </section>
 
       <section className="location">
@@ -220,6 +255,7 @@ function CreateItem() {
             value={address.city}
             onChange={(e) => handleAddressChange("city", e.target.value)}
           />
+           <p className="error">{errors.city}</p>
           <input
             className="location-field"
             type="text"
@@ -227,6 +263,7 @@ function CreateItem() {
             value={address.street}
             onChange={(e) => handleAddressChange("street", e.target.value)}
           />
+           <p className="error">{errors.street}</p>
           <input
             className="location-field"
             type="text"
@@ -234,6 +271,7 @@ function CreateItem() {
             value={address.postCode}
             onChange={(e) => handleAddressChange("postCode", e.target.value)}
           />
+           <p className="error">{errors.postCode}</p>
           <input
             className="location-field"
             type="text"
@@ -243,6 +281,7 @@ function CreateItem() {
               handleAddressChange("streetNumber", e.target.value)
             }
           />
+           <p className="error">{errors.streetNumber}</p>
         </div>
       </section>
 
