@@ -260,4 +260,3 @@ const ReviewsItems = ({ itemId }) => {
 
 
 export default ReviewsItems;
-
