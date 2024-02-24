@@ -6,41 +6,38 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import PersonIcon from '@mui/icons-material/Person';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import "./Navbar.css";
-import { jwtDecode } from "jwt-decode";
 import axios from 'axios';
+import { useDispatch, useSelector } from "react-redux"; 
+import { like } from "../../features/likedItems";
+import {updateUser} from "../../features/userSlice"
+import {updateIsLoggedIn} from "../../features/userTokenSlice.js"
+import {updateUserToken} from "../../features/userTokenSlice.js";
+
 
 
 const Navbar = () => {
   const location = useLocation();
 
-  const [userProfile, setUserProfile] = useState({
+  const dispatch = useDispatch();
+  const userProfile = useSelector((state) => state.user.values);
+  const userId = useSelector((state) => state.userToken.id);
+  const isLoggedIn = useSelector((state) => state.userToken.isLoggedIn);
 
-    name: '',
-    picture: '',
-    role : ''
-  })
-
-  const [isLoggedIn, setIsLoggedIn] = useState(localStorage.getItem('token') !== null ? true : false);
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
 
-    if (token !== null) {
-      setIsLoggedIn(true);
-      const decoded = jwtDecode(token);
-      const userId = decoded.jti;
+    if (userId !== null) {
+     dispatch(updateIsLoggedIn({ isLoggedIn: true }));
+
+     
       const fetchUserInfo = async () => {
-
 
         try {
           const response = await axios.get(`http://localhost:8080/rentify/users/${userId}`);
 
+          dispatch(updateUser(response.data));
 
-          setUserProfile({
-            name: response.data.name,
-            picture: response.data.profilePicture,
-            role : response.data.role,
-          });
+
 
         }
         catch (error) {
@@ -52,14 +49,15 @@ const Navbar = () => {
       fetchUserInfo();
     }
     
-  }, [location , userProfile.picture]);
-
+  }, [location , userProfile.profilePicture , isLoggedIn , userId]);
 
 
   const handleLogout = () => {
     Object.keys(localStorage).forEach(key => { localStorage.removeItem(key); });
-    setIsLoggedIn(false);
 
+    dispatch(like([]));
+    dispatch(updateIsLoggedIn({ isLoggedIn: false }));
+    dispatch(updateUserToken({id : null}))
   };
 
 
@@ -93,6 +91,7 @@ const Navbar = () => {
       <>
 
 <Link to="/items/create">Add Item</Link>
+
         <Link to="/likes"> <FavoriteBorderIcon /> </Link>
         <Link to="/views"><VisibilityIcon /> </Link>
         {userProfile.picture ? (
@@ -101,6 +100,7 @@ const Navbar = () => {
             alt="Profile"
             className="profile-picture"
           /> </Link>
+
         ) : (
           <Link to="/settings"> <PersonIcon /> </Link>
         )}

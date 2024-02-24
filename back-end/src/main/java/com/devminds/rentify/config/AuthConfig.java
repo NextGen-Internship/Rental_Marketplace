@@ -53,6 +53,7 @@ public class AuthConfig {
                                 .requestMatchers("/rentify/password/**").permitAll()
                                 .requestMatchers("/rentify/verification/**").permitAll()
                                 .requestMatchers("/v3/**", "/swagger-ui/**").permitAll()
+                                .requestMatchers("/rentify/reviews/**").permitAll()
                                 .anyRequest().authenticated()
 
                 )

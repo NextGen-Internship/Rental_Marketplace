@@ -3,7 +3,9 @@ package com.devminds.rentify.controller;
 import com.devminds.rentify.dto.UpdatedUserInfoDto;
 import com.devminds.rentify.dto.UserDto;
 import com.devminds.rentify.service.UserServiceImpl;
+
 import lombok.RequiredArgsConstructor;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +22,8 @@ import java.util.List;
 public class UserController {
 
     private final UserServiceImpl userService;
+
+
 
 
     private static String INVALID_TOKEN_MESSAGE = "Invalid token";

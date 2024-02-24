@@ -1,14 +1,17 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { jwtDecode } from "jwt-decode";
+
 import { Link } from "react-router-dom";
 import noImage from "../../assets/no-image.avif";
+import { useDispatch, useSelector } from "react-redux"; 
+
 
 const PersonalItems = () => {
   const [userItems, setUserItems] = useState(null);
-  const token = localStorage.getItem("token");
-  const decoded = jwtDecode(token);
-  const userId = decoded.jti;
+
+
+  const userId = useSelector((state) => state.userToken.id);
+
 
   const handleChangeStatusOfItem = async (itemId) => {
     try {

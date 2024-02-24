@@ -4,42 +4,99 @@ import { useParams, useNavigate } from "react-router-dom";
 import Carousel from "./carousel/Carousel";
 import "./ItemDetails.css";
 import { jwtDecode } from "jwt-decode";
+import ReviewsItems from "../reviews-items/ReviewsItems";
+import ShowReviews from "../reviews-items/ShowReviews";
+import axios from 'axios';
+
+
+import { useDispatch, useSelector } from "react-redux"; 
+import { updateRating } from "../../features/ratingReview.js";
+
+import {updateIsLoggedIn} from "../../features/userTokenSlice.js"
+
+
+
 
 const endpoint = "items/";
+
 
 const ItemDetails = () => {
   const [item, setItem] = useState(null);
   const { id } = useParams();
   const navigate = useNavigate();
-  let userId = "";
+  const [showReviews, setShowReviews] = useState(false);
+  const   averageRating = useSelector((state) => state.ratingReview.values);
+
+  const dispatch = useDispatch();
+  const userId = useSelector((state) => state.userToken.id);
+
+  const isLoggedIn = useSelector((state) => state.userToken.isLoggedIn);
+
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
 
-    if (token !== null) {
-      const decoded = jwtDecode(token);
-      userId = decoded.jti;
+    if (userId !== null) {
+
+      dispatch(updateIsLoggedIn({ isLoggedIn: true }));
     }
 
     const fetchItem = async () => {
       try {
         const result = await fetchData(endpoint + id);
-        console.log(result);
         setItem(result);
       } catch (error) {
         navigate("/notfound");
       }
     };
 
+    const fetchRating = async () => {
+      
+
+      try {
+          const response = await axios.get(`http://localhost:8080/rentify/reviews/rating/${id}`);
+          dispatch(updateRating(response.data));
+
+
+      }
+      catch (error) {
+          console.error("Error fetching user Info ", error);
+      }
+
+  };
+
     if (!item) {
       fetchItem();
     }
+
+
 
     if (item && !item.isActive && item.user.id != userId) {
       navigate("/notfound");
     }
     
-  }, [item, id, navigate]);
+    fetchRating();
+
+    const intervalId = setInterval(fetchRating, 1);
+
+    return () => clearInterval(intervalId);
+  
+  
+  }, [dispatch,item, id,]);
+
+
+  const handleButtonClick = () => {
+   
+    if (isLoggedIn) {
+   
+      setShowReviews(true);
+
+    } else {
+
+      navigate("/login");
+    }
+
+
+  };
 
   return (
     <div className="item-details-container">
@@ -59,16 +116,38 @@ const ItemDetails = () => {
               }
             </p>
           </div>
-
+          
           <div className="price-deposit-box">
+           
+           <div class="row justify-content-between">
+
+    <div class="col-md-4 text-left">
+
+        <div>
             <h3>Price</h3>
             <p>{"$" + item.price}</p>
             <h3>Deposit</h3>
             <p>{"$" + item.deposit}</p>
-
+        </div>
+    </div>
+    <div class="col-md-4 text-center">
+        <div class="ratingBox">
+            <h1 class="pt-4">{averageRating}</h1>
+            <p>out of 5</p>
+        </div>
+        <div>
+            <span class="fa fa-star star-active"></span>
+            <span class="fa fa-star star-active"></span>
+            <span class="fa fa-star star-active"></span>
+            <span class="fa fa-star star-active"></span>
+            <span class="fa fa-star star-inactive"></span>
+        </div>
+    </div>
+</div>        
             <button className="rent-button">Rent</button>
-          </div>
-
+      
+       <ShowReviews  itemId={id}/>
+        </div>
           <div className="user-details">
             <h3>Posted on</h3>
             <p>
@@ -83,7 +162,13 @@ const ItemDetails = () => {
             </p>
             <h3>Posted by</h3>
             <p>{item.user.firstName + " " + item.user.lastName}</p>
-            <button className="message-button">Message</button>
+            <button className="message-button" onClick={handleButtonClick}>
+              Add Review
+            </button>
+
+
+            {showReviews && <ReviewsItems itemId={id} />}
+
           </div>
         </div>
       )}

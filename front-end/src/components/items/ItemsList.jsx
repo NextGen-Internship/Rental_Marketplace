@@ -9,13 +9,24 @@ import SearchIcon from "@mui/icons-material/Search";
 import MonetizationOnIcon from "@mui/icons-material/MonetizationOn";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux"; 
+import { like } from "../../features/likedItems";
+
+
+import { updateUser } from "../../features/userSlice";
+import {updateIsLoggedIn} from "../../features/userTokenSlice.js"
+
 
 const endpointItems = "items";
 
+
 const ItemsList = () => {
-  const [likedItems, setLikedItems] = useState(new Set());
+
+  const likedItems = useSelector((state) => new Set(state.likedItems.values));
+
+  const dispatch = useDispatch();
+
   const [items, setItems] = useState([]);
-  const [userId, setUserId] = useState(null);
   const { id: categoryId } = useParams();
   const [currentPage, setCurrentPage] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
@@ -31,19 +42,14 @@ const ItemsList = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const navigate = useNavigate();
 
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-
+  const userId = useSelector((state) => state.userToken.id);
+  const isLoggedIn = useSelector((state) => state.userToken.isLoggedIn);
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
+   
 
-    if (token !== null) {
-      const decoded = jwtDecode(token);
-      setUserId(decoded.jti);
-    }
-    else{
-     setIsLoggedIn(false)
-
+    if (userId === null) {
+      dispatch(updateIsLoggedIn({ isLoggedIn: false }));
     }
     
 
@@ -91,7 +97,6 @@ const ItemsList = () => {
           }?page=${currentPage}&sortDirection=${sortOrder}&category=${selectedCategory}&priceFrom=${priceFrom}&priceTo=${priceTo}&address=${selectedAddress}&searchTerm=${searchTerm}`
         );
 
-      
         setItems(result.content);
         setTotalPages(result.totalPages);
 
@@ -107,7 +112,9 @@ const ItemsList = () => {
         const token = localStorage.getItem("token");
 
         if (token === null) {
-         setLikedItems(  new Set());
+
+
+        dispatch(like(new Set()))
         
         }
         else{
@@ -123,8 +130,9 @@ const ItemsList = () => {
 
           if (response.ok) {
             const likedItemsFromDB = await response.json();
-            const likedItemsSet = new Set(likedItemsFromDB);
-            setLikedItems(likedItemsSet);
+            const likedItemsArray = Array.from(new Set(likedItemsFromDB));
+            dispatch(like(likedItemsArray));
+
           } else {
             throw new Error(`HTTP error! Status: ${response.status}`);
           }
@@ -156,7 +164,9 @@ const ItemsList = () => {
     }
 
     const isLiked = !likedItems.has(itemId);
-    setLikedItems(updatedLikedItems);
+
+
+    dispatch(like(updatedLikedItems));
     const requestBody = {
       itemId: itemId,
       userId: parseInt(userId, 10),
@@ -176,11 +186,14 @@ const ItemsList = () => {
       );
 
 
+
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
     } catch (error) {
       console.error("Error in handleLikeClick:", error.message);
+      dispatch(like(isLiked ? likedItems : updatedLikedItems));
+
     }
   }
   else{
@@ -309,7 +322,7 @@ const ItemsList = () => {
     </div>
 
       <div className="items-list">
-        { 
+        {
           items &&
             items.map((item) => (
               <div className="items-list-item" key={item.id}>
@@ -326,7 +339,7 @@ const ItemsList = () => {
                     <div className="card-body">
                       <h3 className="card-title">{item.name}</h3>
                       <p className="card-text">{"$" + item.price}</p>
-                      <p className="card-text">{item.address.city}</p>
+                      <p className="card-text">{item.addresses}</p>
                     </div>
                   </div>
                 </Link>
