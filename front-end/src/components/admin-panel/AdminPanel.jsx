@@ -3,6 +3,7 @@ import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 import noImage from "../../assets/no-image.avif";
 import { useNavigate } from "react-router-dom";
+import blocked from '../../assets/blocked.jpg';
 
 
 const AdminPanel = () => {
@@ -10,7 +11,7 @@ const AdminPanel = () => {
 
   const [recentItems, setRecentItems] = useState([]);
 
-  const [userDetails, setUserDetails] = useState({});
+  const [userDetails, setUserDetails] = useState([]);
 
   const [blockedUsers, setBlockedUsers] = useState([]);
 
@@ -140,6 +141,8 @@ const AdminPanel = () => {
       console.error("Error updating role " + error)
     }
   }
+
+
   const displayedItems = showAllReviews ? recentItems : recentItems.slice(0, 3);
   const displayUsers = showAllReviews ? users : users.slice(0, 2);
 
@@ -147,6 +150,13 @@ const AdminPanel = () => {
 
 
   return (
+    <div>
+    {userDetails.blocked ? (
+      <div>
+    <img src={blocked} style={{ width: '500px', height: '400px', marginLeft:"800px", marginTop: '30px', border: 'none' }} />
+      </div>
+    ) : (
+      <>
     <div class="row flex-grow">
       <div class="col-12 grid-margin stretch-card">
         <div class="card card-rounded">
@@ -376,6 +386,9 @@ const AdminPanel = () => {
       </div>
     </div>
     </div >
+    </>
+    )}
+    </div>
 
   );
 };

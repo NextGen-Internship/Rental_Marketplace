@@ -229,7 +229,6 @@ const FilterComponent = ({ notShowDropdown, categoryId, onFilterChange }) => {
                 </div>
                 <input
                   className="text form-control"
-                  // className="form-control"
                   id="inlineFormInputGroupUsername"
                   placeholder="Search by name"
                   value={searchTerm}

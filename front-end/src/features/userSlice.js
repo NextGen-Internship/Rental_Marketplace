@@ -5,9 +5,7 @@ export const userSlice = createSlice({
   name: "user",
   initialState: {
    values: []
-        
-        
-      
+
   },
   reducers: {
     updateUser : (state, action) => {

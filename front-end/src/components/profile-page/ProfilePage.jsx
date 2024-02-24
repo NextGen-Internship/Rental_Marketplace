@@ -7,6 +7,8 @@ import PersonalItems from "./PersonalItems";
 
 import { useDispatch, useSelector } from "react-redux"; 
 import { updateUser } from "../../features/userSlice";
+import blocked from '../../assets/blocked.jpg';
+
 
 const ProfilePage = () => {
   const [userItems, setuserItems] = useState([]);
@@ -22,6 +24,10 @@ const ProfilePage = () => {
   const [editMode, setEditMode] = useState(false);
   const [editPictureMode, setEditPictureMode] = useState(false);
 
+  const[isBlocked , setIsBlocked] = useState("");
+
+  console.log("userr infooo")
+  console.log(userInfo);
   const handleEditClick = () => {
     setEditedUserInfo({ ...userInfo });
     setEditMode(true);
@@ -31,6 +37,23 @@ const ProfilePage = () => {
     setEditPictureMode(true);
   };
 
+
+  
+  useEffect(() => {
+    const fetchUserisBlocked = async () => {
+      try {
+
+        const response = await axios.get(
+          `http://localhost:8080/rentify/users/${userId}`
+        );
+        setIsBlocked(response.data.blocked);
+      } catch (error) {
+        console.error("Error fetching user items:", error);
+      }
+    }
+
+    fetchUserisBlocked();
+  }, []);
 
   const handleUpload = async () => {
     try {
@@ -221,6 +244,20 @@ const ProfilePage = () => {
                         </button>
                       </>
                     )}
+
+              {userInfo && userInfo.blocked && (
+                
+               
+                <div>
+                  <br></br>
+                <strong>
+                  <strong  style={{ color: 'red', fontSize: '20px' }}>Attention: Account Blocked</strong>
+                  <br />
+                  We regret to inform you that your account has been blocked due to violations of our privacy policy. Please review our guidelines to ensure compliance.
+                </strong>
+              </div>
+               
+                )}
                   </div>
                 </div>
               </div>

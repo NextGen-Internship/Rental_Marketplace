@@ -60,10 +60,7 @@ function CreateItem() {
     }
     fetchUser();
   }, []);
-
-
-  console.log("useraa v add item")
-  console.log(user);
+  
   const handleChange = (event) => {
     const inputValue = event.target.value;
     setTitle(inputValue);
