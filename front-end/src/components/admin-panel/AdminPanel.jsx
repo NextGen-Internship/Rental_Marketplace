@@ -33,9 +33,6 @@ const AdminPanel = () => {
     const fetchUsers = async () => {
       try {
 
-
-
-        //localhost:8080/rentify/users/admin/4
         const response = await axios.get(
           `http://localhost:8080/rentify/users/admin/${userId}`
         );
@@ -81,8 +78,6 @@ const AdminPanel = () => {
 
       try {
 
-        //localhost:8080/rentify/users/blocked
-
         const response = await axios.get(
           `http://localhost:8080/rentify/users/blocked`
         );
@@ -99,17 +94,14 @@ const AdminPanel = () => {
 
     if (userDetails?.role?.role === "USER") {
       navigate("/*");
-  } else {
-      console.error("User details or role is not defined properly:", userDetails);
-      // Optionally, you can handle this error more gracefully, or log it for further investigation
-  }
+  } 
 
     fetchUsers();
     fetchLastAddedItems();
     fetchBlockedUsers();
     fetchUserInfo();
    
-  }, [ userDetails]);
+  }, [userDetails]);
 
   const updateRole = async (userId) => {
     try {
@@ -148,14 +140,6 @@ const AdminPanel = () => {
       console.error("Error updating role " + error)
     }
   }
-
-
-  console.log(userDetails)
-
-
-
-
-
   const displayedItems = showAllReviews ? recentItems : recentItems.slice(0, 3);
   const displayUsers = showAllReviews ? users : users.slice(0, 2);
 

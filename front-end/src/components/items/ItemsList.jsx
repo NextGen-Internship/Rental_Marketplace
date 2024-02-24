@@ -91,7 +91,7 @@ const ItemsList = () => {
           }?page=${currentPage}&sortDirection=${sortOrder}&category=${selectedCategory}&priceFrom=${priceFrom}&priceTo=${priceTo}&address=${selectedAddress}&searchTerm=${searchTerm}`
         );
 
-        console.log("rrr", result );
+      
         setItems(result.content);
         setTotalPages(result.totalPages);
 
@@ -175,8 +175,6 @@ const ItemsList = () => {
         }
       );
 
-      console.log("isLike");
-      console.log(JSON.stringify(requestBody));
 
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);

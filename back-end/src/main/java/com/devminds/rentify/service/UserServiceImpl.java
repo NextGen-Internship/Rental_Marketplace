@@ -237,9 +237,6 @@ public class UserServiceImpl implements UserService {
 
         existingUser.setRole(newRole);
         userRepository.save(existingUser);
-
-        System.out.println( "rolqtaa v smqnataa" + existingUser.getRole().getRole());
-
         return mapUserToUserDto(existingUser);
     }
 
