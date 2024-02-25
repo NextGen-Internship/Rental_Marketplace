@@ -45,7 +45,7 @@ public class UserController {
         return new ResponseEntity<>(userService.getUserById(id), HttpStatus.OK);
     }
 
-    @PutMapping("/update/{id}")
+    @PutMapping("/users/update/{id}")
     public ResponseEntity<UserDto> updateUser(@PathVariable Long id,
                                               @RequestBody UpdatedUserInfoDto updatedUserInfoDto) {
 
@@ -53,7 +53,7 @@ public class UserController {
 
     }
 
-    @PutMapping("/updateProfilePicture/{userId}")
+    @PutMapping("/users/updateProfilePicture/{userId}")
     public ResponseEntity<UserDto> uploadFile(@PathVariable Long userId, @RequestParam("file") MultipartFile file)
             throws IOException {
 

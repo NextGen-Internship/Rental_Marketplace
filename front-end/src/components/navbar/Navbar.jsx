@@ -20,12 +20,13 @@ const Navbar = () => {
   const dispatch = useDispatch();
   const userProfile = useSelector((state) => state.user.values);
   const userId = useSelector((state) => state.userToken.id);
-  const isLoggedIn = useSelector((state) => state.userToken.isLoggedIn);
+
+  const isLoggedInInitially = localStorage.getItem('token') !== null;
 
   useEffect(() => {
 
     if (userId !== null) {
-     dispatch(updateIsLoggedIn({ isLoggedIn: true }));
+
 
      
       const fetchUserInfo = async () => {
@@ -46,14 +47,13 @@ const Navbar = () => {
       fetchUserInfo();
     }
     
-  }, [location , userProfile.profilePicture , isLoggedIn , userId]);
+  }, [location , userProfile.profilePicture , isLoggedInInitially , userId]);
 
 
   const handleLogout = () => {
     Object.keys(localStorage).forEach(key => { localStorage.removeItem(key); });
 
     dispatch(like([]));
-    dispatch(updateIsLoggedIn({ isLoggedIn: false }));
     dispatch(updateUserToken({id : null}))
   };
 
@@ -64,7 +64,7 @@ const Navbar = () => {
       <div className="links">
         <Link to="/">Home</Link>
        
-        {isLoggedIn ? (
+        {isLoggedInInitially ? (
           <>
 
 <Link to="/items/create">Add Item</Link>
