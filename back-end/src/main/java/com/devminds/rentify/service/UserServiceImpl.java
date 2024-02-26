@@ -1,7 +1,7 @@
 package com.devminds.rentify.service;
 
 import com.devminds.rentify.config.JwtService;
-import com.devminds.rentify.config.storage.StorageConfig;
+import com.devminds.rentify.dto.AddUserDetailsDto;
 import com.devminds.rentify.dto.AddressDto;
 import com.devminds.rentify.dto.UpdatedUserInfoDto;
 import com.devminds.rentify.dto.UserDto;
@@ -27,7 +27,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-
 import java.io.IOException;
 import java.net.URL;
 import java.security.GeneralSecurityException;
@@ -260,6 +259,25 @@ public class UserServiceImpl implements UserService {
                 .map(this::mapUserToUserDto)
                 .collect(Collectors.toList());
 
+    }
+  
+    public UserDto partialUpdate(Long id, AddUserDetailsDto userDetailsDto) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new UsernameNotFoundException(String.format(USER_NOT_FOUND_MESSAGE, id)));
+
+        String phoneNumber = userDetailsDto.getPhoneNumber();
+        String iban = userDetailsDto.getIban();
+
+        if (phoneNumber != null && !phoneNumber.isBlank()) {
+            user.setPhoneNumber(phoneNumber);
+        }
+
+        if (iban != null && !iban.isBlank()) {
+            user.setIban(iban);
+        }
+
+        User saved = userRepository.save(user);
+        return mapUserToUserDto(saved);
     }
 }
 

@@ -20,6 +20,7 @@ import AccountVerification from "./components/account-verification/AccountVerifi
 import EditItem from "./components/profile-page/EditItem";
 import AdminPanel from "./components/admin-panel/AdminPanel";
 import RentItem from "./components/rents/RentItem";
+import AddAdditionalInfo from "./components/add-item/AddAdditionalInfo";
 
 
 function App() {
@@ -50,7 +51,7 @@ function App() {
           <Route path="/account-verification" element={<AccountVerification />} />
           <Route path = "/admin" element = {<AdminPanel />}/>
           <Route path="/rent-item/:id" element={<RentItem />} />
-            
+          <Route path="/add-additional-info" element={<AddAdditionalInfo />} />
         </Routes>
         <Footer />
       </div>

@@ -1,15 +1,23 @@
 package com.devminds.rentify.controller;
 
+import com.devminds.rentify.dto.AddUserDetailsDto;
 import com.devminds.rentify.dto.UpdatedUserInfoDto;
 import com.devminds.rentify.dto.UserDto;
 import com.devminds.rentify.service.UserServiceImpl;
-
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
@@ -21,10 +29,6 @@ import java.util.List;
 public class UserController {
 
     private final UserServiceImpl userService;
-
-
-
-
     private static String INVALID_TOKEN_MESSAGE = "Invalid token";
 
     @PostMapping("/google-login")
@@ -64,15 +68,13 @@ public class UserController {
 
     }
 
-    @PutMapping("/updateProfilePicture/{userId}")
+    @PutMapping("/users/updateProfilePicture/{userId}")
     public ResponseEntity<UserDto> uploadFile(@PathVariable Long userId, @RequestParam("file") MultipartFile file)
             throws IOException {
 
         return new ResponseEntity<>(userService.updateProfilePicture(userId, file), HttpStatus.OK);
 
     }
-
-
 
     @PutMapping("/users/admin/updateRole/{userId}")
     public ResponseEntity<UserDto> updateUserRole(@PathVariable Long userId){
@@ -84,6 +86,13 @@ public class UserController {
     public ResponseEntity<UserDto> blockUser(@PathVariable Long userId){
         return new ResponseEntity<>(userService.blockUser(userId) , HttpStatus.OK);
 
+    }
+
+    @PatchMapping("/users/add-additional-info/{id}")
+    public ResponseEntity<UserDto> addAdditionalInfo(@PathVariable Long id,
+                                                     @RequestBody AddUserDetailsDto userDetailsDto) {
+
+        return new ResponseEntity<>(userService.partialUpdate(id, userDetailsDto), HttpStatus.OK);
     }
 
 }
