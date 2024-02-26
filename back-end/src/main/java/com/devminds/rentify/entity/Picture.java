@@ -23,4 +23,12 @@ public class Picture {
     @JoinColumn(name = "item_id")
     private Item item;
 
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", email='" + url + '\'' ;
+    }
+
 }

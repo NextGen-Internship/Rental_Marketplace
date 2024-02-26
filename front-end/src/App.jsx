@@ -12,6 +12,7 @@ import FilterComponent from "./components/filter/FilterComponent";
 import Views from "./components/views/Views";
 import LikedItemsPage from "./components/items/LikedItemsPage";
 import ProfilePage from "./components/profile-page/ProfilePage";
+
 import "./App.css";
 import ForgotPassword from "./components/forgot-password/ForgotPassword";
 import ResetPassword from "./components/forgot-password/ResetPassword";
@@ -27,11 +28,14 @@ function App() {
         <Navbar />
 
         <Routes>
+          
           <Route path="/" element={<Home />} />
           <Route path="/items/category/:id" element={<CategoryDetails />} />
           <Route path="items/:id" element={<ItemDetails />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="*" element={<NotFound />} />
+          <Route path="/notfound" element={<NotFound />} />
           <Route path="/filter" element={<FilterComponent />} />
           <Route path="/items/create" element={<CreateItem />} />
           <Route path="/views" element={<Views />} />
@@ -46,7 +50,6 @@ function App() {
           <Route path="/rent-item/:id" element={<RentItem />} />
           <Route path="/add-additional-info" element={<AddAdditionalInfo />} />
         </Routes>
-
         <Footer />
       </div>
     </Router>

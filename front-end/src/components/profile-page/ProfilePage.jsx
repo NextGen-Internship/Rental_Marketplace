@@ -8,30 +8,20 @@ import noImage from "../../assets/no-image.avif";
 import { jwtDecode } from "jwt-decode";
 import PersonalItems from "./PersonalItems";
 
+import { useDispatch, useSelector } from "react-redux"; 
+import { updateUser } from "../../features/userSlice";
+
 const ProfilePage = () => {
   const [userItems, setuserItems] = useState([]);
   const [errorFoInputs, setErrorForInputs] = useState(false);
   const [errorForProfilePicture, setErrorForProfilePicture] = useState(false);
+
   const [iban, setIban] = useState("");
-  const token = localStorage.getItem("token");
 
-  const decoded = jwtDecode(token);
-  const userId = decoded.jti;
+  const userId = useSelector((state) => state.userToken.id);
+  const userInfo = useSelector((state) => state.user.values);
+  const dispatch = useDispatch();
 
-  const [userInfo, setUserInfo] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
-    phoneNumber: "",
-    address: {
-      city: "",
-      postCode: "",
-      street: "",
-      streetNumber: "",
-    },
-    profilePicture: "",
-    iban: "",
-  });
 
   const [imageFile, setimageFile] = useState("");
 
@@ -48,29 +38,27 @@ const ProfilePage = () => {
     setEditPictureMode(true);
   };
 
+
   const handleUpload = async () => {
     try {
-      const formData = new FormData();
-      formData.append("file", imageFile);
+        const formData = new FormData();
+        formData.append('file', imageFile);
 
-      const response = await axios.put(
-        `http://localhost:8080/rentify/updateProfilePicture/${userId}`,
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
+        const response = await axios.put(`http://localhost:8080/rentify/updateProfilePicture/${userId}`, formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        });
 
-      setUserInfo(response.data);
-      setEditPictureMode(false);
-      setErrorForProfilePicture(false);
-    } catch (error) {
-      console.error("Error uploading picture:", error);
-      setErrorForProfilePicture(true);
+        dispatch(updateUser(response.data));
+        setEditPictureMode(false);
+        setErrorForProfilePicture(false);
+        } catch (error) {
+        console.error('Error uploading picture:', error);
+        setErrorForProfilePicture(true)
     }
-  };
+};
+
 
   const handleFileChange = (event) => {
     setimageFile(event.target.files[0]);
@@ -116,7 +104,8 @@ const ProfilePage = () => {
         }
       );
 
-      setUserInfo(response.data);
+      dispatch(updateUser(response.data));
+
       setEditMode(false);
       setErrorForInputs(false);
       setIban('');
@@ -176,7 +165,8 @@ const ProfilePage = () => {
         const response = await axios.get(
           `http://localhost:8080/rentify/users/${userId}`
         );
-        setUserInfo(response.data);
+
+        dispatch(updateUser(response.data))
       } catch (error) {
         console.error("Error fetching user Info ", error);
       }
@@ -213,13 +203,13 @@ const ProfilePage = () => {
                           onChange={handleFileChange}
                         />
                         <button
-                          className="btn btn-primary"
+                          className="btn btn-primary m-2"
                           onClick={handleUpload}
                         >
                           Upload picture
                         </button>
                         <button
-                          className="btn btn-primary"
+                          className="btn btn-danger m-2"
                           onClick={handleCancelClickPicture}
                         >
                           Cancel picture
@@ -385,18 +375,18 @@ const ProfilePage = () => {
                     </div>
                     <hr />
                     <div className="row">
-                      <div className="col-sm-12">
+                      <div className="col-sm-12 ">
                         {editMode ? (
                           <>
                             <button
-                              className="btn btn-success"
+                              className="btn btn-primary m-2 "
                               onClick={handleSaveClick}
                             >
                               Save
                             </button>
 
                             <button
-                              className="btn btn-danger"
+                              className="btn btn-danger m-2"
                               onClick={handleCancelClick}
                             >
                               Cancel
@@ -404,7 +394,7 @@ const ProfilePage = () => {
                           </>
                         ) : (
                           <button
-                            className="btn btn-info"
+                            className="btn btn-primary"
                             onClick={handleEditClick}
                           >
                             Edit
