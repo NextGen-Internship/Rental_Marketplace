@@ -8,10 +8,10 @@ import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
+import java.time.LocalDate;
 
-import java.util.Date;
 
 @Data
 @Entity
@@ -27,13 +27,13 @@ public class Rent {
     @ManyToOne
     private User user;
 
-    @NotEmpty
+    @NotNull
     @Column(name = "start_date")
-    private Date startDate;
+    private LocalDate startDate;
 
-    @NotEmpty
+    @NotNull
     @Column(name = "end_date")
-    private Date endDate;
+    private LocalDate endDate;
 
     @OneToOne(mappedBy = "rent")
     private Payment payment;

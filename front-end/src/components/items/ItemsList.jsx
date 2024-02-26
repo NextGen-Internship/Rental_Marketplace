@@ -297,8 +297,8 @@ const ItemsList = () => {
                 onChange={(e) => setSelectedAddress(e.target.value)}
               >
                 <option value="">City...</option>
-                {addresses.map((address) => (
-                  <option key={address.id} value={address.name}>
+                {addresses.map((address, index) => (
+                  <option key={index} value={address.name}>
                     {address.city}
                   </option>
                 ))}

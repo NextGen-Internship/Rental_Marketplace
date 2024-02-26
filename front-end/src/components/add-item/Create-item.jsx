@@ -38,8 +38,8 @@ function CreateItem() {
 
 
   const navigate = useNavigate();
-
   const jwt_token = localStorage.getItem('token');
+ 
 
   const decoded = jwtDecode(jwt_token);
   const userId = decoded.jti;
@@ -168,6 +168,7 @@ function CreateItem() {
     } catch (error) {
       console.error("Error adding item:", error.message);
     }
+    
   };
 
   return (

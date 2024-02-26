@@ -19,12 +19,15 @@ CREATE TABLE IF NOT EXISTS user (
     password VARCHAR(255),
     email VARCHAR(100) UNIQUE NOT NULL,
     address_id INT,
+    iban VARCHAR(255),
+    stripe_account_id VARCHAR(255) UNIQUE,
     FOREIGN KEY (address_id) REFERENCES address(id),
     profile_picture VARCHAR(512),
     role_id INT,
     FOREIGN KEY (role_id) REFERENCES user_role(id),
-    phone VARCHAR(10),
+    phone VARCHAR(13),
     is_blocked BOOLEAN NOT NULL DEFAULT FALSE
+
 );
 
 CREATE TABLE IF NOT EXISTS item_category (
@@ -39,6 +42,7 @@ CREATE TABLE IF NOT EXISTS item (
     description VARCHAR(1024) NOT NULL,
     price DECIMAL(10,2) NOT NULL,
     category_id INT,
+    item_stripe_id VARCHAR(512) UNIQUE,
     thumbnail VARCHAR(512),
     FOREIGN KEY (category_id) REFERENCES item_category(id),
     user_id INT,
@@ -70,13 +74,13 @@ CREATE TABLE IF NOT EXISTS rent (
     FOREIGN KEY (item_id) REFERENCES item(id),
     user_id INT,
     FOREIGN KEY (user_id) REFERENCES user(id),
-    start_date DATETIME NOT NULL,
-    end_date DATETIME NOT NULL
+    start_date DATE NOT NULL,
+    end_date DATE NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS payment (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    amount DECIMAL(5,2) NOT NULL,
+    amount DECIMAL(10,2) NOT NULL,
     status VARCHAR(50) NOT NULL,
     date DATETIME NOT NULL,
     owner_id INT,

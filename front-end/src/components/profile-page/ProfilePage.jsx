@@ -1,7 +1,10 @@
 import React from "react";
+
 import { useState } from "react";
 import { useEffect } from "react";
 import axios from "axios";
+import { Link, useParams } from "react-router-dom";
+import noImage from "../../assets/no-image.avif";
 import { jwtDecode } from "jwt-decode";
 import PersonalItems from "./PersonalItems";
 
@@ -14,9 +17,13 @@ const ProfilePage = () => {
   const [userItems, setuserItems] = useState([]);
   const [errorFoInputs, setErrorForInputs] = useState(false);
   const [errorForProfilePicture, setErrorForProfilePicture] = useState(false);
+
+  const [iban, setIban] = useState("");
+
   const userId = useSelector((state) => state.userToken.id);
   const userInfo = useSelector((state) => state.user.values);
   const dispatch = useDispatch();
+
 
   const [imageFile, setimageFile] = useState("");
 
@@ -104,6 +111,7 @@ const ProfilePage = () => {
             ...editedAddress,
           }
         : {},
+        iban: iban || userInfo.iban
     };
 
     try {
@@ -115,6 +123,7 @@ const ProfilePage = () => {
           email: updatedUserInfo.email || userInfo.email,
           phoneNumber: updatedUserInfo.phoneNumber || userInfo.phoneNumber,
           addressDto: updatedUserInfo.address,
+          iban: updatedUserInfo.iban
         }
       );
 
@@ -122,6 +131,7 @@ const ProfilePage = () => {
 
       setEditMode(false);
       setErrorForInputs(false);
+      setIban('');
     } catch (error) {
       console.error("Error updating user information:", error);
 
@@ -304,6 +314,24 @@ const ProfilePage = () => {
                         {userInfo.email}
                       </div>
                     </div>
+                    <div className="row">
+                      <div className="col-sm-3">
+                        <h6 className="mb-0">IBAN</h6>
+                      </div>
+                      <div className="col-sm-9 text-secondary">
+                        {editMode ? (
+                          <input
+                            type="text"
+                            name="iban"
+                            placeholder="IBAN"
+                            value={iban}
+                            onChange={(e) => setIban(e.target.value)}
+                          />
+                        ) : (
+                          <span>{userInfo.iban || "N/A"}</span>
+                        )}
+                      </div>
+                    </div>
                     <hr />
                     <div className="row">
                       <div className="col-sm-3">
@@ -312,7 +340,7 @@ const ProfilePage = () => {
                       <div className="col-sm-9 text-secondary">
                         {editMode ? (
                           <input
-                            type="number"
+                            type="text"
                             name="phoneNumber"
                             value={editedUserInfo.phoneNumber}
                             onChange={handleInputChange}
