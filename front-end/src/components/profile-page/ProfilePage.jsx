@@ -55,7 +55,6 @@ const ProfilePage = () => {
         setErrorForProfilePicture(false);
         } 
         catch (error) {
-        console.error('Error uploading picture', error);
         setErrorForProfilePicture(true)
     }
 };
