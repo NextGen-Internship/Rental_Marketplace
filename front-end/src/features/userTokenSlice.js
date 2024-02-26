@@ -8,16 +8,15 @@ export const userTokenSlice = createSlice({
   },
   reducers: {
     updateUserToken: (state, action) => {
-      state.id = action.payload.id; 
+      state.id = action.payload.id;
+      state.isLoggedIn = action.payload.id !== null; 
     },
     updateIsLoggedIn: (state, action) => {
-      state.isLoggedIn = action.payload.isLoggedIn; 
+      state.isLoggedIn = action.payload.isLoggedIn;
     }
   }
 });
 
-
 export const { updateUserToken, updateIsLoggedIn } = userTokenSlice.actions;
-
 
 export default userTokenSlice.reducer;

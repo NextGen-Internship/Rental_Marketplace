@@ -44,7 +44,7 @@ const ProfilePage = () => {
         const formData = new FormData();
         formData.append('file', imageFile);
 
-        const response = await axios.put(`http://localhost:8080/rentify/updateProfilePicture/${userId}`, formData, {
+        const response = await axios.put(`http://localhost:8080/rentify/users/updateProfilePicture/${userId}`, formData, {
             headers: {
                 'Content-Type': 'multipart/form-data'
             }
@@ -53,8 +53,8 @@ const ProfilePage = () => {
         dispatch(updateUser(response.data));
         setEditPictureMode(false);
         setErrorForProfilePicture(false);
-        } catch (error) {
-        console.error('Error uploading picture:', error);
+        } 
+        catch (error) {
         setErrorForProfilePicture(true)
     }
 };
@@ -93,7 +93,7 @@ const ProfilePage = () => {
 
     try {
       const response = await axios.put(
-        `http://localhost:8080/rentify/update/${userId}`,
+        `http://localhost:8080/rentify/users/update/${userId}`,
         {
           firstName: updatedUserInfo.firstName || userInfo.firstName,
           lastName: updatedUserInfo.lastName || userInfo.lastName,
