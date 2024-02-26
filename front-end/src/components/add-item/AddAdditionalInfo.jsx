@@ -8,8 +8,15 @@ const AddAdditionalInfo = () => {
   const [userId, setUserId] = useState();
   const [iban, setIban] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
+  const [address, setAddress] = useState({
+    city: "",
+    street: "",
+    postCode: "",
+    streetNumber: "",
+  });
   const [showIbanField, setShowIbanField] = useState(false);
   const [showPhoneNumberField, setShowPhoneNumberField] = useState(false);
+  const [showAddressField, setShowAddressField] = useState(false);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -23,25 +30,34 @@ const AddAdditionalInfo = () => {
 
     const fetchUser = async () => {
       try {
-        const backendUrl = `http://localhost:8080/rentify/users/${
-          jwtDecode(token).jti
-        }`;
-        const result = await axios.get(backendUrl);
+        const decoded = jwtDecode(token);
+        const userId = decoded.jti;
 
-        console.log(result.data);
-        setIban(result.data.iban || "");
-        setPhoneNumber(result.data.phoneNumber || "");
 
-        if (!result.data.iban) {
-          setShowIbanField(true);
+        if (userId) {
+          console.log("idiiitooo " + userId);
+
+          const backendUrl = `http://localhost:8080/rentify/users/${userId}`;
+          const result = await axios.get(backendUrl);
+
+          console.log(result.data);
+          setIban(result.data.iban || "");
+          setPhoneNumber(result.data.phoneNumber || "");
+          setAddress(result.data.address || "");
+
+          if (!result.data.iban) {
+            setShowIbanField(true);
+          }
+
+          if (!result.data.phoneNumber) {
+            setShowPhoneNumberField(true);
+          }
+
+          if (!result.data.address) {
+            setShowAddressField(true);
+          }
         }
-
-        if (!result.data.phoneNumber) {
-          setShowPhoneNumberField(true);
-        }
-      } catch (error) {
-        navigate("/notfound");
-      }
+      } catch (error) {}
     };
 
     fetchUser();
@@ -61,7 +77,23 @@ const AddAdditionalInfo = () => {
         body.iban = iban;
       }
 
-      console.log(body)
+      if (address.city) {
+        body.city = address.city;
+      }
+
+      if (address.postCode) {
+        body.postCode = address.postCode;
+      }
+
+      if (address.street) {
+        body.street = address.street;
+      }
+
+      if (address.streetNumber) {
+        body.streetNumber = address.streetNumber;
+      }
+
+      console.log(body);
 
       const backendUrl = `http://localhost:8080/rentify/users/add-additional-info/${userId}`;
       const response = await axios.patch(backendUrl, body);
@@ -71,10 +103,16 @@ const AddAdditionalInfo = () => {
       setPhoneNumber("");
 
       navigate("/items/create");
-
     } catch (error) {
       console.log(error);
     }
+  };
+
+  const handleAddressChange = (field, value) => {
+    setAddress((prevAddress) => ({
+      ...prevAddress,
+      [field]: value,
+    }));
   };
 
   return (
@@ -116,6 +154,50 @@ const AddAdditionalInfo = () => {
                       id="phoneNumber"
                       value={phoneNumber}
                       onChange={(e) => setPhoneNumber(e.target.value)}
+                    />
+                  </div>
+                )}
+                {showAddressField && (
+                  <div className="mb-3">
+                    <label className="form-label">Address</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      placeholder="City"
+                      value={address.city}
+                      onChange={(e) =>
+                        handleAddressChange("city", e.target.value)
+                      }
+                    />
+                    <br />
+                    <input
+                      type="text"
+                      className="form-control"
+                      placeholder="Post code"
+                      value={address.postCode}
+                      onChange={(e) =>
+                        handleAddressChange("postCode", e.target.value)
+                      }
+                    />
+                    <br />
+                    <input
+                      type="text"
+                      className="form-control"
+                      placeholder="Street"
+                      value={address.street}
+                      onChange={(e) =>
+                        handleAddressChange("street", e.target.value)
+                      }
+                    />
+                    <br />
+                    <input
+                      type="text"
+                      className="form-control"
+                      placeholder="Street number"
+                      value={address.streetNumber}
+                      onChange={(e) =>
+                        handleAddressChange("streetNumber", e.target.value)
+                      }
                     />
                   </div>
                 )}

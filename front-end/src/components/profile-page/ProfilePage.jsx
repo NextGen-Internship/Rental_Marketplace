@@ -33,8 +33,7 @@ const ProfilePage = () => {
 
   const[isBlocked , setIsBlocked] = useState("");
 
-  console.log("userr infooo")
-  console.log(userInfo);
+  
   const handleEditClick = () => {
     setEditedUserInfo({ ...userInfo });
     setEditMode(true);
@@ -114,6 +113,8 @@ const ProfilePage = () => {
         iban: iban || userInfo.iban
     };
 
+
+    console.log("iditooo   " + userId)
     try {
       const response = await axios.put(
         `http://localhost:8080/rentify/users/update/${userId}`,

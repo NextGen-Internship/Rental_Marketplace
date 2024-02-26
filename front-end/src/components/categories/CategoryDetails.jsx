@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { fetchData } from '../fetchData';
 import { useParams, useNavigate } from 'react-router-dom';
 import ItemsList from '../items/ItemsList';
+
 const endpoint = 'categories/';
 
 const CategoryDetails = () => {
@@ -25,11 +26,12 @@ const CategoryDetails = () => {
   }, []);
 
   return (
-
-    <div>
+  <div>
+    <div className='category-details'>
       { category && <h2>Items in category {category.name} </h2> }
       { category && <p>Category description: {category.description}</p> }
       <ItemsList notShowDropdown={notShowDropdown} categoryId={categoryId}  /> 
+    </div>
     </div>
   )
 }

@@ -15,4 +15,9 @@ public class AddUserDetailsDto {
     @Nullable
     @Size(max = 13)
     String phoneNumber;
+
+    private String city;
+    private String street;
+    private String postCode;
+    private String streetNumber;
 }

@@ -6,7 +6,6 @@ import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import { useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 import blocked from '../../assets/blocked.jpg';
-import { useEffect } from "react";
 
 function CreateItem() {
   const [title, setTitle] = useState("");
@@ -38,8 +37,15 @@ function CreateItem() {
       navigate("/login");
     }
 
-    const fetchUser= async () => {
+
+
+
+    
+
+    const fetchUser = async () => {
       try {
+
+        console.log("userrss iddd " )
         const backendUrl = `http://localhost:8080/rentify/users/${jwtDecode(token).jti}`;
         const result = await axios.get(backendUrl);
 
@@ -70,12 +76,6 @@ function CreateItem() {
   });
 
 
-
-
-  const navigate = useNavigate();
-  const jwt_token = localStorage.getItem('token');
- 
-
   const decoded = jwtDecode(jwt_token);
   const 
   Id = decoded.jti;
@@ -86,10 +86,12 @@ function CreateItem() {
     const fetchUser = async () => {
       try {
 
+        if(userId){
         const response = await axios.get(
           `http://localhost:8080/rentify/users/${userId}`
         );
         setUser(response.data);
+        }
       } catch (error) {
         console.error("Error fetching user items:", error);
       }

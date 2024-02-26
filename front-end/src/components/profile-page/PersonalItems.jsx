@@ -38,7 +38,7 @@ const PersonalItems = () => {
         );
 
         setUserItems(response.data);
-        console.log("uu", userItems);
+
       } catch (error) {
         console.error("Error fetching user items:", error);
       }

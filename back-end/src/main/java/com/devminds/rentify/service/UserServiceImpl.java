@@ -27,6 +27,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+
 import java.io.IOException;
 import java.net.URL;
 import java.security.GeneralSecurityException;
@@ -171,7 +172,6 @@ public class UserServiceImpl implements UserService {
         }
 
 
-
         if (addressDto.getCity() != null && !addressDto.getCity().isEmpty() &&
                 addressDto.getStreet() != null && !addressDto.getStreet().isEmpty() &&
                 addressDto.getStreetNumber() != null && !addressDto.getStreetNumber().isEmpty() &&
@@ -260,7 +260,7 @@ public class UserServiceImpl implements UserService {
                 .collect(Collectors.toList());
 
     }
-  
+
     public UserDto partialUpdate(Long id, AddUserDetailsDto userDetailsDto) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new UsernameNotFoundException(String.format(USER_NOT_FOUND_MESSAGE, id)));
@@ -276,6 +276,14 @@ public class UserServiceImpl implements UserService {
             user.setIban(iban);
         }
 
+        Address address = new Address();
+        address.setCity(userDetailsDto.getCity());
+        address.setStreet(userDetailsDto.getStreet());
+        address.setPostCode(userDetailsDto.getPostCode());
+        address.setStreetNumber(userDetailsDto.getStreetNumber());
+        Address addressToSave = addressRepository.save(address);
+
+        user.setAddress(addressToSave);
         User saved = userRepository.save(user);
         return mapUserToUserDto(saved);
     }

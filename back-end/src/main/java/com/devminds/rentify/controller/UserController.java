@@ -60,11 +60,13 @@ public class UserController {
         return new ResponseEntity<>(userService.getAllBlockedUsers(), HttpStatus.OK);
     }
 
-    @PutMapping("/update/{id}")
-    public ResponseEntity<UserDto> updateUser(@PathVariable Long id,
+           // `http://localhost:8080/rentify/users/update/${userId}`,
+
+    @PutMapping("/users/update/{userId}")
+    public ResponseEntity<UserDto> updateUser(@PathVariable Long userId,
                                               @RequestBody UpdatedUserInfoDto updatedUserInfoDto) {
 
-        return new ResponseEntity<>(userService.updateUserInfo(id, updatedUserInfoDto), HttpStatus.OK);
+        return new ResponseEntity<>(userService.updateUserInfo(userId, updatedUserInfoDto), HttpStatus.OK);
 
     }
 

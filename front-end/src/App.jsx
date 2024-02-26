@@ -53,7 +53,7 @@ function App() {
           <Route path="/rent-item/:id" element={<RentItem />} />
           <Route path="/add-additional-info" element={<AddAdditionalInfo />} />
         </Routes>
-        <Footer />
+        {/* <Footer /> */}
       </div>
     </Router>
   );
