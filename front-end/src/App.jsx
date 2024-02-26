@@ -19,6 +19,7 @@ import ResetPassword from "./components/forgot-password/ResetPassword";
 import AccountVerification from "./components/account-verification/AccountVerification";
 import EditItem from "./components/profile-page/EditItem";
 import RentItem from "./components/rents/RentItem";
+import AddAdditionalInfo from "./components/add-item/AddAdditionalInfo";
 
 function App() {
   return (
@@ -47,6 +48,7 @@ function App() {
           <Route path="/reset-password" element={<ResetPassword />} />
           <Route path="/account-verification" element={<AccountVerification />} />
           <Route path="/rent-item/:id" element={<RentItem />} />
+          <Route path="/add-additional-info" element={<AddAdditionalInfo />} />
         </Routes>
         <Footer />
       </div>

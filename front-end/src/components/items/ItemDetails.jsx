@@ -95,10 +95,6 @@ const ItemDetails = () => {
 
   };
 
-
-
-
-
   return (
     <div className="item-details-container">
       {item && (

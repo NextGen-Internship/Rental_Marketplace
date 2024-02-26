@@ -1,13 +1,12 @@
 package com.devminds.rentify.service;
 
 import com.devminds.rentify.config.JwtService;
-import com.devminds.rentify.config.storage.StorageConfig;
+import com.devminds.rentify.dto.AddUserDetailsDto;
 import com.devminds.rentify.dto.AddressDto;
 import com.devminds.rentify.dto.UpdatedUserInfoDto;
 import com.devminds.rentify.dto.UserDto;
 import com.devminds.rentify.entity.Address;
 import com.devminds.rentify.entity.User;
-import com.devminds.rentify.exception.AddressNotFoundException;
 import com.devminds.rentify.exception.DuplicateEntityException;
 import com.devminds.rentify.repository.AddressRepository;
 import com.devminds.rentify.repository.RoleRepository;
@@ -209,6 +208,25 @@ public class UserServiceImpl implements UserService {
         userRepository.save(existingUser);
 
         return mapUserToUserDto(existingUser);
+    }
+
+    public UserDto partialUpdate(Long id, AddUserDetailsDto userDetailsDto) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new UsernameNotFoundException(String.format(USER_NOT_FOUND_MESSAGE, id)));
+
+        String phoneNumber = userDetailsDto.getPhoneNumber();
+        String iban = userDetailsDto.getIban();
+
+        if (phoneNumber != null && !phoneNumber.isBlank()) {
+            user.setPhoneNumber(phoneNumber);
+        }
+
+        if (iban != null && !iban.isBlank()) {
+            user.setIban(iban);
+        }
+
+        User saved = userRepository.save(user);
+        return mapUserToUserDto(saved);
     }
 }
 
