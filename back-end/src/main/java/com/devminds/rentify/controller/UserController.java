@@ -4,6 +4,7 @@ import com.devminds.rentify.dto.AddUserDetailsDto;
 import com.devminds.rentify.dto.UpdatedUserInfoDto;
 import com.devminds.rentify.dto.UserDto;
 import com.devminds.rentify.service.UserServiceImpl;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,17 +23,12 @@ import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.List;
 
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("/rentify")
 public class UserController {
 
     private final UserServiceImpl userService;
-
-    @Autowired
-    public UserController(UserServiceImpl userService) {
-        this.userService = userService;
-    }
-
     private static String INVALID_TOKEN_MESSAGE = "Invalid token";
 
     @PostMapping("/google-login")
@@ -49,12 +45,22 @@ public class UserController {
         return new ResponseEntity<>(userService.getAllUsers(), HttpStatus.OK);
     }
 
+    @GetMapping("/users/admin/{userId}")
+    public ResponseEntity<List<UserDto>> getAllUsersExpectAdmin(@PathVariable Long userId) {
+        return new ResponseEntity<>(userService.getAllUsersExpectAdmin(userId), HttpStatus.OK);
+    }
+
     @GetMapping("/users/{id}")
     public ResponseEntity<UserDto> getUserById(@PathVariable Long id) {
         return new ResponseEntity<>(userService.getUserById(id), HttpStatus.OK);
     }
 
-    @PutMapping("/users/update/{id}")
+    @GetMapping("/users/blocked")
+    public ResponseEntity<List<UserDto>> getAllBlockedUsers() {
+        return new ResponseEntity<>(userService.getAllBlockedUsers(), HttpStatus.OK);
+    }
+
+    @PutMapping("/update/{id}")
     public ResponseEntity<UserDto> updateUser(@PathVariable Long id,
                                               @RequestBody UpdatedUserInfoDto updatedUserInfoDto) {
 
@@ -70,10 +76,23 @@ public class UserController {
 
     }
 
+    @PutMapping("/users/admin/updateRole/{userId}")
+    public ResponseEntity<UserDto> updateUserRole(@PathVariable Long userId){
+        return new ResponseEntity<>(userService.updateUserRole(userId) , HttpStatus.OK);
+
+    }
+
+    @PutMapping("/users/admin/blockUser/{userId}")
+    public ResponseEntity<UserDto> blockUser(@PathVariable Long userId){
+        return new ResponseEntity<>(userService.blockUser(userId) , HttpStatus.OK);
+
+    }
+
     @PatchMapping("/users/add-additional-info/{id}")
     public ResponseEntity<UserDto> addAdditionalInfo(@PathVariable Long id,
                                                      @RequestBody AddUserDetailsDto userDetailsDto) {
 
         return new ResponseEntity<>(userService.partialUpdate(id, userDetailsDto), HttpStatus.OK);
     }
+
 }

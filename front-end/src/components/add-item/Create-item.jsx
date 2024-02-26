@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./Create-item.css";
 import CategoryModal from "./CategoryModal";
 import axios from "axios";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import { useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
+import blocked from '../../assets/blocked.jpg';
 import { useEffect } from "react";
 
 function CreateItem() {
@@ -20,6 +21,9 @@ function CreateItem() {
     postCode: "",
     streetNumber: "",
   });
+
+  
+  const [user, setUser] = useState("")
   const navigate = useNavigate();
   const jwt_token = localStorage.getItem('token');
   const [ userId, setUserId ] = useState(null);
@@ -53,6 +57,7 @@ function CreateItem() {
     fetchUser();
   }, []);
 
+
   const [errors, setErrors] = useState({
     title: "",
     price: "",
@@ -63,6 +68,35 @@ function CreateItem() {
     postCode: "",
     streetNumber: "",
   });
+
+
+
+
+  const navigate = useNavigate();
+  const jwt_token = localStorage.getItem('token');
+ 
+
+  const decoded = jwtDecode(jwt_token);
+  const 
+  Id = decoded.jti;
+
+  useEffect(() => {
+
+
+    const fetchUser = async () => {
+      try {
+
+        const response = await axios.get(
+          `http://localhost:8080/rentify/users/${userId}`
+        );
+        setUser(response.data);
+      } catch (error) {
+        console.error("Error fetching user items:", error);
+      }
+    }
+    fetchUser();
+  }, []);
+  
 
   const handleChange = (event) => {
     const inputValue = event.target.value;
@@ -177,6 +211,14 @@ function CreateItem() {
   return (
     <div className="createItem-container">
       <h1>Add Item</h1>
+      {user.blocked ? (
+  <div>
+
+<img src={blocked} style={{ width: '500px', height: '400px', marginTop: '30px', border: 'none' }} />
+
+  </div>
+) : (
+  <>
       <section className="info">
         <h2>What you offer?</h2>
         <h3>Title*</h3>
@@ -318,7 +360,11 @@ function CreateItem() {
       <button className="add-btn" onClick={handleAddItem}>
         <b>Add item</b>
       </button>
+      </>
+    )}
     </div>
+    
+    
   );
 }
 

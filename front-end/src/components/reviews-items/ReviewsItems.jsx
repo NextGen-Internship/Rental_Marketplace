@@ -4,7 +4,7 @@ import axios from 'axios';
 import { jwtDecode } from 'jwt-decode';
 import { useEffect } from 'react';
 
-
+import blocked from '../../assets/blocked.jpg';
 
 import { useDispatch, useSelector } from "react-redux"; 
 import { updateUserReview } from "../../features/userReviewSlice";
@@ -48,6 +48,7 @@ const ReviewsItems = ({ itemId }) => {
 
       try {
         const response = await axios.get(`http://localhost:8080/rentify/users/${userId}`);
+
         setUserInfo(response.data);
 
       }
@@ -144,7 +145,14 @@ const ReviewsItems = ({ itemId }) => {
 
     }
   }
+
   return (
+    <>
+      { userInfo.blocked ? (
+    <div>
+      <img src = {blocked}  style={{ width: '200px', height: '200px', marginLeft:"100px" }}/>
+          </div>
+      ): ( 
     <>
       {!addedReview ? (
         <div className="cardRevieRating">
@@ -254,6 +262,8 @@ const ReviewsItems = ({ itemId }) => {
       )}
 
 
+    </>
+      )}
     </>
   );
 };

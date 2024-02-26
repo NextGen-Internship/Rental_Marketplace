@@ -8,15 +8,7 @@ const CategoryDetails = () => {
   const { id } = useParams();
   const [category, setCategory] = useState();
   const navigate = useNavigate();
-
-
-
-
-
-
-
   const notShowDropdown = true;
-  console.log(notShowDropdown);
   const categoryId  = id; 
 
   useEffect(() => {
@@ -31,11 +23,6 @@ const CategoryDetails = () => {
 
     fetchCategory();
   }, []);
-
-
-
-
-  
 
   return (
 
