@@ -75,10 +75,12 @@ public class Item {
     @ManyToOne
     private Address address;
 
+
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "item")
     private List<History> histories;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "item")
+
     private List<Picture> pictures;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "item")
@@ -89,4 +91,11 @@ public class Item {
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "item")
     private List<Review> reviews;
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", email='" + name + '\'' ;
+    }
 }
