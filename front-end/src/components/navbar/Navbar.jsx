@@ -1,11 +1,12 @@
-import React, { useEffect, useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import logo from '../../assets/rentify-logo.svg';
-import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
-import LogoutIcon from '@mui/icons-material/Logout';
-import PersonIcon from '@mui/icons-material/Person';
-import VisibilityIcon from '@mui/icons-material/Visibility';
+import React, { useEffect, useState } from "react";
+import { Link, useLocation } from "react-router-dom";
+import logo from "../../assets/rentify-logo.svg";
+import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import LogoutIcon from "@mui/icons-material/Logout";
+import PersonIcon from "@mui/icons-material/Person";
+import VisibilityIcon from "@mui/icons-material/Visibility";
 import "./Navbar.css";
+
 import axios from 'axios';
 import { useDispatch, useSelector } from "react-redux"; 
 import { like } from "../../features/likedItems";
@@ -40,11 +41,11 @@ const Navbar = () => {
         catch (error) {
           console.error("Error fetching user Info ", error);
         }
-
       };
 
       fetchUserInfo();
     }
+
     
   }, [location , userProfile.profilePicture , isLoggedIn , userId]);
 
@@ -57,15 +58,18 @@ const Navbar = () => {
     dispatch(updateUserToken({id : null}))
   };
 
-
   return (
     <nav className="navbar">
-      <Link to="/"> <img src={logo} width={"200px"} alt="Logo" /> </Link>
+      <Link to="/">
+        {" "}
+        <img src={logo} width={"200px"} alt="Logo" />{" "}
+      </Link>
       <div className="links">
         <Link to="/">Home</Link>
-       
+
         {isLoggedIn ? (
           <>
+
 
 <Link to="/items/create">Add Item</Link>
             <Link to="/likes"> <FavoriteBorderIcon /> </Link>
@@ -76,11 +80,17 @@ const Navbar = () => {
                 alt="Profile"
                 className="profile-picture"
               /> </Link>
+         
             ) : (
-              <Link to="/settings"> <PersonIcon /> </Link>
+              <Link to="/settings">
+                {" "}
+                <PersonIcon />{" "}
+              </Link>
             )}
-            <Link to="/" onClick={handleLogout}> <LogoutIcon /> </Link>
-
+            <Link to="/" onClick={handleLogout}>
+              {" "}
+              <LogoutIcon />{" "}
+            </Link>
           </>
         ) : (
           <>
@@ -91,6 +101,6 @@ const Navbar = () => {
       </div>
     </nav>
   );
-}
+};
 
 export default Navbar;

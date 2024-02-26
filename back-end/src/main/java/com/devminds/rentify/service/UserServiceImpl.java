@@ -118,7 +118,6 @@ public class UserServiceImpl implements UserService {
 
     public String mapGoogleTokenToOurToken(String googleCredentials) throws GeneralSecurityException, IOException {
         GoogleIdToken idToken = isValidGoogleToken(googleCredentials);
-
         if (idToken != null) {
             Payload payload = idToken.getPayload();
 
@@ -164,6 +163,9 @@ public class UserServiceImpl implements UserService {
 
         if (updatedUserInfoDto.getPhoneNumber() != null) {
             existingUser.setPhoneNumber(updatedUserInfoDto.getPhoneNumber());
+        }
+        if (updatedUserInfoDto.getIban() != null) {
+            existingUser.setIban(updatedUserInfoDto.getIban());
         }
 
 

@@ -3,6 +3,7 @@ package com.devminds.rentify.auth;
 import com.devminds.rentify.dto.LoginDto;
 import com.devminds.rentify.dto.UserRegisterDto;
 import com.devminds.rentify.exception.DuplicateEntityException;
+import com.stripe.exception.StripeException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -32,6 +33,8 @@ public class AuthController {
                     .build();
             return ResponseEntity.badRequest().body(errorResponse);
         } catch (IOException e) {
+            throw new RuntimeException(e);
+        } catch (StripeException e) {
             throw new RuntimeException(e);
         }
     }

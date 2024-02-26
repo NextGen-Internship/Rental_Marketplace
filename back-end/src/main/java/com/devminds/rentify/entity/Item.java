@@ -57,6 +57,9 @@ public class Item {
     @Column(name = "deposit")
     private float deposit;
 
+    @Column(name = "item_stripe_id")
+    private String itemStripeId;
+
     @ManyToOne
     private Category category;
 

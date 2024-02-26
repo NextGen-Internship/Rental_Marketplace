@@ -32,8 +32,8 @@ function CreateItem() {
 
 
   const navigate = useNavigate();
-
   const jwt_token = localStorage.getItem('token');
+ 
 
   const handleChange = (event) => {
     const inputValue = event.target.value;
@@ -142,6 +142,7 @@ function CreateItem() {
     } catch (error) {
       console.error("Error adding item:", error.message);
     }
+    
   };
 
   return (
