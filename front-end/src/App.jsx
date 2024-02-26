@@ -18,6 +18,7 @@ import ForgotPassword from "./components/forgot-password/ForgotPassword";
 import ResetPassword from "./components/forgot-password/ResetPassword";
 import AccountVerification from "./components/account-verification/AccountVerification";
 import EditItem from "./components/profile-page/EditItem";
+import RentItem from "./components/rents/RentItem";
 
 function App() {
   return (
@@ -45,6 +46,7 @@ function App() {
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/reset-password" element={<ResetPassword />} />
           <Route path="/account-verification" element={<AccountVerification />} />
+          <Route path="/rent-item/:id" element={<RentItem />} />
         </Routes>
         <Footer />
       </div>

@@ -20,4 +20,7 @@ public class UpdatedUserInfoDto {
 
     @Nullable
     private AddressDto addressDto;
+
+    @Nullable
+    private String iban;
 }

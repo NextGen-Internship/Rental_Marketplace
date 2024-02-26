@@ -1,19 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { fetchData } from "../fetchData";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, Link } from "react-router-dom";
 import Carousel from "./carousel/Carousel";
 import "./ItemDetails.css";
 import { jwtDecode } from "jwt-decode";
 import ReviewsItems from "../reviews-items/ReviewsItems";
 import ShowReviews from "../reviews-items/ShowReviews";
 import axios from 'axios';
-
-
 import { useDispatch, useSelector } from "react-redux"; 
 import { updateRating } from "../../features/ratingReview.js";
-
 import {updateIsLoggedIn} from "../../features/userTokenSlice.js"
-
 
 
 
@@ -73,6 +69,7 @@ const ItemDetails = () => {
     if (item && !item.isActive && item.user.id != userId) {
       navigate("/notfound");
     }
+
     
     fetchRating();
 
@@ -97,6 +94,10 @@ const ItemDetails = () => {
 
 
   };
+
+
+
+
 
   return (
     <div className="item-details-container">
@@ -128,6 +129,7 @@ const ItemDetails = () => {
             <p>{"$" + item.price}</p>
             <h3>Deposit</h3>
             <p>{"$" + item.deposit}</p>
+
         </div>
     </div>
     <div class="col-md-4 text-center">
@@ -144,10 +146,13 @@ const ItemDetails = () => {
         </div>
     </div>
 </div>        
-            <button className="rent-button">Rent</button>
+            <Link to={`/rent-item/${item.id}`}>
+              <button className="rent-button">Rent</button>
+            </Link>
       
        <ShowReviews  itemId={id}/>
         </div>
+
           <div className="user-details">
             <h3>Posted on</h3>
             <p>
@@ -162,12 +167,16 @@ const ItemDetails = () => {
             </p>
             <h3>Posted by</h3>
             <p>{item.user.firstName + " " + item.user.lastName}</p>
+     
+            <h3>Address</h3>
+            <p>{item.address.city}</p>
+
             <button className="message-button" onClick={handleButtonClick}>
               Add Review
             </button>
 
-
             {showReviews && <ReviewsItems itemId={id} />}
+
 
           </div>
         </div>

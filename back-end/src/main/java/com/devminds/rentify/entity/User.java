@@ -20,7 +20,6 @@ import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -66,6 +65,11 @@ public class User implements UserDetails {
     @JoinColumn(name = "address_id")
     private Address address;
 
+    @Column
+    private String iban;
+
+    @Column(name = "stripe_account_id")
+    private String stripeAccountId;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
     private List<Item> items = new ArrayList<>();

@@ -4,6 +4,8 @@ import com.devminds.rentify.dto.CreateItemDto;
 import com.devminds.rentify.dto.EditItemDto;
 import com.devminds.rentify.dto.ItemDto;
 import com.devminds.rentify.service.ItemService;
+import com.stripe.exception.StripeException;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -18,7 +20,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
 import java.io.IOException;
 import java.util.List;
 
@@ -37,8 +38,8 @@ public class ItemController {
     }
 
     @PostMapping("/create")
-    public void createItem(@ModelAttribute CreateItemDto createItemDto) throws IOException {
-        this.itemService.saveItem(createItemDto);
+    public void createItem(@ModelAttribute CreateItemDto createItemDto, HttpServletRequest httpServletRequest) throws IOException, StripeException {
+        this.itemService.saveItem(createItemDto,httpServletRequest);
     }
 
     @GetMapping

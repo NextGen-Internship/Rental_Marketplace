@@ -12,12 +12,11 @@ import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.Data;
-
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Data
 @Entity
@@ -27,7 +26,7 @@ public class Payment {
     @Id
     private long id;
 
-    @NotEmpty
+    @NotNull
     @Positive
     @Column(name = "amount")
     private BigDecimal amount;
@@ -35,8 +34,8 @@ public class Payment {
     @Enumerated(EnumType.STRING)
     private PaymentStatus status;
 
-    @NotEmpty
-    private Date date;
+    @NotNull
+    private LocalDateTime date;
 
     @ManyToOne
     private User owner;
@@ -45,6 +44,7 @@ public class Payment {
     private User receiver;
 
     @Enumerated(EnumType.STRING)
+    @Column(name = "method")
     private PaymentMethod paymentMethod;
 
     @OneToOne

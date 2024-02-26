@@ -3,7 +3,6 @@ package com.devminds.rentify.dto;
 import com.devminds.rentify.entity.Address;
 import com.devminds.rentify.entity.Role;
 import lombok.Data;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,4 +19,5 @@ public class UserDto {
     private Address address;
     private List<PlainItemDto> items = new ArrayList<>();
     private Role role;
+    private String iban;
 }

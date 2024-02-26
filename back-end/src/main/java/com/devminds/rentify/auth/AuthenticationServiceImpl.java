@@ -8,7 +8,9 @@ import com.devminds.rentify.entity.User;
 import com.devminds.rentify.exception.UserAccountNotConfirmedException;
 import com.devminds.rentify.exception.UserNotFoundException;
 import com.devminds.rentify.repository.RoleRepository;
+import com.devminds.rentify.service.StripeService;
 import com.devminds.rentify.service.UserService;
+import com.stripe.exception.StripeException;
 import com.devminds.rentify.service.VerificationTokenService;
 import lombok.RequiredArgsConstructor;
 
