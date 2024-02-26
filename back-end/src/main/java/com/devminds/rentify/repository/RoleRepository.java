@@ -1,6 +1,7 @@
 package com.devminds.rentify.repository;
 
 import com.devminds.rentify.entity.Role;
+import com.devminds.rentify.enums.UserRole;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import org.springframework.data.jpa.repository.Query;
@@ -13,6 +14,9 @@ public interface RoleRepository extends JpaRepository<Role, Long> {
 
     @Query("SELECT u FROM Role u WHERE u.id = 2")
     Role findUserRole();
+
+
+    Optional<Role> findByRole(UserRole role);
 
 
 }

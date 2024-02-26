@@ -227,17 +227,17 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new UsernameNotFoundException(String.format(USER_NOT_FOUND_MESSAGE, userId)));
 
         Role currentRole = existingUser.getRole();
-        Role newRole;
 
-        if (currentRole.getId() == 1) {
-            newRole = roleRepository.findById(currentRole.getId() + 1)
+
+        if (currentRole.getRole() == UserRole.USER) {
+            currentRole = roleRepository.findByRole(UserRole.ADMIN)
                     .orElseThrow(() -> new RuntimeException("Role not found"));
         } else {
-            newRole = roleRepository.findById(currentRole.getId() - 1)
+            currentRole = roleRepository.findByRole(UserRole.USER)
                     .orElseThrow(() -> new RuntimeException("Role not found"));
         }
 
-        existingUser.setRole(newRole);
+        existingUser.setRole(currentRole);
         userRepository.save(existingUser);
         return mapUserToUserDto(existingUser);
     }
